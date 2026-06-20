@@ -1,0 +1,1727 @@
+{
+  "events": [
+    {
+      "id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "login_url": "https://www.futebolcard.com/login",
+      "url": "https://www.futebolcard.com/buy/sector?event=37057",
+      "name": "Santa Cruz - teste",
+      "status": "concluido",
+      "config": {
+        "account_id": "ALL",
+        "email": "TODAS",
+        "senha_enc": "",
+        "setores": [
+          "Oeste Inferior",
+          "Leste Inferior"
+        ],
+        "quantidade": 3,
+        "intervalo": 30,
+        "aceitar_qualquer": false,
+        "headless": false,
+        "loop_continuo": false
+      },
+      "created_at": "2026-06-20T09:11:21.780Z",
+      "expires_at": null
+    }
+  ],
+  "accounts": [
+    {
+      "id": "5b6b3e61-5fe1-4824-8947-349e8abbb1c4",
+      "user_id": "local-user-id",
+      "label": "Principal",
+      "email": "veiga.yury@gmail.com",
+      "senha_enc": "v1:42nAifh+NiUaIhZO:GREK+adJ8uupzUDKvPqmp8GFvn187xLy4mVMvUECxdc=",
+      "created_at": "2026-06-20T09:03:18.994Z"
+    },
+    {
+      "id": "d224a2e6-3df1-4835-96dc-12ed15e6b1df",
+      "user_id": "local-user-id",
+      "label": "teste 2",
+      "email": "Yuri_muaythai@hotmail.com",
+      "senha_enc": "v1:5xttqFyYm/OzXxl1:wjxRO1dh1XwzPrl3I+vLqkd0gqQPrS5L",
+      "created_at": "2026-06-20T12:16:20.755Z"
+    },
+    {
+      "id": "fcd2fbd5-df8e-4010-aa88-c60c24432a69",
+      "user_id": "local-user-id",
+      "label": "teste 3",
+      "email": "bochecha0805@outlook.com",
+      "senha_enc": "v1:GoWPSvp4JYJIzbTI:jaBsaVxpcE3ZBO8C6PABSc2iM7ZNd9h+",
+      "created_at": "2026-06-20T12:16:42.054Z"
+    },
+    {
+      "id": "3b8b9f26-0175-45e5-b36b-b671e79fcd40",
+      "user_id": "local-user-id",
+      "label": "teste 4",
+      "email": "flainter1@outlook.com",
+      "senha_enc": "v1:8aPEgKH1tWIpZB3T:xkaPqznscqVEQyC4J3pAKODaczdQ7UP9",
+      "created_at": "2026-06-20T12:17:05.390Z"
+    },
+    {
+      "id": "febe6bec-74db-4cf3-9994-0540ec2b602b",
+      "user_id": "local-user-id",
+      "label": "teste 5",
+      "email": "flainter2@outlook.com",
+      "senha_enc": "v1:FB1sk87E6xT2hRPw:DVWXY8lXX+QbFN0m9hqkgZpf+o7NbGDa",
+      "created_at": "2026-06-20T12:17:17.649Z"
+    }
+  ],
+  "bot_commands": [
+    {
+      "id": "4328f630-4945-4935-9fdc-7111d779e7ef",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T09:11:21.794Z",
+      "processed_at": "2026-06-20T09:16:18.790Z"
+    },
+    {
+      "id": "da886048-1c82-4693-8f02-72784aad2ee9",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T09:12:34.335Z",
+      "processed_at": "2026-06-20T09:16:18.809Z"
+    },
+    {
+      "id": "9c8f2346-f71d-479f-962b-d62461357d5f",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T09:13:06.361Z",
+      "processed_at": "2026-06-20T09:16:21.793Z"
+    },
+    {
+      "id": "90447f76-6335-41a7-b535-838f4c2d44c3",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T09:13:45.867Z",
+      "processed_at": "2026-06-20T09:16:18.827Z"
+    },
+    {
+      "id": "cc7095cb-eac2-48e1-8a71-1bed976eecf9",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T09:16:39.160Z",
+      "processed_at": "2026-06-20T09:16:39.849Z"
+    },
+    {
+      "id": "c77276cb-4f29-4713-89b9-51008aaa0ad2",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T09:16:56.958Z",
+      "processed_at": "2026-06-20T09:16:57.896Z"
+    },
+    {
+      "id": "6f511672-277a-4679-9c9f-a327129105b0",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T09:17:48.385Z",
+      "processed_at": "2026-06-20T09:17:49.047Z"
+    },
+    {
+      "id": "3b1dd9eb-6bd2-4385-9042-f1ef75e0036a",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T09:18:23.676Z",
+      "processed_at": "2026-06-20T09:18:25.274Z"
+    },
+    {
+      "id": "69b4a465-75f2-46b2-a12a-6645a57b7ce0",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T09:19:42.570Z",
+      "processed_at": "2026-06-20T09:19:43.494Z"
+    },
+    {
+      "id": "f508fa66-8eb2-4841-ad20-9b4e437ff07d",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T09:20:53.902Z",
+      "processed_at": "2026-06-20T09:20:56.268Z"
+    },
+    {
+      "id": "683a3bcb-d40a-42b4-83d6-565a3377abbd",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T09:21:15.989Z",
+      "processed_at": "2026-06-20T09:21:17.343Z"
+    },
+    {
+      "id": "ba655612-6433-4d4f-9d77-d553e28a4770",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T09:22:42.557Z",
+      "processed_at": "2026-06-20T09:22:44.492Z"
+    },
+    {
+      "id": "ea757311-0409-4e52-9dc8-df8671fc01f0",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T09:24:55.481Z",
+      "processed_at": "2026-06-20T09:24:55.708Z"
+    },
+    {
+      "id": "b52515de-25da-4e38-8790-dcd572ba65d9",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T09:26:39.434Z",
+      "processed_at": "2026-06-20T09:26:40.973Z"
+    },
+    {
+      "id": "cad0cd98-2d6c-455a-9552-20b0b687ea99",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T09:30:22.031Z",
+      "processed_at": "2026-06-20T09:30:23.584Z"
+    },
+    {
+      "id": "9801c59c-3dff-46cc-91d8-f1952783251a",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T09:31:47.013Z",
+      "processed_at": "2026-06-20T09:31:47.764Z"
+    },
+    {
+      "id": "822f3420-bdde-4e1c-9099-ece23bea0fc7",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T09:34:45.684Z",
+      "processed_at": "2026-06-20T09:34:48.157Z"
+    },
+    {
+      "id": "70d6afce-04e4-4055-a268-ac066ad7526e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T09:41:13.538Z",
+      "processed_at": "2026-06-20T09:41:16.119Z"
+    },
+    {
+      "id": "cb9dd6ac-3eb2-4fe8-8767-a13d92eef520",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T09:49:18.264Z",
+      "processed_at": "2026-06-20T09:49:18.855Z"
+    },
+    {
+      "id": "8d1f6832-241e-48f3-adfb-b854fefb8a02",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T09:54:31.064Z",
+      "processed_at": "2026-06-20T09:54:32.558Z"
+    },
+    {
+      "id": "dbde37ee-6265-4cfa-900b-5c4a625efa71",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T09:58:26.431Z",
+      "processed_at": "2026-06-20T09:58:27.809Z"
+    },
+    {
+      "id": "d7700cdf-befa-48d9-9631-e46a9dfd8e7a",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T10:04:57.936Z",
+      "processed_at": "2026-06-20T10:04:58.705Z"
+    },
+    {
+      "id": "ac39ad14-9256-4119-bc98-0c42af8194c8",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T10:12:42.220Z",
+      "processed_at": "2026-06-20T10:12:44.027Z"
+    },
+    {
+      "id": "da30c9b9-8edf-427a-8a0b-f2da7fd7270b",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T10:13:30.095Z",
+      "processed_at": "2026-06-20T10:13:32.155Z"
+    },
+    {
+      "id": "7aad3fb1-5110-454e-807a-077caca61930",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T10:14:31.279Z",
+      "processed_at": "2026-06-20T10:14:31.291Z"
+    },
+    {
+      "id": "8bb7d23f-a613-483e-93bc-fc09ba09a5af",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T10:16:54.379Z",
+      "processed_at": "2026-06-20T10:16:55.633Z"
+    },
+    {
+      "id": "de348eff-a4b3-4c5e-bd70-04c11e4a9ad2",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T10:20:49.499Z",
+      "processed_at": "2026-06-20T10:20:51.793Z"
+    },
+    {
+      "id": "714e1f2c-276c-4db4-9886-44e8f73a138e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T10:21:01.308Z",
+      "processed_at": "2026-06-20T10:21:03.827Z"
+    },
+    {
+      "id": "55a5421b-dccb-4e7d-8351-3ab2e102a87b",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T10:21:03.132Z",
+      "processed_at": "2026-06-20T10:21:03.828Z"
+    },
+    {
+      "id": "e42f532d-9baa-436b-9aeb-7ce6b117d131",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T10:21:16.043Z",
+      "processed_at": "2026-06-20T10:21:18.874Z"
+    },
+    {
+      "id": "737da052-ec2f-419b-bdf1-351ac4b5a423",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T10:21:20.143Z",
+      "processed_at": "2026-06-20T10:21:21.876Z"
+    },
+    {
+      "id": "afe2abb7-c41e-48d5-ab90-ef7c4751a226",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T10:21:29.701Z",
+      "processed_at": "2026-06-20T10:21:30.912Z"
+    },
+    {
+      "id": "5443c246-72ee-4c05-91d8-8e600f8414c6",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T10:22:38.696Z",
+      "processed_at": "2026-06-20T10:22:39.687Z"
+    },
+    {
+      "id": "4851cef3-3e0f-4c94-81fb-36f482ee95c0",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T10:24:34.190Z",
+      "processed_at": "2026-06-20T10:24:36.954Z"
+    },
+    {
+      "id": "91485288-1fda-440c-9bc3-6055a8945d26",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T10:46:13.418Z",
+      "processed_at": "2026-06-20T10:46:14.528Z"
+    },
+    {
+      "id": "fa1368c9-9ad2-4db6-a3cb-699c43983a40",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T10:49:32.278Z",
+      "processed_at": "2026-06-20T10:49:34.354Z"
+    },
+    {
+      "id": "78573e34-d192-4ba5-88b7-5fa88fe36274",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T10:52:57.472Z",
+      "processed_at": "2026-06-20T10:52:58.780Z"
+    },
+    {
+      "id": "0f6a8aa3-6086-4f32-9c0a-3dd1b5ee9c9b",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T10:59:04.001Z",
+      "processed_at": "2026-06-20T10:59:06.208Z"
+    },
+    {
+      "id": "19205814-0790-4d0e-ae6d-92253fb74617",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:01:43.198Z",
+      "processed_at": "2026-06-20T11:01:45.570Z"
+    },
+    {
+      "id": "d246c4b9-5fe3-4402-b5ff-6282b221e2f3",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:06:07.114Z",
+      "processed_at": "2026-06-20T11:07:37.789Z"
+    },
+    {
+      "id": "2eb6ec71-301c-4912-8615-b8c44d71fb56",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T11:06:26.752Z",
+      "processed_at": "2026-06-20T11:07:40.792Z"
+    },
+    {
+      "id": "0ee6130b-23a4-4836-b81c-5297e79a8bc6",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:06:28.336Z",
+      "processed_at": "2026-06-20T11:07:40.796Z"
+    },
+    {
+      "id": "e4b075f8-aaaf-4355-94eb-d039d91ca267",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T11:06:41.285Z",
+      "processed_at": "2026-06-20T11:07:40.797Z"
+    },
+    {
+      "id": "7165999c-6c78-4370-9eb6-a0eba71c466e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:06:48.090Z",
+      "processed_at": "2026-06-20T11:07:40.800Z"
+    },
+    {
+      "id": "f4ca71bf-464d-4e8c-ad0f-ea2f9cc01ece",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T11:07:06.955Z",
+      "processed_at": "2026-06-20T11:07:40.802Z"
+    },
+    {
+      "id": "d490915c-7e21-42fa-9fa5-581a6bc261c3",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:08:02.834Z",
+      "processed_at": "2026-06-20T11:08:04.847Z"
+    },
+    {
+      "id": "7db9c2ff-48f3-4223-b580-6a75e68b7ae5",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:10:43.085Z",
+      "processed_at": "2026-06-20T11:10:44.198Z"
+    },
+    {
+      "id": "f5808e75-d22c-4efa-8a1a-af1c818df3e2",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:15:21.214Z",
+      "processed_at": "2026-06-20T11:15:24.010Z"
+    },
+    {
+      "id": "17b08df8-e9d6-42df-a6f1-fd405993df53",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:18:21.525Z",
+      "processed_at": "2026-06-20T11:18:24.476Z"
+    },
+    {
+      "id": "2ad2d21e-eb04-4596-b6d3-4ce35851801e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:22:11.776Z",
+      "processed_at": "2026-06-20T11:22:12.552Z"
+    },
+    {
+      "id": "81e9c239-7ee6-4275-a1b2-716ca8dcb375",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T11:26:30.164Z",
+      "processed_at": "2026-06-20T11:26:31.904Z"
+    },
+    {
+      "id": "6999d957-dfc7-4705-95fd-2ee784ef59e5",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:26:31.414Z",
+      "processed_at": "2026-06-20T11:26:31.918Z"
+    },
+    {
+      "id": "71d6aa04-248f-45d2-93f5-d992d51df14b",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T11:26:56.532Z",
+      "processed_at": "2026-06-20T11:26:58.965Z"
+    },
+    {
+      "id": "608b991f-afc9-4fec-826d-52a12ea7d952",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:26:58.857Z",
+      "processed_at": "2026-06-20T11:26:58.968Z"
+    },
+    {
+      "id": "7f376422-9fd8-49cd-af9d-c5ad79d6aca7",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:30:14.134Z",
+      "processed_at": "2026-06-20T11:30:16.666Z"
+    },
+    {
+      "id": "b75a8de7-dcae-4657-bc2e-ab944ed90820",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:35:19.449Z",
+      "processed_at": "2026-06-20T11:35:21.564Z"
+    },
+    {
+      "id": "8823ec7c-e4c0-4312-9548-082a67188116",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:38:50.329Z",
+      "processed_at": "2026-06-20T11:38:50.772Z"
+    },
+    {
+      "id": "1bf63ea5-05ba-466a-b252-d0539d3b812a",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:53:27.630Z",
+      "processed_at": "2026-06-20T11:53:29.037Z"
+    },
+    {
+      "id": "4223f968-d767-4119-8afb-710a9ce319cf",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "test_login",
+      "created_at": "2026-06-20T11:55:51.373Z",
+      "processed_at": "2026-06-20T11:55:53.380Z"
+    },
+    {
+      "id": "dd2eebe7-2b16-44c0-bb98-bec42ad4f753",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:58:57.434Z",
+      "processed_at": "2026-06-20T11:58:59.241Z"
+    },
+    {
+      "id": "119d5a4b-1c50-40c1-8a61-cae99288e31e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T11:59:14.323Z",
+      "processed_at": "2026-06-20T11:59:17.281Z"
+    },
+    {
+      "id": "06991d97-5756-46f4-be1b-cd0b29d03ddb",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T11:59:18.297Z",
+      "processed_at": "2026-06-20T11:59:20.296Z"
+    },
+    {
+      "id": "44433b41-cefa-4986-b45f-2d9e33490fc7",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T12:02:04.324Z",
+      "processed_at": "2026-06-20T12:02:26.335Z"
+    },
+    {
+      "id": "6a205b90-f266-474e-9fc7-13368be2eee7",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T12:02:53.139Z",
+      "processed_at": "2026-06-20T12:02:53.407Z"
+    },
+    {
+      "id": "56d1e6d7-4734-48ad-a206-ad1e87f9e182",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "test_login",
+      "created_at": "2026-06-20T12:07:27.251Z",
+      "processed_at": "2026-06-20T12:07:28.034Z"
+    },
+    {
+      "id": "6a108777-feb8-4d7c-85f9-0c610a0cab6f",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T12:07:40.348Z",
+      "processed_at": "2026-06-20T12:07:43.056Z"
+    },
+    {
+      "id": "dbb0efb6-c381-4dda-8762-ff8c005680bf",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T12:10:26.987Z",
+      "processed_at": "2026-06-20T12:10:28.448Z"
+    },
+    {
+      "id": "99b213ab-98fd-4e8b-8c8e-559ad9db5999",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T12:11:36.324Z",
+      "processed_at": "2026-06-20T12:11:36.462Z"
+    },
+    {
+      "id": "11438907-d2e8-4dd5-b6c7-4ba99ba4dcd4",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T12:24:15.839Z",
+      "processed_at": "2026-06-20T12:24:17.513Z"
+    },
+    {
+      "id": "51e27092-7f13-495f-ab08-3f0dd91bf65c",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-06-20T12:28:26.119Z",
+      "processed_at": "2026-06-20T12:28:28.319Z"
+    },
+    {
+      "id": "e9b28f2e-5bb8-4984-96a8-8c2e040458ec",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-06-20T12:28:32.340Z",
+      "processed_at": "2026-06-20T12:28:34.347Z"
+    }
+  ],
+  "logs": [
+    {
+      "id": "5f2d1e9a-4b43-4e5c-abf7-bcc6fd79d799",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "🤖 Bot iniciado. Preparando sessão...",
+      "ts": "2026-06-20T12:28:34.372Z"
+    },
+    {
+      "id": "5438fad8-f40d-41bc-abd7-0f10eed0902a",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "🚀 Iniciando fila: 5 conta(s) detectada(s)...",
+      "ts": "2026-06-20T12:28:34.375Z"
+    },
+    {
+      "id": "acc98ed2-5b16-471e-a1bd-9b3228392b23",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "==================================================",
+      "ts": "2026-06-20T12:28:34.380Z"
+    },
+    {
+      "id": "7ea59dd9-1add-4c43-aa00-72283c500272",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "[CONTA 1/5] Iniciando automação para veiga.yury@gmail.com...",
+      "ts": "2026-06-20T12:28:34.381Z"
+    },
+    {
+      "id": "13d6b8dc-40a6-47f6-b866-e3d3ab88f891",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "[INFO CONTA] veiga.yury@gmail.com — Ingressos históricos: 9",
+      "ts": "2026-06-20T12:28:34.383Z"
+    },
+    {
+      "id": "5e61222b-6400-4a8a-933f-9b0ff9c4f8ea",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Iniciando browser persistente (headless=false)...",
+      "ts": "2026-06-20T12:28:34.385Z"
+    },
+    {
+      "id": "0a8d8741-16ce-4039-95c7-53c142ae652c",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Navegando para URL de login: https://www.futebolcard.com/login",
+      "ts": "2026-06-20T12:28:34.755Z"
+    },
+    {
+      "id": "f9ac4246-2a39-47c3-93f9-21b360736071",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "E-mail preenchido: veiga.yury@gmail.com",
+      "ts": "2026-06-20T12:28:35.231Z"
+    },
+    {
+      "id": "49df3b19-982e-4a3a-b9b5-4b8f12a69f3f",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "Senha preenchida.",
+      "ts": "2026-06-20T12:28:35.245Z"
+    },
+    {
+      "id": "48fe9a84-c556-4818-9cae-c1ac176d51ec",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Aguardando resposta do login...",
+      "ts": "2026-06-20T12:28:35.753Z"
+    },
+    {
+      "id": "cdff3f10-9f85-41bd-9e40-541906f6eb54",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "Login efetuado com sucesso!",
+      "ts": "2026-06-20T12:28:50.779Z"
+    },
+    {
+      "id": "279b4409-5dd6-4473-ac95-55b7acb09499",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Navegando para URL do evento: https://www.futebolcard.com/buy/sector?event=37057",
+      "ts": "2026-06-20T12:28:50.781Z"
+    },
+    {
+      "id": "799e6480-e665-4433-8e12-cd94e411b422",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "🎯 Modo de interceptação ativo. Aguardando o site atualizar a disponibilidade...",
+      "ts": "2026-06-20T12:28:54.106Z"
+    },
+    {
+      "id": "0c532fbc-b9dd-4f78-bb06-ed670afe9fe3",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "   (O site faz isso a cada ~30s via console log do fcard-maps-ac.js)",
+      "ts": "2026-06-20T12:28:54.108Z"
+    },
+    {
+      "id": "ad539db1-7c8f-4bfa-b8f4-ae825eed1811",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "🔄 Atualização do site detectada via console! (tentativa #1) — agindo em 500ms...",
+      "ts": "2026-06-20T12:29:21.343Z"
+    },
+    {
+      "id": "02296a09-e099-442e-8074-88dea1520255",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Procurando setor: \"Oeste Inferior\"...",
+      "ts": "2026-06-20T12:29:21.853Z"
+    },
+    {
+      "id": "a57f45d8-e6d0-480a-9a2f-2d7fea12b9c8",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "\"Oeste Inferior\" encontrado! Selecionando...",
+      "ts": "2026-06-20T12:29:21.868Z"
+    },
+    {
+      "id": "837e342f-f867-4fec-88e6-460d27fe480e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "Quantidade: 3 (via botão +)",
+      "ts": "2026-06-20T12:29:23.255Z"
+    },
+    {
+      "id": "55a4c822-cbfe-4e96-aadf-bd31a5cf2e5f",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Botão de compra clicado. Aguardando o site registrar no carrinho...",
+      "ts": "2026-06-20T12:29:23.395Z"
+    },
+    {
+      "id": "73823447-cc77-4806-8adc-d6e79c09e645",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "warn",
+      "message": "🚨 [CAPTCHA] Desafio Google detectado! Iniciando solver invisível...",
+      "ts": "2026-06-20T12:29:23.401Z"
+    },
+    {
+      "id": "5969ba7f-3248-4d17-92e0-400be4bba490",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "[CAPTCHA] SiteKey capturada: 6LfRi4Er... Enviando à API.",
+      "ts": "2026-06-20T12:29:23.405Z"
+    },
+    {
+      "id": "abf87fe8-062b-4672-9bdb-f0ab25145d5e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "[CAPTCHA] Tarefa c14e0d38-04fb-44f1-964d-838273c13e09 criada! Trabalhadores resolvendo imagens...",
+      "ts": "2026-06-20T12:29:23.732Z"
+    },
+    {
+      "id": "71e0d37e-c1b0-4fc8-a015-4adbc4df9884",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "[CAPTCHA] 🔥 Resolvido com sucesso! Injetando token mágico na página...",
+      "ts": "2026-06-20T12:29:43.273Z"
+    },
+    {
+      "id": "6183d80f-39c0-48ff-858f-24c365cc8410",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Token injetado. Tentando clicar em 'Comprar' novamente para prosseguir...",
+      "ts": "2026-06-20T12:29:45.331Z"
+    },
+    {
+      "id": "56010a11-dee2-4b2e-aa93-b5d0299791ee",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "warn",
+      "message": "Botão Comprar não está mais visível após o captcha.",
+      "ts": "2026-06-20T12:29:46.855Z"
+    },
+    {
+      "id": "f32a35e8-9478-4b8f-8325-2fd6f01bfcc3",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Aguardando redirecionamento para a página do carrinho...",
+      "ts": "2026-06-20T12:29:46.857Z"
+    },
+    {
+      "id": "c9c73323-1501-4151-8316-872fc2174c8a",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "✅ Redirecionado para o carrinho com sucesso!",
+      "ts": "2026-06-20T12:29:46.955Z"
+    },
+    {
+      "id": "2a074647-1a15-45ee-88ae-983908723a46",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "🎟 INGRESSO NO CARRINHO! Setor: \"Oeste Inferior\" · 3x (Conta: veiga.yury@gmail.com)",
+      "ts": "2026-06-20T12:29:46.957Z"
+    },
+    {
+      "id": "b5fa81d4-1b44-4831-8506-f594953fa01a",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Fechando browser.",
+      "ts": "2026-06-20T12:29:46.959Z"
+    },
+    {
+      "id": "80bf1e81-31c8-487e-911e-2d8bef378126",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "✅ Bot finalizado com sucesso! Ingresso adicionado ao carrinho.",
+      "ts": "2026-06-20T12:29:47.151Z"
+    },
+    {
+      "id": "974c12fc-1798-4aaa-ad2e-7dbbd5f551d1",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "--------------------------------------------------",
+      "ts": "2026-06-20T12:29:47.152Z"
+    },
+    {
+      "id": "212744ff-a32f-4b47-8273-0448006b9f2d",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "📊 RESUMO GERAL DE INGRESSOS COMPRADOS POR CONTA:",
+      "ts": "2026-06-20T12:29:47.154Z"
+    },
+    {
+      "id": "53184048-639a-4a01-912c-fd23a96ff810",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "   👤 veiga.yury@gmail.com: 12 ingressos garantidos",
+      "ts": "2026-06-20T12:29:47.155Z"
+    },
+    {
+      "id": "6732e0e2-a414-4563-91c7-f2996f611de5",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "   👤 Yuri_muaythai@hotmail.com: 3 ingressos garantidos",
+      "ts": "2026-06-20T12:29:47.157Z"
+    },
+    {
+      "id": "081f36ba-1521-45e6-a25f-289e47954723",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "--------------------------------------------------",
+      "ts": "2026-06-20T12:29:47.158Z"
+    },
+    {
+      "id": "159c8250-7ef6-43a8-ba10-0d52b0d4cab5",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Fechando browser.",
+      "ts": "2026-06-20T12:29:47.160Z"
+    },
+    {
+      "id": "0a3b2a2c-05a4-4f25-9faf-67f04997362c",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "✅ Fim do processamento para veiga.yury@gmail.com. Ingresso garantido!",
+      "ts": "2026-06-20T12:29:47.162Z"
+    },
+    {
+      "id": "d28113c2-c78f-4b73-b7a7-41bdb70716d2",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "==================================================",
+      "ts": "2026-06-20T12:29:47.164Z"
+    },
+    {
+      "id": "6970afde-bb7d-427c-be67-0565c2b2d911",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "[CONTA 2/5] Iniciando automação para Yuri_muaythai@hotmail.com...",
+      "ts": "2026-06-20T12:29:47.166Z"
+    },
+    {
+      "id": "e7a08dba-0ce2-4bd6-85fc-1773744bd54f",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "[INFO CONTA] Yuri_muaythai@hotmail.com — Ingressos históricos: 3",
+      "ts": "2026-06-20T12:29:47.168Z"
+    },
+    {
+      "id": "a6288dd2-8d3a-4c39-9df4-2af0dcb5bea2",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Iniciando browser persistente (headless=false)...",
+      "ts": "2026-06-20T12:29:47.170Z"
+    },
+    {
+      "id": "ddb8573b-12ed-41ca-81db-495fde2a00b9",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Navegando para URL de login: https://www.futebolcard.com/login",
+      "ts": "2026-06-20T12:29:47.416Z"
+    },
+    {
+      "id": "7220f17a-d58b-4914-b449-74a1034bf315",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "E-mail preenchido: Yuri_muaythai@hotmail.com",
+      "ts": "2026-06-20T12:29:47.930Z"
+    },
+    {
+      "id": "80d078ad-8044-4064-b5a7-ae2e64bbbb6e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "Senha preenchida.",
+      "ts": "2026-06-20T12:29:47.989Z"
+    },
+    {
+      "id": "510a45e2-347a-4ff4-b8e0-9d067bda482a",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Aguardando resposta do login...",
+      "ts": "2026-06-20T12:29:48.451Z"
+    },
+    {
+      "id": "e3c3c47e-051f-4e64-a32c-e0182fca1add",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "Login efetuado com sucesso!",
+      "ts": "2026-06-20T12:30:03.479Z"
+    },
+    {
+      "id": "d526573b-40ec-4970-b09b-70cd3be034db",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Navegando para URL do evento: https://www.futebolcard.com/buy/sector?event=37057",
+      "ts": "2026-06-20T12:30:03.483Z"
+    },
+    {
+      "id": "031a41b0-e2d8-47b0-9c9e-f6f0dee5ce65",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "🎯 Modo de interceptação ativo. Aguardando o site atualizar a disponibilidade...",
+      "ts": "2026-06-20T12:30:06.867Z"
+    },
+    {
+      "id": "452131db-c9a6-46f8-9ec7-f63588731693",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "   (O site faz isso a cada ~30s via console log do fcard-maps-ac.js)",
+      "ts": "2026-06-20T12:30:06.869Z"
+    },
+    {
+      "id": "a429c3cf-202a-492b-912d-080c8ba51b15",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "🔄 Atualização do site detectada via console! (tentativa #1) — agindo em 500ms...",
+      "ts": "2026-06-20T12:30:34.172Z"
+    },
+    {
+      "id": "73d1077d-4957-44f5-a1ac-4a7aad054634",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Procurando setor: \"Oeste Inferior\"...",
+      "ts": "2026-06-20T12:30:34.675Z"
+    },
+    {
+      "id": "a1297671-3666-4242-8f86-b5e2e607d309",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "\"Oeste Inferior\" encontrado! Selecionando...",
+      "ts": "2026-06-20T12:30:34.690Z"
+    },
+    {
+      "id": "06251ce9-75ee-486a-b50a-f0e0f896941d",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "Quantidade: 3 (via botão +)",
+      "ts": "2026-06-20T12:30:36.082Z"
+    },
+    {
+      "id": "7dac6983-acfd-4cba-942e-76c004f619dc",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Botão de compra clicado. Aguardando o site registrar no carrinho...",
+      "ts": "2026-06-20T12:30:36.226Z"
+    },
+    {
+      "id": "8b1fd92e-e99c-45f8-839a-0a3a315cb3a2",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "warn",
+      "message": "🚨 [CAPTCHA] Desafio Google detectado! Iniciando solver invisível...",
+      "ts": "2026-06-20T12:30:36.232Z"
+    },
+    {
+      "id": "9b253612-af4d-416c-a4c1-a933c6ab5214",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "[CAPTCHA] SiteKey capturada: 6LfRi4Er... Enviando à API.",
+      "ts": "2026-06-20T12:30:36.237Z"
+    },
+    {
+      "id": "95543187-7655-48c0-ba58-e4070dc189ac",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "[CAPTCHA] Tarefa 5ba2223d-e620-473b-aa1d-44edd940c56e criada! Trabalhadores resolvendo imagens...",
+      "ts": "2026-06-20T12:30:36.522Z"
+    },
+    {
+      "id": "9c14d6e8-0a8b-4ee2-a16f-5c83222a5077",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "[CAPTCHA] 🔥 Resolvido com sucesso! Injetando token mágico na página...",
+      "ts": "2026-06-20T12:31:22.753Z"
+    },
+    {
+      "id": "2cbaa33b-1062-463e-a902-0ada4a15ddbc",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Token injetado. Tentando clicar em 'Comprar' novamente para prosseguir...",
+      "ts": "2026-06-20T12:31:24.769Z"
+    },
+    {
+      "id": "61c7c6d4-b3d2-49f2-9b7e-475d7936ae9e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "warn",
+      "message": "Botão Comprar não está mais visível após o captcha.",
+      "ts": "2026-06-20T12:31:26.285Z"
+    },
+    {
+      "id": "a2a12d54-1a64-4dfa-96fe-f9357d421c2d",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Aguardando redirecionamento para a página do carrinho...",
+      "ts": "2026-06-20T12:31:26.292Z"
+    },
+    {
+      "id": "32b95b63-bfd2-442f-9948-20d82834385f",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "✅ Redirecionado para o carrinho com sucesso!",
+      "ts": "2026-06-20T12:31:26.376Z"
+    },
+    {
+      "id": "66c7aebe-1872-4252-a405-f5f46ff6f607",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "🎟 INGRESSO NO CARRINHO! Setor: \"Oeste Inferior\" · 3x (Conta: Yuri_muaythai@hotmail.com)",
+      "ts": "2026-06-20T12:31:26.378Z"
+    },
+    {
+      "id": "84e6a951-eafd-4b7d-a288-ded5ef43f74c",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Fechando browser.",
+      "ts": "2026-06-20T12:31:26.381Z"
+    },
+    {
+      "id": "ffc6568c-f55a-463c-978d-6130c45123d3",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "✅ Bot finalizado com sucesso! Ingresso adicionado ao carrinho.",
+      "ts": "2026-06-20T12:31:26.569Z"
+    },
+    {
+      "id": "01dd53cd-72c5-4bfd-a224-1c63c6f9bfa1",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "--------------------------------------------------",
+      "ts": "2026-06-20T12:31:26.571Z"
+    },
+    {
+      "id": "73482292-5e2e-4810-878d-f5ed4096b406",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "📊 RESUMO GERAL DE INGRESSOS COMPRADOS POR CONTA:",
+      "ts": "2026-06-20T12:31:26.573Z"
+    },
+    {
+      "id": "8db68243-2ca3-4c95-bf3c-02de5005b4a4",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "   👤 veiga.yury@gmail.com: 12 ingressos garantidos",
+      "ts": "2026-06-20T12:31:26.574Z"
+    },
+    {
+      "id": "15a76952-fa85-4a3b-9314-e225bd4fe857",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "   👤 Yuri_muaythai@hotmail.com: 6 ingressos garantidos",
+      "ts": "2026-06-20T12:31:26.577Z"
+    },
+    {
+      "id": "4126d6a4-1d84-46d1-88de-f849b9604892",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "--------------------------------------------------",
+      "ts": "2026-06-20T12:31:26.579Z"
+    },
+    {
+      "id": "09808d40-60a6-4bdb-8cfe-e7040f1363f3",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Fechando browser.",
+      "ts": "2026-06-20T12:31:26.581Z"
+    },
+    {
+      "id": "3718bd0f-97a9-4b65-9d2a-3d3183a8eea8",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "✅ Fim do processamento para Yuri_muaythai@hotmail.com. Ingresso garantido!",
+      "ts": "2026-06-20T12:31:26.582Z"
+    },
+    {
+      "id": "fcfcdc07-366f-4e40-aa14-4ddb26f315bb",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "==================================================",
+      "ts": "2026-06-20T12:31:26.584Z"
+    },
+    {
+      "id": "8c3dcb1b-fe42-4f18-8799-d752a34dee60",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "[CONTA 3/5] Iniciando automação para bochecha0805@outlook.com...",
+      "ts": "2026-06-20T12:31:26.586Z"
+    },
+    {
+      "id": "4c0d0bc5-1eba-4bde-813d-688ed97d9236",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "[INFO CONTA] bochecha0805@outlook.com — Ingressos históricos: 0",
+      "ts": "2026-06-20T12:31:26.588Z"
+    },
+    {
+      "id": "70cfd8e0-51dc-4cc4-9ba8-233d46c3ded6",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Iniciando browser persistente (headless=false)...",
+      "ts": "2026-06-20T12:31:26.589Z"
+    },
+    {
+      "id": "a592d024-d5e9-46f2-9e72-09958d26e5d5",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Navegando para URL de login: https://www.futebolcard.com/login",
+      "ts": "2026-06-20T12:31:26.841Z"
+    },
+    {
+      "id": "23624e52-afc9-468a-b087-40f7c0c0a0eb",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "E-mail preenchido: bochecha0805@outlook.com",
+      "ts": "2026-06-20T12:31:27.341Z"
+    },
+    {
+      "id": "2350b366-3f9b-405a-bdba-ef10ddf17f16",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "Senha preenchida.",
+      "ts": "2026-06-20T12:31:27.412Z"
+    },
+    {
+      "id": "f39662db-4aed-4dde-9f37-b1c15e18e7ef",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Aguardando resposta do login...",
+      "ts": "2026-06-20T12:31:27.639Z"
+    },
+    {
+      "id": "ccd46b73-aa92-4a12-b50a-13f7f3fa728e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Fechando browser.",
+      "ts": "2026-06-20T12:31:42.660Z"
+    },
+    {
+      "id": "98e925b0-8bfb-424b-a6e8-d12922a24b93",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "error",
+      "message": "❌ Erro na conta bochecha0805@outlook.com: Credenciais inválidas. Verifique e-mail e senha.. Pulando para a próxima...",
+      "ts": "2026-06-20T12:31:42.800Z"
+    },
+    {
+      "id": "d136b1a1-0e7b-4125-a2a2-a8636c32262d",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "==================================================",
+      "ts": "2026-06-20T12:31:42.802Z"
+    },
+    {
+      "id": "b1ec0d0d-bcf0-42ae-882f-a4d6cf7774b2",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "[CONTA 4/5] Iniciando automação para flainter1@outlook.com...",
+      "ts": "2026-06-20T12:31:42.804Z"
+    },
+    {
+      "id": "686aa40e-e89d-43b5-ab78-cd0baa82c6ff",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "[INFO CONTA] flainter1@outlook.com — Ingressos históricos: 0",
+      "ts": "2026-06-20T12:31:42.806Z"
+    },
+    {
+      "id": "e7ecfc71-6ff4-4b8b-a20a-edb9b7e6695d",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Iniciando browser persistente (headless=false)...",
+      "ts": "2026-06-20T12:31:42.807Z"
+    },
+    {
+      "id": "10fd65a9-8fa6-49b0-9421-fcbf2fff6034",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Navegando para URL de login: https://www.futebolcard.com/login",
+      "ts": "2026-06-20T12:31:43.065Z"
+    },
+    {
+      "id": "8f7e4c83-d18d-4e5e-9ab1-9cae7c27c8e7",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "E-mail preenchido: flainter1@outlook.com",
+      "ts": "2026-06-20T12:31:43.505Z"
+    },
+    {
+      "id": "e31acbbd-3cfa-4808-ad5b-976e456b230b",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "Senha preenchida.",
+      "ts": "2026-06-20T12:31:43.565Z"
+    },
+    {
+      "id": "4a7e53f0-0932-45c2-adc0-01f19af330bd",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Aguardando resposta do login...",
+      "ts": "2026-06-20T12:31:44.058Z"
+    },
+    {
+      "id": "4d862e11-3604-46cc-81fc-a14ff953e8f5",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "Login efetuado com sucesso!",
+      "ts": "2026-06-20T12:31:59.081Z"
+    },
+    {
+      "id": "77089466-0218-41e6-9115-ae562116d91c",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Navegando para URL do evento: https://www.futebolcard.com/buy/sector?event=37057",
+      "ts": "2026-06-20T12:31:59.083Z"
+    },
+    {
+      "id": "6f9de5ab-73fc-4c42-92b7-4086df7a42db",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "🎯 Modo de interceptação ativo. Aguardando o site atualizar a disponibilidade...",
+      "ts": "2026-06-20T12:32:02.337Z"
+    },
+    {
+      "id": "5eac79d7-ad1b-45e5-97f3-8981524e8176",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "   (O site faz isso a cada ~30s via console log do fcard-maps-ac.js)",
+      "ts": "2026-06-20T12:32:02.339Z"
+    },
+    {
+      "id": "bd965523-1e04-4c17-94ca-e5403da2180f",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "🔄 Atualização do site detectada via console! (tentativa #1) — agindo em 500ms...",
+      "ts": "2026-06-20T12:32:29.555Z"
+    },
+    {
+      "id": "45f20b1f-2938-43c2-bba5-a263784c592a",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Procurando setor: \"Oeste Inferior\"...",
+      "ts": "2026-06-20T12:32:30.065Z"
+    },
+    {
+      "id": "20423930-6da8-4720-94b6-ecbc32aa1346",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "\"Oeste Inferior\" encontrado! Selecionando...",
+      "ts": "2026-06-20T12:32:30.081Z"
+    },
+    {
+      "id": "814c335b-8618-4797-b596-681cea9aaee0",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "Quantidade: 3 (via botão +)",
+      "ts": "2026-06-20T12:32:31.446Z"
+    },
+    {
+      "id": "99124ae2-0de2-4f19-908a-1972252ded18",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Botão de compra clicado. Aguardando o site registrar no carrinho...",
+      "ts": "2026-06-20T12:32:31.591Z"
+    },
+    {
+      "id": "5217d258-c49e-4656-97ec-a5b5cb69b466",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "warn",
+      "message": "🚨 [CAPTCHA] Desafio Google detectado! Iniciando solver invisível...",
+      "ts": "2026-06-20T12:32:31.597Z"
+    },
+    {
+      "id": "bca3bb82-bc8c-4e39-936a-da4f584eb64d",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "[CAPTCHA] SiteKey capturada: 6LfRi4Er... Enviando à API.",
+      "ts": "2026-06-20T12:32:31.602Z"
+    },
+    {
+      "id": "dfab6eff-d691-41f4-8426-5c8d6694d28e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "[CAPTCHA] Tarefa 9f73f90f-35fe-48f9-9547-3512f0aa6401 criada! Trabalhadores resolvendo imagens...",
+      "ts": "2026-06-20T12:32:32.321Z"
+    },
+    {
+      "id": "45454671-cb66-4d9f-9be1-ca9082775118",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "[CAPTCHA] 🔥 Resolvido com sucesso! Injetando token mágico na página...",
+      "ts": "2026-06-20T12:32:48.087Z"
+    },
+    {
+      "id": "a87593d3-16a9-42c0-bba1-395567984449",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Token injetado. Tentando clicar em 'Comprar' novamente para prosseguir...",
+      "ts": "2026-06-20T12:32:50.109Z"
+    },
+    {
+      "id": "0ac8a2d3-7c39-41bb-bc2c-835728e08f73",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "warn",
+      "message": "Botão Comprar não está mais visível após o captcha.",
+      "ts": "2026-06-20T12:32:51.624Z"
+    },
+    {
+      "id": "1781d72b-6be3-40f8-9df4-ccde9dd356c2",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Aguardando redirecionamento para a página do carrinho...",
+      "ts": "2026-06-20T12:32:51.626Z"
+    },
+    {
+      "id": "ed53842b-24c1-4f24-98bf-29ab1841e092",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "✅ Redirecionado para o carrinho com sucesso!",
+      "ts": "2026-06-20T12:32:51.717Z"
+    },
+    {
+      "id": "fa1662f8-c9a4-455f-b670-55fff0efc53e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "🎟 INGRESSO NO CARRINHO! Setor: \"Oeste Inferior\" · 3x (Conta: flainter1@outlook.com)",
+      "ts": "2026-06-20T12:32:51.719Z"
+    },
+    {
+      "id": "bac7b68c-8acf-4c11-91c4-19840370b881",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Fechando browser.",
+      "ts": "2026-06-20T12:32:51.722Z"
+    },
+    {
+      "id": "b46bea86-1ac1-483e-9aab-7a984132e69e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "✅ Bot finalizado com sucesso! Ingresso adicionado ao carrinho.",
+      "ts": "2026-06-20T12:32:51.887Z"
+    },
+    {
+      "id": "3e2f2f15-afe2-4fc2-a15b-584a437f7bdd",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "--------------------------------------------------",
+      "ts": "2026-06-20T12:32:51.889Z"
+    },
+    {
+      "id": "3a54a447-f60e-4855-a85d-9901b6831c0a",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "📊 RESUMO GERAL DE INGRESSOS COMPRADOS POR CONTA:",
+      "ts": "2026-06-20T12:32:51.891Z"
+    },
+    {
+      "id": "006ffd02-9e73-44af-9e8a-ee8fa375f164",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "   👤 veiga.yury@gmail.com: 12 ingressos garantidos",
+      "ts": "2026-06-20T12:32:51.892Z"
+    },
+    {
+      "id": "4277c357-9de5-4bf2-93e3-0e0bc7592748",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "   👤 Yuri_muaythai@hotmail.com: 6 ingressos garantidos",
+      "ts": "2026-06-20T12:32:51.895Z"
+    },
+    {
+      "id": "36424501-7bb4-41ec-84a9-5ecab907f67e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "   👤 flainter1@outlook.com: 3 ingressos garantidos",
+      "ts": "2026-06-20T12:32:51.898Z"
+    },
+    {
+      "id": "64379dfb-f11a-4d96-9064-a36161934942",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "--------------------------------------------------",
+      "ts": "2026-06-20T12:32:51.900Z"
+    },
+    {
+      "id": "966b2f14-8f97-4e07-942d-50a57fa52942",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Fechando browser.",
+      "ts": "2026-06-20T12:32:51.903Z"
+    },
+    {
+      "id": "a27a2aea-1b70-4763-94b2-ba7238c2961c",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "✅ Fim do processamento para flainter1@outlook.com. Ingresso garantido!",
+      "ts": "2026-06-20T12:32:51.905Z"
+    },
+    {
+      "id": "d0cee13b-155b-465a-9558-5f23eac80582",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "==================================================",
+      "ts": "2026-06-20T12:32:51.908Z"
+    },
+    {
+      "id": "8b770a93-b47e-4afd-82f0-e917365bc312",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "[CONTA 5/5] Iniciando automação para flainter2@outlook.com...",
+      "ts": "2026-06-20T12:32:51.915Z"
+    },
+    {
+      "id": "28d9e130-1ac5-424d-8598-4627b3e05b74",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "[INFO CONTA] flainter2@outlook.com — Ingressos históricos: 0",
+      "ts": "2026-06-20T12:32:51.917Z"
+    },
+    {
+      "id": "b8b8cb33-49f2-41d3-8012-ef0c3acc2e3f",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Iniciando browser persistente (headless=false)...",
+      "ts": "2026-06-20T12:32:51.919Z"
+    },
+    {
+      "id": "2cf45088-02b9-4c59-a122-0e5b44dcc540",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Navegando para URL de login: https://www.futebolcard.com/login",
+      "ts": "2026-06-20T12:32:52.171Z"
+    },
+    {
+      "id": "4129f994-d727-496e-bed5-d68094ed7efc",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "E-mail preenchido: flainter2@outlook.com",
+      "ts": "2026-06-20T12:32:52.644Z"
+    },
+    {
+      "id": "9133d385-df67-4ea0-b05e-69eb75b88b0d",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "Senha preenchida.",
+      "ts": "2026-06-20T12:32:52.716Z"
+    },
+    {
+      "id": "e47f5894-8b1b-425e-b768-a060abdfd175",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Aguardando resposta do login...",
+      "ts": "2026-06-20T12:32:53.265Z"
+    },
+    {
+      "id": "674a651a-a8ed-41bb-89ad-99b6bd7b487e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "Login efetuado com sucesso!",
+      "ts": "2026-06-20T12:33:08.289Z"
+    },
+    {
+      "id": "4d1704e9-b19f-44b6-be4d-c008b5d733bb",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Navegando para URL do evento: https://www.futebolcard.com/buy/sector?event=37057",
+      "ts": "2026-06-20T12:33:08.291Z"
+    },
+    {
+      "id": "ec300c00-fdb3-42a2-85b1-d77141d6ddc8",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "🎯 Modo de interceptação ativo. Aguardando o site atualizar a disponibilidade...",
+      "ts": "2026-06-20T12:33:11.568Z"
+    },
+    {
+      "id": "055ae130-86a0-45a5-9481-76a1f686667f",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "   (O site faz isso a cada ~30s via console log do fcard-maps-ac.js)",
+      "ts": "2026-06-20T12:33:11.570Z"
+    },
+    {
+      "id": "3dc921a2-eacb-4c11-b275-0c1d03a34ab8",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "🔄 Atualização do site detectada via console! (tentativa #1) — agindo em 500ms...",
+      "ts": "2026-06-20T12:33:38.806Z"
+    },
+    {
+      "id": "cff0a35a-2637-4c95-a02b-d6575ee827ed",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Procurando setor: \"Oeste Inferior\"...",
+      "ts": "2026-06-20T12:33:39.321Z"
+    },
+    {
+      "id": "94eefb93-a97a-4e20-baa6-8966d25f99b4",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "\"Oeste Inferior\" encontrado! Selecionando...",
+      "ts": "2026-06-20T12:33:39.335Z"
+    },
+    {
+      "id": "24b6ac9b-3f70-4b36-bdfd-34c02ab5eea8",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "Quantidade: 3 (via botão +)",
+      "ts": "2026-06-20T12:33:40.750Z"
+    },
+    {
+      "id": "d3ea6406-86aa-4c9c-b12f-77ed09f6452f",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Botão de compra clicado. Aguardando o site registrar no carrinho...",
+      "ts": "2026-06-20T12:33:40.891Z"
+    },
+    {
+      "id": "d9a00a11-e566-4b18-a554-8b166014df67",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "warn",
+      "message": "🚨 [CAPTCHA] Desafio Google detectado! Iniciando solver invisível...",
+      "ts": "2026-06-20T12:33:40.897Z"
+    },
+    {
+      "id": "635650cb-fb4b-4c4a-9399-3819b7634b3b",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "api",
+      "message": "[CAPTCHA] SiteKey capturada: 6LfRi4Er... Enviando à API.",
+      "ts": "2026-06-20T12:33:40.902Z"
+    },
+    {
+      "id": "1962e513-3dd6-4650-90f9-7898489008c8",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "[CAPTCHA] Tarefa a7dca106-ccf5-49f6-b4db-587147ebe0ec criada! Trabalhadores resolvendo imagens...",
+      "ts": "2026-06-20T12:33:41.212Z"
+    },
+    {
+      "id": "b90f3e78-00a3-45bc-944f-0d0d24cf741c",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "[CAPTCHA] 🔥 Resolvido com sucesso! Injetando token mágico na página...",
+      "ts": "2026-06-20T12:34:05.721Z"
+    },
+    {
+      "id": "ec53d1a1-7367-4922-bdfa-cc69848cd8c4",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "error",
+      "message": "[CAPTCHA] Erro interno: page.evaluate: Execution context was destroyed, most likely because of a navigation",
+      "ts": "2026-06-20T12:34:07.770Z"
+    },
+    {
+      "id": "c72a5c2e-6526-4eec-97bd-b08abfdbac5c",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "wait",
+      "message": "Aguardando redirecionamento para a página do carrinho...",
+      "ts": "2026-06-20T12:34:07.772Z"
+    },
+    {
+      "id": "1767f8d0-99b6-4710-9a89-bd3b64232579",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "✅ Redirecionado para o carrinho com sucesso!",
+      "ts": "2026-06-20T12:34:08.317Z"
+    },
+    {
+      "id": "97d68574-3d52-46ca-9fa9-1ae064d06028",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "🎟 INGRESSO NO CARRINHO! Setor: \"Oeste Inferior\" · 3x (Conta: flainter2@outlook.com)",
+      "ts": "2026-06-20T12:34:08.319Z"
+    },
+    {
+      "id": "c4ae998b-fb3b-48ad-9215-2cf2349c4daa",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Fechando browser.",
+      "ts": "2026-06-20T12:34:08.321Z"
+    },
+    {
+      "id": "b073061a-94a1-4f10-a5a4-1c76b4941496",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "✅ Bot finalizado com sucesso! Ingresso adicionado ao carrinho.",
+      "ts": "2026-06-20T12:34:08.490Z"
+    },
+    {
+      "id": "f6a03b77-f43f-41a6-a9d9-9db050ad73d5",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "--------------------------------------------------",
+      "ts": "2026-06-20T12:34:08.492Z"
+    },
+    {
+      "id": "ef3ca7fa-d2a2-43d0-9d6d-600460ed1779",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "📊 RESUMO GERAL DE INGRESSOS COMPRADOS POR CONTA:",
+      "ts": "2026-06-20T12:34:08.495Z"
+    },
+    {
+      "id": "810200fc-b101-4795-9e1a-70c09f6f3d23",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "   👤 veiga.yury@gmail.com: 12 ingressos garantidos",
+      "ts": "2026-06-20T12:34:08.496Z"
+    },
+    {
+      "id": "16a39087-4a81-4a91-bb2e-474bb393c3e9",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "   👤 Yuri_muaythai@hotmail.com: 6 ingressos garantidos",
+      "ts": "2026-06-20T12:34:08.498Z"
+    },
+    {
+      "id": "924beaa8-8f14-42e5-86e8-4ac46f1fef9e",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "   👤 flainter1@outlook.com: 3 ingressos garantidos",
+      "ts": "2026-06-20T12:34:08.500Z"
+    },
+    {
+      "id": "c3d5a535-30fa-4aed-8ac5-1aadfc35aa07",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "   👤 flainter2@outlook.com: 3 ingressos garantidos",
+      "ts": "2026-06-20T12:34:08.502Z"
+    },
+    {
+      "id": "c281b130-29b4-4e8c-ba12-0005691730e3",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "--------------------------------------------------",
+      "ts": "2026-06-20T12:34:08.504Z"
+    },
+    {
+      "id": "9f981b46-af87-4739-a7c5-bb18fdd066d5",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "info",
+      "message": "Fechando browser.",
+      "ts": "2026-06-20T12:34:08.505Z"
+    },
+    {
+      "id": "4b0ae8ea-83d4-4985-9805-3e0151f23159",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "✅ Fim do processamento para flainter2@outlook.com. Ingresso garantido!",
+      "ts": "2026-06-20T12:34:08.507Z"
+    },
+    {
+      "id": "c228d696-7981-41c1-b8bc-18834d7f9147",
+      "event_id": "deff6337-c071-4ee1-bc02-d9a6b70ebfa6",
+      "level": "success",
+      "message": "🏁 Todas as contas foram processadas com sucesso!",
+      "ts": "2026-06-20T12:34:08.512Z"
+    }
+  ]
+}
