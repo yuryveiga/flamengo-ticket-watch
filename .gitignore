@@ -30,3 +30,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Playwright/Bot runtime files
+chrome-bot-profile*
+error-login*
+debug-*.png
+tickets-stats.json

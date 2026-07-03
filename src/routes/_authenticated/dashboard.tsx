@@ -64,6 +64,7 @@ function Dashboard() {
       ) : active ? (
         <div className="grid lg:grid-cols-2 gap-4">
           <StatusPanel
+            key={active.id}
             event={active}
             onStart={async () => {
               try {

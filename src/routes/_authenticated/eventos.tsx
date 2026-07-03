@@ -24,10 +24,13 @@ export const Route = createFileRoute("/_authenticated/eventos")({
 // ─── Maracanã sectors ─────────────────────────────────────────────────────────
 
 const SETORES_PADRAO = [
+  "Sul Nível 1 | B",      "Sul Nível 2 | B",
+  "Sul Nível 1 | C",      "Sul Nível 2 | C",
+  "Leste Inferior",       "Oeste Inferior",
+  "Maracanã + | A",
   "Norte Inferior",       "Norte Superior",
   "Sul Inferior",         "Sul Superior",
-  "Leste Inferior",       "Leste Superior",
-  "Oeste Inferior",       "Oeste Superior",
+  "Leste Superior",       "Oeste Superior",
   "Maracanã Mais",        "Cadeira Especial Leste",
   "Cadeira Especial Oeste","Cadeira Cativa",
   "Área VIP",             "Camarote",

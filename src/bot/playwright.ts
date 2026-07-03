@@ -44,15 +44,27 @@ async function doLogin(page: Page, loginUrl: string, email: string, senha: strin
     if (await cookieBtn.isVisible({ timeout: 2000 })) await cookieBtn.click();
   } catch {}
 
-  // Fill credentials
+  // Verifica se já está logado (sessão persistente) ou se precisa logar
   const emailField = page.locator("input[type='email'], input[name='email'], input#Email, input[placeholder*='e-mail' i], input[placeholder*='cpf' i]").first();
-  await emailField.waitFor({ state: "visible", timeout: 10_000 }).catch(async (e) => {
-    // Se falhar, salva a página para debug
-    await page.screenshot({ path: "error-login-email.png" });
+  const logoutLink = page.locator("a[href*='logout'], a:has-text('Sair'), a:has-text('Logout')").first();
+
+  try {
+    await Promise.race([
+      emailField.waitFor({ state: "visible", timeout: 10_000 }),
+      logoutLink.waitFor({ state: "visible", timeout: 10_000 })
+    ]);
+  } catch (e: any) {
+    await page.screenshot({ path: "error-login-page.png" });
     const html = await page.content();
-    require("fs").writeFileSync("error-login.html", html);
-    throw new Error(`Campo de e-mail não encontrado. HTML salvo em error-login.html. Erro original: ${e.message}`);
-  });
+    fs.writeFileSync("error-login.html", html);
+    throw new Error(`Página de login não carregou corretamente (sem campo de email e sem botão de Sair). HTML salvo em error-login.html. Erro: ${e.message}`);
+  }
+
+  if (await logoutLink.isVisible()) {
+    await log("success", `Sessão da conta ${email} já estava salva e logada! Pulando login...`);
+    return;
+  }
+
   await emailField.fill(email);
   await log("api", `E-mail preenchido: ${email}`);
 
@@ -320,9 +332,10 @@ async function tryAddToCart(
            await log("warn", "Fallback também falhou em redirecionar.");
         }
       }
+    } else {
+      await page.screenshot({ path: `debug-buy-not-found-${setor.replace(/[^a-zA-Z0-9]/g, '-')}.png` });
+      await log("warn", `Botão de compra não encontrado para "${setor}". Uma foto da tela foi salva na pasta raiz para investigarmos.`);
     }
-
-    await log("warn", `Botão de compra não encontrado para "${setor}".`);
   }
 
   // Fallback: any available button
@@ -398,36 +411,79 @@ export async function runBotPersistent(
   if (!email)           throw new Error("E-mail não configurado.");
   if (!decryptedSenha)  throw new Error("Senha não configurada.");
 
-  // Lê os stats logo no início para mostrar no painel em realtime
+  // Lê os stats isolando por ID do evento (para zerar em novos eventos)
   const statsFile = path.join(process.cwd(), 'tickets-stats.json');
   let currentStats = 0;
   if (fs.existsSync(statsFile)) {
-     const stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
-     currentStats = stats[email] || 0;
+     try {
+       const stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+       if (stats[eventData.id] && typeof stats[eventData.id] === 'object') {
+         currentStats = stats[eventData.id][email] || 0;
+       }
+     } catch {}
   }
-  await log("info", `[INFO CONTA] ${email} — Ingressos históricos: ${currentStats}`);
+  await log("info", `[INFO CONTA] ${email} — Ingressos históricos no evento atual: ${currentStats}`);
   await log("info", `Iniciando browser persistente (headless=${headless})...`);
 
-  const userDataDir = path.join(process.cwd(), "chrome-bot-profile");
+  const safeEmail = email.replace(/[^a-zA-Z0-9]/g, '_');
+  const userDataDir = path.join(process.cwd(), `chrome-bot-profile-${safeEmail}`);
   
   const context = await chromium.launchPersistentContext(userDataDir, {
     headless,
     channel: "chrome",
     viewport: { width: 1366, height: 768 },
-    userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+    args: [
+      "--disable-background-timer-throttling",
+      "--disable-backgrounding-occluded-windows",
+      "--disable-renderer-backgrounding"
+    ]
   });
 
   // O PersistentContext já abre com uma aba vazia
   const page = context.pages().length > 0 ? context.pages()[0] : await context.newPage();
 
-  // Escuta os logs do console do próprio site de forma nativa no Playwright
   let resolveUpdate: (() => void) | null = null;
-  page.on("console", (msg) => {
-    const text = msg.text();
-    if (text.includes("Done reading available tickets") || text.includes("reading available tickets")) {
-      if (resolveUpdate) {
-        resolveUpdate();
-        resolveUpdate = null;
+  
+  // Expor função para o browser chamar quando interceptar o log
+  await page.exposeFunction("onFcardUpdate", () => {
+    if (resolveUpdate) {
+      resolveUpdate();
+      resolveUpdate = null;
+    }
+  });
+
+  // Injetar script antes de tudo para hackear o console.log original do site
+  await page.addInitScript(() => {
+    const origLog = console.log;
+    const origInfo = console.info;
+    const origDebug = console.debug;
+    
+    function checkArgs(args: any[]) {
+      const text = args.map(a => String(a)).join(" ");
+      if (text.includes("reading available tickets")) {
+        window.onFcardUpdate().catch(() => {});
+      }
+    }
+    
+    console.log = function(...args) { checkArgs(args); return origLog.apply(this, args); };
+    console.info = function(...args) { checkArgs(args); return origInfo.apply(this, args); };
+    console.debug = function(...args) { checkArgs(args); return origDebug.apply(this, args); };
+  });
+
+  // Interceptação de Rede (Network) Ultra-Rápida
+  page.on("response", async (res) => {
+    const type = res.request().resourceType();
+    const url = res.url().toLowerCase();
+    
+    // Se for uma chamada de dados (XHR/Fetch) para a própria API/Site do FutebolCard
+    if ((type === "fetch" || type === "xhr") && url.includes("futebolcard")) {
+      // Ignora chamadas óbvias de analytics/tracking
+      if (!url.includes("google") && !url.includes("analytics") && !url.includes("facebook")) {
+        if (resolveUpdate) {
+          resolveUpdate();
+          resolveUpdate = null;
+        }
       }
     }
   });
@@ -441,49 +497,27 @@ export async function runBotPersistent(
     await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30_000 });
     await page.waitForTimeout(3000);
 
-    await log("info", "🎯 Modo de interceptação ativo. Aguardando o site atualizar a disponibilidade...");
-    await log("info", "   (O site faz isso a cada ~30s via console log do fcard-maps-ac.js)");
+    await log("info", "🎯 Modo de interceptação ativo! Checando DOM imediatamente e aguardando atualizações...");
 
     let attemptCount = 0;
 
-    // Step 3: Listen for the site's own update cycle
+    // Step 3: Loop combinando polling e interceptação
     while (!stopSignal.stop) {
-      try {
-        // Aguarda a promessa ser resolvida pelo evento 'console'
-        await new Promise<void>((resolve, reject) => {
-          resolveUpdate = resolve;
-          // Timeout de 90s (como o site atualiza a cada 30s, 90s é margem de folga)
-          setTimeout(() => reject(new Error("TIMEOUT_AGUARDANDO_SITE")), 90_000);
-        });
-      } catch (err: any) {
-        if (stopSignal.stop) break;
-        if (err.message === "TIMEOUT_AGUARDANDO_SITE") {
-          await log("warn", "Timeout aguardando atualização do site. Recarregando página...");
-          await page.reload({ waitUntil: "domcontentloaded", timeout: 30_000 });
-          await page.waitForTimeout(3000);
-          continue;
-        }
-        throw err;
-      }
-
-      if (stopSignal.stop) break;
-
       attemptCount++;
-      await log("api", `🔄 Atualização do site detectada via console! (tentativa #${attemptCount}) — agindo em 500ms...`);
+      await log("api", `🔄 Verificando disponibilidade (tentativa #${attemptCount})...`);
 
-      // Aguarda 500ms para o site terminar de processar o mapa visualmente
-      await page.waitForTimeout(500);
-
+      // 1. Tenta comprar imediatamente
       const success = await tryAddToCart(page, setores, quantidade, aceitarQualquer, email, log);
       
       if (success) {
-        // Atualiza a contagem global de ingressos por conta no final com sucesso garantido
+        // Atualiza a contagem isolada por evento
         const statsFile = path.join(process.cwd(), 'tickets-stats.json');
-        let stats: Record<string, number> = {};
+        let stats: any = {};
         if (fs.existsSync(statsFile)) {
-           stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+           try { stats = JSON.parse(fs.readFileSync(statsFile, 'utf8')); } catch {}
         }
-        stats[email] = (stats[email] || 0) + quantidade;
+        if (!stats[eventData.id]) stats[eventData.id] = {};
+        stats[eventData.id][email] = (stats[eventData.id][email] || 0) + quantidade;
         fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
 
         await log("info", "Fechando browser.");
@@ -491,8 +525,8 @@ export async function runBotPersistent(
         
         await log("success", "✅ Bot finalizado com sucesso! Ingresso adicionado ao carrinho.");
         await log("info", "--------------------------------------------------");
-        await log("info", "📊 RESUMO GERAL DE INGRESSOS COMPRADOS POR CONTA:");
-        for (const [acc, qtd] of Object.entries(stats)) {
+        await log("info", "📊 RESUMO DE INGRESSOS DESTE EVENTO POR CONTA:");
+        for (const [acc, qtd] of Object.entries(stats[eventData.id] || {})) {
            await log("success", `   👤 ${acc}: ${qtd} ingressos garantidos`);
         }
         await log("info", "--------------------------------------------------");
@@ -500,7 +534,37 @@ export async function runBotPersistent(
         return true;
       }
 
-      await log("wait", `Nenhum setor disponível nesta rodada. Aguardando próxima atualização do site...`);
+      await log("wait", `Nenhum setor disponível. Aguardando ${config.intervalo || 30}s ou atualização do site...`);
+
+      if (stopSignal.stop) break;
+
+      // 2. Aguarda o intervalo da configuração OU o console log do site
+      try {
+        await new Promise<void>((resolve, reject) => {
+          resolveUpdate = resolve;
+          
+          // Timeout baseado no intervalo configurado pelo usuário (default 30s se não existir)
+          const waitTimeMs = (config.intervalo || 30) * 1000;
+          setTimeout(() => {
+            if (resolveUpdate) {
+              resolveUpdate = null;
+              reject(new Error("INTERVAL_TICK"));
+            }
+          }, waitTimeMs);
+        });
+        
+        // Se chegou aqui, a promessa foi resolvida pelo console log (onFcardUpdate)!
+        await log("info", "⚡ Atualização detectada via console do site! Verificando imediatamente...");
+        await page.waitForTimeout(500); // Aguarda o DOM renderizar
+      } catch (err: any) {
+        if (err.message === "INTERVAL_TICK") {
+          // Apenas o tempo passou (polling normal)
+          // Se quiser recarregar a página a cada X tentativas, pode adicionar aqui
+          // Mas normalmente apenas checar o DOM de novo já basta.
+        } else {
+          throw err;
+        }
+      }
     }
 
     return false;
@@ -519,19 +583,24 @@ export async function runTestLogin(eventData: EventData, decryptedSenha: string,
   const statsFile = path.join(process.cwd(), 'tickets-stats.json');
   let currentStats = 0;
   if (fs.existsSync(statsFile)) {
-     const stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
-     currentStats = stats[(config as any)?.email] || 0;
+     try {
+       const stats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+       if (stats[eventData.id] && typeof stats[eventData.id] === 'object') {
+         currentStats = stats[eventData.id][(config as any)?.email] || 0;
+       }
+     } catch {}
   }
-  await log("info", `[INFO CONTA] ${(config as any)?.email || 'Desconhecido'} — Ingressos históricos: ${currentStats}`);
+  await log("info", `[INFO CONTA] ${(config as any)?.email || 'Desconhecido'} — Ingressos históricos no evento atual: ${currentStats}`);
   await log("info", `Iniciando teste de login (headless=${headless})...`);
   
   // Usa uma pasta diferente para o teste, assim não dá conflito (crash) se o bot principal estiver rodando
-  const userDataDir = path.join(process.cwd(), "chrome-bot-profile-test");
+  const safeEmail = ((config as any)?.email || "test").replace(/[^a-zA-Z0-9]/g, '_');
+  const userDataDir = path.join(process.cwd(), `chrome-bot-profile-test-${safeEmail}`);
   const context = await chromium.launchPersistentContext(userDataDir, {
     headless,
     channel: "chrome",
     viewport: { width: 1366, height: 768 },
-    userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
   });
   const page = context.pages().length > 0 ? context.pages()[0] : await context.newPage();
   try {
