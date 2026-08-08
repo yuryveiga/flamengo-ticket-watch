@@ -403,6 +403,6 @@ async function logHourlyStats() {
   }
 }
 
-// Dispara imediatamente ao subir e depois a cada 1 hora
+// Dispara imediatamente ao subir e depois a cada 30 minutos
 logHourlyStats();
-setInterval(logHourlyStats, 60 * 60 * 1000);
+setInterval(logHourlyStats, 30 * 60 * 1000);

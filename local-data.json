@@ -1459,6 +1459,34 @@
       "level": "info",
       "message": "📊 [08/08/2026, 18:05:47] Relatório horário — 0 ingressos encontrados até agora.",
       "ts": "2026-08-08T21:05:47.525Z"
+    },
+    {
+      "id": "8333f9fe-d420-457a-81ab-6d9e810647df",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "level": "info",
+      "message": "📊 [08/08/2026, 18:11:32] Relatório horário — «fla x cru» — 0 ingressos encontrados até agora.",
+      "ts": "2026-08-08T21:11:32.464Z"
+    },
+    {
+      "id": "5df9cff3-281a-4c15-906f-806c700e15a9",
+      "event_id": "2526dcea-b34a-4b1e-9da9-7d766ff8e756",
+      "level": "info",
+      "message": "📊 [08/08/2026, 18:11:32] Relatório horário — «Fla x vit» — 0 ingressos encontrados até agora.",
+      "ts": "2026-08-08T21:11:32.467Z"
+    },
+    {
+      "id": "76373a3e-b77d-496d-9065-995644a21ffb",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "level": "info",
+      "message": "📊 [08/08/2026, 18:15:21] Relatório horário — «fla x cru» — 0 ingressos encontrados até agora.",
+      "ts": "2026-08-08T21:15:21.167Z"
+    },
+    {
+      "id": "0ec411cc-35d7-412b-8cef-9b139655f57f",
+      "event_id": "2526dcea-b34a-4b1e-9da9-7d766ff8e756",
+      "level": "info",
+      "message": "📊 [08/08/2026, 18:15:21] Relatório horário — «Fla x vit» — 0 ingressos encontrados até agora.",
+      "ts": "2026-08-08T21:15:21.171Z"
     }
   ]
 }
