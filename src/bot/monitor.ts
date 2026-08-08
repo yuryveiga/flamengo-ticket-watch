@@ -223,7 +223,11 @@ async function monitorEvent(
       }
     } else {
       log("INFO", label, `Sem ingressos (check #${msgCount}).`);
-      await dashLog(ev.id, "info", `🔍 Monitor: sem ingressos disponíveis (check #${msgCount}).`);
+      
+      // Log no dashboard a cada 10 checks (~5 minutos, considerando consultas a cada 30s)
+      if (msgCount === 1 || msgCount % 10 === 0) {
+        await dashLog(ev.id, "info", `🔍 Monitor (a cada 5min): sem ingressos disponíveis (check #${msgCount}).`);
+      }
 
       if (alertSent) {
         alertSent    = false;
