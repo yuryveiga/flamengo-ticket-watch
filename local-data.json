@@ -1487,6 +1487,48 @@
       "level": "info",
       "message": "📊 [08/08/2026, 18:15:21] Relatório horário — «Fla x vit» — 0 ingressos encontrados até agora.",
       "ts": "2026-08-08T21:15:21.171Z"
+    },
+    {
+      "id": "43d51c45-9f26-4329-953b-b770a4effca1",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "level": "info",
+      "message": "🔍 Monitor (a cada 5min): sem ingressos disponíveis (check #1).",
+      "ts": "2026-08-08T21:30:29.857Z"
+    },
+    {
+      "id": "42b3fe1c-ef54-4252-a257-7f4e81a184a0",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "level": "info",
+      "message": "🔍 Monitor (a cada 5min): sem ingressos disponíveis (check #10).",
+      "ts": "2026-08-08T21:30:29.860Z"
+    },
+    {
+      "id": "755a4d16-2ac8-46a4-a75d-48d6cbbb3ec5",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "level": "info",
+      "message": "🔍 Monitor (a cada 5min): sem ingressos disponíveis (check #1).",
+      "ts": "2026-08-08T21:32:26.839Z"
+    },
+    {
+      "id": "f15c1ccb-d45a-4cae-977e-24e0e5f5136a",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "level": "info",
+      "message": "🔍 Monitor (a cada 5min): sem ingressos disponíveis (check #10).",
+      "ts": "2026-08-08T21:32:26.842Z"
+    },
+    {
+      "id": "bd172a40-4fbd-49de-a27f-dd24f33f1911",
+      "event_id": "2526dcea-b34a-4b1e-9da9-7d766ff8e756",
+      "level": "info",
+      "message": "🔍 Monitor (a cada 5min): sem ingressos disponíveis (check #1).",
+      "ts": "2026-08-08T21:32:26.845Z"
+    },
+    {
+      "id": "d3ad1e58-0aa2-4cbb-99db-af53234e3fc1",
+      "event_id": "2526dcea-b34a-4b1e-9da9-7d766ff8e756",
+      "level": "info",
+      "message": "🔍 Monitor (a cada 5min): sem ingressos disponíveis (check #10).",
+      "ts": "2026-08-08T21:32:26.848Z"
     }
   ]
 }
