@@ -366,3 +366,43 @@ setInterval(async () => {
     console.error("[ERRO] Loop de comandos:", err.message);
   }
 }, 3000);
+
+// ─── Relatório horário por evento ─────────────────────────────────────────────────────
+
+async function logHourlyStats() {
+  try {
+    const db = await localDb.read();
+    if (!db.events || db.events.length === 0) return;
+
+    const statsFile = resolve(process.cwd(), "tickets-stats.json");
+    let stats: Record<string, Record<string, number>> = {};
+    try {
+      if (fs.existsSync(statsFile)) {
+        stats = JSON.parse(fs.readFileSync(statsFile, "utf8"));
+      }
+    } catch {}
+
+    const now = new Date().toLocaleString("pt-BR");
+
+    for (const ev of db.events) {
+      const evStats = stats[ev.id] ?? {};
+      const totalTickets = Object.values(evStats).reduce((sum, n) => sum + (n as number), 0);
+      const accountLines = Object.entries(evStats)
+        .map(([email, qty]) => `👤 ${email}: ${qty} ingresso(s)`)
+        .join(" | ");
+
+      const msg = totalTickets > 0
+        ? `📊 [${now}] Relatório horário — ${totalTickets} ingresso(s) garantido(s). ${accountLines}`
+        : `📊 [${now}] Relatório horário — 0 ingressos encontrados até agora.`;
+
+      await pushLog(ev.id, "info", msg);
+      console.log(`📊 [${ev.name ?? ev.id.slice(0,8)}] ${msg}`);
+    }
+  } catch (err: any) {
+    console.error("[ERRO] Relatório horário:", err.message);
+  }
+}
+
+// Dispara imediatamente ao subir e depois a cada 1 hora
+logHourlyStats();
+setInterval(logHourlyStats, 60 * 60 * 1000);

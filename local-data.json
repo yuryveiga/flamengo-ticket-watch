@@ -1445,6 +1445,20 @@
       "level": "success",
       "message": "🏁 Teste em massa concluído para todas as contas!",
       "ts": "2026-08-07T17:48:02.579Z"
+    },
+    {
+      "id": "ababf591-8a43-46d1-9564-7f9b208396ac",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "level": "info",
+      "message": "📊 [08/08/2026, 18:05:47] Relatório horário — 0 ingressos encontrados até agora.",
+      "ts": "2026-08-08T21:05:47.522Z"
+    },
+    {
+      "id": "021151e7-89ea-4dfb-890c-2c5642f0a00e",
+      "event_id": "2526dcea-b34a-4b1e-9da9-7d766ff8e756",
+      "level": "info",
+      "message": "📊 [08/08/2026, 18:05:47] Relatório horário — 0 ingressos encontrados até agora.",
+      "ts": "2026-08-08T21:05:47.525Z"
     }
   ]
 }
