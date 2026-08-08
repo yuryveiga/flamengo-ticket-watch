@@ -85,24 +85,44 @@ async function sendTelegram(message: string): Promise<void> {
   }
 }
 
+// ─── Busca evento no banco pelo ID da FutebolCard (via URL) ──────────────────
+
+async function findEvent(fcardId: string) {
+  const db = await localDb.read();
+  return db.events.find((e) => e.url?.includes(`event=${fcardId}`));
+}
+
+// ─── Loga no dashboard do painel ─────────────────────────────────────────────
+
+async function dashLog(
+  fcardId: string,
+  level: "info" | "warn" | "success" | "error" | "api",
+  msg: string
+) {
+  try {
+    const ev = await findEvent(fcardId);
+    if (ev) await localDb.appendLog(ev.id, level, msg);
+  } catch {}
+}
+
 // ─── Aciona bot de compra ─────────────────────────────────────────────────────
 
-async function triggerBuyBot(eventId: string): Promise<void> {
+async function triggerBuyBot(fcardId: string): Promise<void> {
   log("BOT", "Acionando bot de compra...");
   try {
     const db = await localDb.read();
 
-    // Verifica se o evento existe no banco
-    const ev = db.events.find((e) => e.id === eventId);
+    // Busca evento pela URL (id interno é UUID, não o ID da FutebolCard)
+    const ev = db.events.find((e) => e.url?.includes(`event=${fcardId}`));
     if (!ev) {
-      log("WARN", `Evento ${eventId} não encontrado no local-data.json. Bot não acionado.`);
-      log("WARN", "Certifique-se de ter cadastrado este evento no painel antes de monitorar.");
+      log("WARN", `Evento ${fcardId} não encontrado no local-data.json. Bot não acionado.`);
+      log("WARN", "Cadastre este evento no painel antes de monitorar.");
       return;
     }
 
     // Verifica se já há um comando start pendente (não processado)
     const alreadyPending = db.bot_commands.some(
-      (c) => c.event_id === eventId && c.command === "start" && !c.processed_at
+      (c) => c.event_id === ev.id && c.command === "start" && !c.processed_at
     );
     if (alreadyPending) {
       log("BOT", "Bot já possui comando start pendente. Nenhuma ação necessária.");
@@ -110,15 +130,13 @@ async function triggerBuyBot(eventId: string): Promise<void> {
     }
 
     // Atualiza status do evento para "monitorando"
-    const evIdx = db.events.findIndex((e) => e.id === eventId);
-    if (evIdx !== -1) {
-      db.events[evIdx].status = "monitorando";
-    }
+    const evIdx = db.events.findIndex((e) => e.id === ev.id);
+    if (evIdx !== -1) db.events[evIdx].status = "monitorando";
 
     // Insere o comando start
     db.bot_commands.push({
       id: crypto.randomUUID(),
-      event_id: eventId,
+      event_id: ev.id,
       user_id: ev.user_id,
       command: "start",
       created_at: new Date().toISOString(),
@@ -126,7 +144,7 @@ async function triggerBuyBot(eventId: string): Promise<void> {
     });
 
     await localDb.write(db);
-    log("SUCCESS", `🤖 Comando START enviado para o bot! Evento: ${ev.name ?? eventId}`);
+    log("SUCCESS", `🤖 Comando START enviado para o bot! Evento: ${ev.name ?? fcardId}`);
     log("BOT", "O worker.ts processará este comando em até 3 segundos.");
   } catch (err: any) {
     log("ERROR", `Erro ao acionar bot: ${err.message}`);
@@ -184,6 +202,7 @@ async function startMonitor() {
 
     if (isAvailable) {
       log("ALERT", `🎟️  INGRESSO DISPONÍVEL! Resposta diferente do padrão vazio.`);
+      await dashLog(EVENT_ID, "success", `🚨 INGRESSO DISPONÍVEL! Monitor detectou: ${text.slice(0, 200)}`);
 
       if (!alertSent) {
         alertSent = true;
@@ -198,14 +217,17 @@ async function startMonitor() {
           `⏰ ${new Date().toLocaleString("pt-BR")}`;
 
         await sendTelegram(telegramMsg);
+        await dashLog(EVENT_ID, "info", "📱 Alerta enviado ao Telegram.");
 
         // 2. Aciona bot de compra automaticamente
         if (!botTriggered) {
           botTriggered = true;
           await triggerBuyBot(EVENT_ID);
+          await dashLog(EVENT_ID, "info", "🤖 Comando START enviado ao bot de compra pelo monitor.");
         }
       }
     } else {
+      await dashLog(EVENT_ID, "info", `🔍 Monitor: sem ingressos disponíveis (check #${msgCount}).`);
       log("INFO", `Sem ingressos (padrão vazio confirmado).`);
 
       // Reseta flags quando esgota novamente (para reacionar se voltar)
@@ -233,6 +255,8 @@ async function startMonitor() {
       log("RAW", `[Network #${msgCount}] ${body.slice(0, 200)}`);
       if (isAvailable && !alertSent) {
         alertSent = true;
+        log("ALERT", `🎟️  INGRESSO DISPONÍVEL! (via rede)`);
+        await dashLog(EVENT_ID, "success", `🚨 INGRESSO DISPONÍVEL! API retornou: ${body.slice(0, 200)}`);
         const telegramMsg =
           `🚨 <b>INGRESSO DISPONÍVEL!</b>\n\n` +
           `🎟️ Evento: <code>${EVENT_ID}</code>\n` +
@@ -241,15 +265,18 @@ async function startMonitor() {
           `🤖 Bot de compra acionado automaticamente!\n` +
           `⏰ ${new Date().toLocaleString("pt-BR")}`;
         await sendTelegram(telegramMsg);
+        await dashLog(EVENT_ID, "info", "📱 Alerta enviado ao Telegram.");
         if (!botTriggered) {
           botTriggered = true;
           await triggerBuyBot(EVENT_ID);
+          await dashLog(EVENT_ID, "info", "🤖 Comando START enviado ao bot de compra pelo monitor.");
         }
       } else if (!isAvailable && alertSent) {
         alertSent = false;
         botTriggered = false;
         log("INFO", "Flags resetadas — monitorando novamente.");
       } else if (!isAvailable) {
+        await dashLog(EVENT_ID, "info", `🔍 Monitor: sem ingressos disponíveis (rede check #${msgCount}).`);
         log("INFO", "Sem ingressos (confirmado via rede).");
       }
     } catch {}
