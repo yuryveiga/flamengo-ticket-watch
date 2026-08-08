@@ -43,7 +43,7 @@ export type BotCommandRecord = {
   id: string;
   event_id: string;
   user_id: string;
-  command: "start" | "stop" | "test_login";
+  command: "start" | "stop" | "test_login" | "test_all_logins";
   created_at: string;
   processed_at: string | null;
 };
@@ -76,11 +76,16 @@ const defaultData: LocalDbData = {
 
 // ─── Core R/W ─────────────────────────────────────────────────────────────────
 
+// ─── Mutex simples para evitar race condition em paralelo ────────────────────
+let writeLock: Promise<void> = Promise.resolve();
+
 async function readDb(): Promise<LocalDbData> {
+  // Aguarda qualquer escrita em andamento antes de ler
+  await writeLock;
   try {
-    const data = await fs.readFile(DATA_FILE, "utf-8");
-    const parsed = JSON.parse(data) as LocalDbData;
-    // Migrate old data that may not have logs field
+    const raw = await fs.readFile(DATA_FILE, "utf-8");
+    if (!raw || !raw.trim()) return { ...defaultData };
+    const parsed = JSON.parse(raw) as LocalDbData;
     if (!parsed.logs) parsed.logs = [];
     return parsed;
   } catch (error: any) {
@@ -88,12 +93,23 @@ async function readDb(): Promise<LocalDbData> {
       await fs.writeFile(DATA_FILE, JSON.stringify(defaultData, null, 2), "utf-8");
       return { ...defaultData };
     }
+    // JSON corrompido: loga o erro mas NÃO apaga os dados — lança o erro para cima
+    console.error("[DB] Erro ao ler banco de dados:", error.message);
     throw error;
   }
 }
 
 async function writeDb(data: LocalDbData): Promise<void> {
-  await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), "utf-8");
+  // Serializa escritas: cada write aguarda o anterior terminar
+  const doWrite = async () => {
+    // Faz backup antes de sobrescrever
+    try {
+      await fs.copyFile(DATA_FILE, DATA_FILE + ".bak");
+    } catch {}
+    await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), "utf-8");
+  };
+  writeLock = writeLock.then(doWrite, doWrite);
+  await writeLock;
 }
 
 // ─── Log helpers ─────────────────────────────────────────────────────────────

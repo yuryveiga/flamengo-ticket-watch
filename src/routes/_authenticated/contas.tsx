@@ -8,9 +8,11 @@ import {
   createAccount,
   updateAccount,
   deleteAccount,
+  enqueueTestAllLoginsFn,
 } from "@/lib/accounts.functions";
 import { toast } from "sonner";
-import { Plus, Trash2, Pencil, Eye, EyeOff, X, Check, ShieldCheck, Github } from "lucide-react";
+import { Plus, Trash2, Pencil, Eye, EyeOff, X, Check, ShieldCheck, Github, Play } from "lucide-react";
+import { LogTerminal } from "./dashboard";
 
 export const Route = createFileRoute("/_authenticated/contas")({
   head: () => ({ meta: [{ title: "Contas — TicketBot" }] }),
@@ -164,6 +166,7 @@ function ContasPage() {
   const qc = useQueryClient();
   const listAccountsFn = useServerFn(listAccounts);
   const deleteAccountFn = useServerFn(deleteAccount);
+  const enqueueTestAll = useServerFn(enqueueTestAllLoginsFn);
 
   const { data: accounts = [], isLoading } = useQuery({
     queryKey: ["accounts"],
@@ -180,6 +183,17 @@ function ContasPage() {
   });
 
   const [modal, setModal] = useState<"new" | Account | null>(null);
+  const [showTestModal, setShowTestModal] = useState(false);
+
+  const startTestAll = async () => {
+    try {
+      await enqueueTestAll();
+      setShowTestModal(true);
+      toast.success("Teste iniciado!");
+    } catch (e: any) {
+      toast.error(e.message);
+    }
+  };
 
   const exportAccounts = () => {
     const safe = accounts.map(({ id, label, email, created_at }) => ({ id, label, email, created_at }));
@@ -200,13 +214,22 @@ function ContasPage() {
         </div>
         <div className="flex items-center gap-2">
           {accounts.length > 0 && (
-            <button
-              onClick={exportAccounts}
-              title="Exportar contas (sem senhas)"
-              className="flex items-center gap-2 px-3 py-2 rounded-md border border-border font-semibold text-sm"
-            >
-              <Download className="h-4 w-4" /> Exportar
-            </button>
+            <>
+              <button
+                onClick={startTestAll}
+                title="Testar login de todas as contas sequencialmente"
+                className="flex items-center gap-2 px-3 py-2 rounded-md border border-border font-semibold text-sm hover:bg-accent"
+              >
+                <Play className="h-4 w-4" /> Testar Todos
+              </button>
+              <button
+                onClick={exportAccounts}
+                title="Exportar contas (sem senhas)"
+                className="flex items-center gap-2 px-3 py-2 rounded-md border border-border font-semibold text-sm hover:bg-accent"
+              >
+                <Download className="h-4 w-4" /> Exportar
+              </button>
+            </>
           )}
           <button
             onClick={() => setModal("new")}
@@ -283,8 +306,24 @@ function ContasPage() {
       </p>
 
       {modal === "new" && <AccountModal onClose={() => setModal(null)} />}
-      {modal && modal !== "new" && (
-        <AccountModal account={modal as Account} onClose={() => setModal(null)} />
+      {modal !== "new" && modal !== null && (
+        <AccountModal account={modal} onClose={() => setModal(null)} />
+      )}
+      
+      {showTestModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
+          <div className="w-full max-w-2xl rounded-xl border border-border bg-card shadow-xl overflow-hidden flex flex-col" style={{ height: "600px" }}>
+            <div className="flex items-center justify-between p-4 border-b border-border bg-muted/50">
+              <h2 className="font-black text-lg">Teste de Logins</h2>
+              <button onClick={() => setShowTestModal(false)} className="p-1 hover:bg-accent rounded">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <div className="flex-1 p-0 overflow-hidden bg-black">
+              <LogTerminal eventId="test-all-logins" />
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

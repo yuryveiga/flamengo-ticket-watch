@@ -33,6 +33,8 @@ dist-ssr
 
 # Playwright/Bot runtime files
 chrome-bot-profile*
+chrome-monitor-*
 error-login*
 debug-*.png
 tickets-stats.json
+local-data.json.bak

@@ -15,6 +15,23 @@ import type { LogLevel, EventRecord } from "../lib/local-db";
 
 config({ path: resolve(process.cwd(), ".env") });
 
+// ─── Limpeza de Cache ──────────────────────────────────────────────────────────
+// O usuário solicitou que o cache do browser seja limpo sempre que o bot iniciar.
+import * as fs from "fs";
+try {
+  const rootDir = process.cwd();
+  const files = fs.readdirSync(rootDir);
+  for (const file of files) {
+    if (file.startsWith("chrome-bot-profile-")) {
+      const fullPath = resolve(rootDir, file);
+      fs.rmSync(fullPath, { recursive: true, force: true });
+    }
+  }
+  console.log("🧹 Cache do browser limpo com sucesso!");
+} catch (err) {
+  console.error("⚠️ Erro ao limpar cache do browser:", err);
+}
+
 // ─── Active bot instances ─────────────────────────────────────────────────────
 // Each running event gets a StopSignal. Setting stop=true cleanly terminates
 // the persistent browser loop at the next update cycle check.
@@ -59,6 +76,19 @@ async function runEventLoop(eventId: string) {
   // Limpa os logs antigos ao iniciar uma nova execução
   await localDb.clearEventLogs(eventId);
 
+  // Zera a contagem de ingressos garantidos para este evento
+  try {
+    const fs = require("fs");
+    const path = require("path");
+    const statsFile = path.resolve(process.cwd(), "tickets-stats.json");
+    let stats: any = {};
+    if (fs.existsSync(statsFile)) {
+      stats = JSON.parse(fs.readFileSync(statsFile, "utf8"));
+    }
+    stats[eventId] = {};
+    fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
+  } catch (err) {}
+
   await pushLog(eventId, "info", "🤖 Bot iniciado. Preparando sessão...");
 
   try {
@@ -72,7 +102,7 @@ async function runEventLoop(eventId: string) {
 
     const conf = ev.config as any;
 
-    let accountsToRun = [];
+    let accountsToRun: any[] = [];
     if (conf.account_id === "ALL") {
       if (db.accounts && db.accounts.length > 0) {
         accountsToRun = db.accounts;
@@ -84,9 +114,16 @@ async function runEventLoop(eventId: string) {
       accountsToRun = [{ email: conf.email, senha_enc: conf.senha_enc }];
     }
 
-    await pushLog(eventId, "info", `🚀 Iniciando fila: ${accountsToRun.length} conta(s) detectada(s)...`);
+    let running = true;
+    let rodada = 1;
 
-    while (!stopSignal.stop) {
+    do {
+      if (conf.loop_continuo) {
+        await pushLog(eventId, "info", `🚀 Iniciando rodada contínua #${rodada} para fila de ${accountsToRun.length} conta(s)...`);
+      } else {
+        await pushLog(eventId, "info", `🚀 Iniciando fila: ${accountsToRun.length} conta(s) detectada(s)...`);
+      }
+
       for (let i = 0; i < accountsToRun.length; i++) {
         if (stopSignal.stop) {
           await pushLog(eventId, "warn", "⏹ Loop de contas interrompido pelo usuário.");
@@ -95,7 +132,7 @@ async function runEventLoop(eventId: string) {
 
         const acc = accountsToRun[i];
         const senha = await decryptText(acc.senha_enc).catch(() => "");
-        
+
         if (!acc.email || !senha) {
           await pushLog(eventId, "error", `⚠️ Credenciais inválidas para a conta ${acc.email || 'desconhecida'}. Pulando...`);
           continue;
@@ -104,52 +141,98 @@ async function runEventLoop(eventId: string) {
         await pushLog(eventId, "info", `==================================================`);
         await pushLog(eventId, "info", `[CONTA ${i + 1}/${accountsToRun.length}] Iniciando automação para ${acc.email}...`);
 
-        try {
-          const success = await runBotPersistent(
-            {
-              id: ev.id,
-              login_url: ev.login_url,
-              url: ev.url,
-              config: {
-                ...conf,
-                email: acc.email,
-                senha_enc: acc.senha_enc,
-                headless: conf?.headless !== false,
-              },
-            },
-            senha,
-            (level, msg) => pushLog(eventId, level, msg),
-            stopSignal,
-          );
-
-          if (success) {
-            await pushLog(eventId, "success", `✅ Fim do processamento para ${acc.email}. Ingresso garantido!`);
-          } else {
-            await pushLog(eventId, "warn", `⚠️ Fim do processing para ${acc.email}. Nenhum ingresso adicionado.`);
+        let success = false;
+        // O usuário pediu: "tente 3x (feito no playwright), feche, abra novamente e tente mais 3x"
+        // E também: se der erro (timeout/crash), fechar o browser e tentar de novo no próximo ciclo.
+        for (let cycle = 1; cycle <= 2; cycle++) {
+          if (stopSignal.stop) break;
+          
+          if (cycle > 1) {
+             await pushLog(eventId, "info", `🔄 Reabrindo browser para nova bateria de tentativas (${cycle}/2)...`);
           }
-        } catch (err: any) {
-          await pushLog(eventId, "error", `❌ Erro na conta ${acc.email}: ${err.message}. Pulando para a próxima...`);
+
+          try {
+            success = await runBotPersistent(
+              {
+                id: ev.id,
+                login_url: ev.login_url,
+                url: ev.url,
+                config: {
+                  ...conf,
+                  email: acc.email,
+                  senha_enc: acc.senha_enc,
+                  headless: conf?.headless !== false,
+                },
+              },
+              senha,
+              (level, msg) => pushLog(eventId, level, msg),
+              stopSignal,
+            );
+
+            if (success) break; // Conseguiu ingresso, não precisa do ciclo 2
+          } catch (err: any) {
+            if (cycle < 2) {
+              await pushLog(eventId, "error", `❌ Erro na conta ${acc.email}: ${err.message}. Fechando e tentando novamente...`);
+            } else {
+              await pushLog(eventId, "error", `❌ Erro na conta ${acc.email}: ${err.message}. Pulando para a próxima...`);
+            }
+          }
+        }
+
+        if (success) {
+          await pushLog(eventId, "success", `✅ Fim do processamento para ${acc.email}. Ingresso garantido!`);
+        } else {
+          await pushLog(eventId, "warn", `⚠️ Fim do processamento para ${acc.email} após 2 ciclos. Nenhum ingresso adicionado. Passando para a próxima...`);
         }
       }
 
-      if (stopSignal.stop) break;
-
-      if (!conf.loop_continuo) {
+      if (stopSignal.stop) {
         break;
       }
 
-      await pushLog(eventId, "info", "🔄 Ciclo concluído. 'Loop Contínuo' ativado, recomeçando a fila de contas em 5 segundos...");
-      await new Promise(r => setTimeout(r, 5000));
-    }
+      if (!conf.loop_continuo) {
+        running = false;
+      } else {
+        rodada++;
+        await pushLog(eventId, "info", `⏳ Rodada contínua #${rodada - 1} finalizada. Aguardando 1 minuto antes de recomeçar...`);
+        for (let w = 0; w < 60; w++) {
+          if (stopSignal.stop) {
+            running = false;
+            break;
+          }
+          await new Promise(r => setTimeout(r, 1000));
+        }
+      }
+    } while (running);
 
-    // Finalizou todas as contas
+    // Finalizou todas as contas — atualiza status com segurança
     const freshDb = await localDb.read();
-    const idx = freshDb.events.findIndex((e) => e.id === eventId);
-    if (idx !== -1) {
-      freshDb.events[idx].status = "concluido";
-      await localDb.write(freshDb);
+    if (freshDb.events && freshDb.events.length > 0) {
+      const idx = freshDb.events.findIndex((e) => e.id === eventId);
+      if (idx !== -1) {
+        freshDb.events[idx].status = "pausado";
+        await localDb.write(freshDb);
+      }
     }
     await pushLog(eventId, "success", "🏁 Todas as contas foram processadas com sucesso!");
+
+    // Imprime resumo final a partir de bot-stats.json
+    try {
+      const fs = require("fs");
+      const path = require("path");
+      const statsFile = path.resolve(process.cwd(), "tickets-stats.json");
+      if (fs.existsSync(statsFile)) {
+        const stats = JSON.parse(fs.readFileSync(statsFile, "utf8"));
+        if (stats[eventId]) {
+          await pushLog(eventId, "info", "--------------------------------------------------");
+          await pushLog(eventId, "info", "📊 RESUMO FINAL DE INGRESSOS DESTE EVENTO POR CONTA:");
+          for (const [acc, qtd] of Object.entries(stats[eventId])) {
+             await pushLog(eventId, "success", `   👤 ${acc}: ${qtd} ingressos garantidos`);
+          }
+          await pushLog(eventId, "info", "--------------------------------------------------");
+        }
+      }
+    } catch (err) {}
 
   } catch (err: any) {
     await pushLog(eventId, "error", `Erro fatal no bot: ${err.message}`);
@@ -223,6 +306,49 @@ async function processCommands() {
         senha,
         (level, msg) => pushLog(cmd.event_id, level, msg),
       ).catch((err) => pushLog(cmd.event_id, "error", `Erro no teste: ${err.message}`));
+    }
+
+    if (cmd.command === "test_all_logins") {
+      const freshDb = await localDb.read();
+      const userAccounts = freshDb.accounts.filter(a => a.user_id === cmd.user_id);
+      
+      if (userAccounts.length === 0) {
+        await pushLog("test-all-logins", "warn", "Nenhuma conta encontrada para testar.");
+        continue;
+      }
+
+      // Rodar testes sequencialmente, sem await para não travar o loop de comandos?
+      // Ou criar uma promise auto-executável
+      (async () => {
+        await pushLog("test-all-logins", "info", "==================================================");
+        await pushLog("test-all-logins", "info", `Iniciando teste em massa de ${userAccounts.length} contas...`);
+        
+        for (let i = 0; i < userAccounts.length; i++) {
+          const acc = userAccounts[i];
+          const senha = await decryptText(acc.senha_enc);
+          
+          await pushLog("test-all-logins", "info", `---`);
+          await pushLog("test-all-logins", "info", `[CONTA ${i + 1}/${userAccounts.length}] Testando ${acc.email}...`);
+          
+          try {
+            await runTestLogin(
+              {
+                id: "test-all-logins", // dummy event id
+                login_url: "https://www.futebolcard.com/login",
+                url: "https://www.futebolcard.com/information?event=37218", // dummy url
+                config: { email: acc.email, headless: true },
+              },
+              senha,
+              (level, msg) => pushLog("test-all-logins", level, msg),
+            );
+          } catch (err: any) {
+            await pushLog("test-all-logins", "error", `Erro no teste da conta ${acc.email}: ${err.message}`);
+          }
+        }
+        
+        await pushLog("test-all-logins", "success", "==================================================");
+        await pushLog("test-all-logins", "success", "🏁 Teste em massa concluído para todas as contas!");
+      })();
     }
   }
 }

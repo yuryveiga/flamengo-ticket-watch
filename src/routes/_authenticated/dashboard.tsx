@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { listEvents, enqueueCommand, setStatus } from "@/lib/events.functions";
+import { getEventLogs, clearEventLogs } from "@/lib/logs.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Play, Square, Trash2, Download } from "lucide-react";
@@ -213,40 +214,26 @@ const LEVEL_EMOJI: Record<string, string> = {
   api: "🩵",
 };
 
-function LogTerminal({ eventId }: { eventId: string }) {
-  const [logs, setLogs] = useState<LogRow[]>([]);
+export function LogTerminal({ eventId }: { eventId: string }) {
   const ref = useRef<HTMLDivElement>(null);
+  const getLogsFn = useServerFn(getEventLogs);
 
-  useEffect(() => {
-    setLogs([]);
-    supabase
-      .from("logs")
-      .select("id, ts, level, message")
-      .eq("event_id", eventId)
-      .order("ts", { ascending: false })
-      .limit(200)
-      .then(({ data }) => {
-        if (data) setLogs(data.reverse() as LogRow[]);
-      });
+  const { data: logs = [] } = useQuery({
+    queryKey: ["logs", eventId],
+    queryFn: () => getLogsFn({ data: { event_id: eventId, limit: 200 } }),
+    refetchInterval: 1000,
+  });
 
-    const ch = supabase
-      .channel(`logs-${eventId}`)
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "logs", filter: `event_id=eq.${eventId}` },
-        (p) => setLogs((cur) => [...cur, p.new as LogRow].slice(-500)),
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(ch);
-    };
-  }, [eventId]);
+  const clearLogsFn = useServerFn(clearEventLogs);
+
+  const clear = async () => {
+    await clearLogsFn({ data: { event_id: eventId } });
+  };
 
   useEffect(() => {
     ref.current?.scrollTo({ top: ref.current.scrollHeight });
   }, [logs]);
 
-  const clear = () => setLogs([]);
   const exportTxt = () => {
     const txt = logs
       .map((l) => `[${new Date(l.ts).toISOString()}] ${l.level.toUpperCase()} — ${l.message}`)

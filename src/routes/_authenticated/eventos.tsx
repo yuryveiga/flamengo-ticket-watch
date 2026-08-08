@@ -405,10 +405,12 @@ function EventWizard({ event, onCreated, onCancel }: { event?: any, onCreated: (
             </button>
           </div>
 
-          <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" checked={data.aceitar_qualquer} onChange={(e) => set("aceitar_qualquer", e.target.checked)} />
-            Aceitar qualquer setor disponível se os preferidos não estiverem disponíveis
-          </label>
+          <div>
+            <label className="text-sm font-semibold flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={data.aceitar_qualquer} onChange={(e) => set("aceitar_qualquer", e.target.checked)} />
+              Se meus setores não estiverem disponíveis, comprar QUALQUER SETOR que aparecer.
+            </label>
+          </div>
 
           <div className="flex gap-2">
             <button onClick={() => setStep(2)} className="flex-1 py-2.5 rounded-md border border-border font-semibold text-sm flex items-center justify-center gap-1">

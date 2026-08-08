@@ -8,7 +8,27 @@ chromium.use(stealth());
 import type { LogLevel } from "../lib/local-db";
 import path from "path";
 import fs from "fs";
+import { sleep } from "../lib/utils";
 import axios from "axios";
+
+// ─── Alertas Telegram ────────────────────────────────────────────────────────
+async function sendTelegramAlert(message: string, log: LogFn) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) return;
+
+  try {
+    const url = `https://api.telegram.org/bot${token}/sendMessage`;
+    await axios.post(url, {
+      chat_id: chatId,
+      text: message,
+      parse_mode: "Markdown"
+    });
+    await log("info", "📱 Alerta enviado para o Telegram com sucesso!");
+  } catch (err: any) {
+    await log("warn", `📱 Falha ao enviar alerta para o Telegram: ${err.message}`);
+  }
+}
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -235,13 +255,18 @@ async function tryAddToCart(
   quantidade: number,
   aceitarQualquer: boolean,
   email: string,
+  eventId: string,
   log: LogFn,
 ): Promise<boolean> {
   for (const setor of setores) {
     await log("info", `Procurando setor: "${setor}"...`);
 
-    // getByText com exact: false permite encontrar "Oeste Inferior ." quando procuramos "Oeste Inferior"
-    const sectorEl = page.getByText(setor, { exact: false }).first();
+    // Busca especificamente no h4.match_sector-name, comparando de forma case-insensitive e ignorando espaços extras
+    // Exemplo do site: <h4 class="match_sector-name">OESTE INFERIOR</h4>
+    const sectorEl = page.locator("h4.match_sector-name").filter({
+      hasText: new RegExp(setor.trim().replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"), "i")
+    }).first();
+
     const isVisible = await sectorEl.isVisible({ timeout: 1500 }).catch(() => false);
 
     if (!isVisible) {
@@ -250,13 +275,17 @@ async function tryAddToCart(
     }
 
     await log("info", `"${setor}" encontrado! Selecionando...`);
+    // Clica no elemento pai (card do setor) para garantir que o clique funciona
     await sectorEl.click().catch(() => {});
     await page.waitForTimeout(800);
 
     // Verifica se a conta já atingiu o limite ou tem ingresso no carrinho
-    const isLimit = await page.getByText("Você já tem ingressos selecionados", { exact: false }).isVisible({ timeout: 500 }).catch(() => false);
+    const isLimit = await page.locator("#alert-modal").isVisible({ timeout: 1000 }).catch(() => false);
     if (isLimit) {
-      throw new Error("Esta conta já possui ingressos no carrinho para este evento (limite atingido). Bot pausado.");
+      await log("warn", "⚠️ Modal de aviso detectado (provável limite atingido). Fechando modal para tentar continuar...");
+      await page.keyboard.press("Escape").catch(() => {});
+      await page.locator("#alert-modal button").last().click({ timeout: 1500 }).catch(() => {});
+      await page.waitForTimeout(500);
     }
 
     // Adjust quantity
@@ -269,7 +298,7 @@ async function tryAddToCart(
 
     if (await cartBtn.isVisible({ timeout: 3000 })) {
       await page.screenshot({ path: "debug-before-cart.png" });
-      await cartBtn.click();
+      await cartBtn.click({ force: true, timeout: 15000 });
       await log("wait", "Botão de compra clicado. Aguardando o site registrar no carrinho...");
       
       // Verifica se o Google jogou CAPTCHA e tenta resolver com a API
@@ -296,6 +325,7 @@ async function tryAddToCart(
         await page.screenshot({ path: "debug-after-cart-success.png" });
         await log("success", "✅ Redirecionado para o carrinho com sucesso!");
         await log("success", `🎟 INGRESSO NO CARRINHO! Setor: "${setor}" · ${quantidade}x (Conta: ${email})`);
+        await sendTelegramAlert(`🚨 *INGRESSO GARANTIDO!* 🚨\n\n🎟 **Setor:** ${setor}\n👤 **Conta:** ${email}\n⚽ **Evento:** ${eventId}`, log);
         return true;
       } catch (err) {
         await page.screenshot({ path: "debug-after-cart-failed.png" });
@@ -327,6 +357,8 @@ async function tryAddToCart(
         try {
            await page.waitForURL("**/shopping-cart**", { timeout: 15000 });
            await log("success", "✅ Fallback: Redirecionado para o carrinho com sucesso!");
+           await log("success", `🎟 INGRESSO NO CARRINHO! Setor: "${setor}" · ${quantidade}x (Conta: ${email})`);
+           await sendTelegramAlert(`🚨 *INGRESSO GARANTIDO!* 🚨\n\n🎟 **Setor:** ${setor}\n👤 **Conta:** ${email}\n⚽ **Evento:** ${eventId}`, log);
            return true;
         } catch(e) {
            await log("warn", "Fallback também falhou em redirecionar.");
@@ -346,6 +378,7 @@ async function tryAddToCart(
       await anyBtn.click();
       await page.waitForTimeout(1500);
       await log("success", `🎟 INGRESSO NO CARRINHO! (setor automático · ${quantidade}x) (Conta: ${email})`);
+      await sendTelegramAlert(`🚨 *INGRESSO GARANTIDO!* 🚨\n\n🎟 **Setor:** (Automático)\n👤 **Conta:** ${email}\n⚽ **Evento:** ${eventId}`, log);
       return true;
     }
   }
@@ -507,7 +540,7 @@ export async function runBotPersistent(
       await log("api", `🔄 Verificando disponibilidade (tentativa #${attemptCount})...`);
 
       // 1. Tenta comprar imediatamente
-      const success = await tryAddToCart(page, setores, quantidade, aceitarQualquer, email, log);
+      const success = await tryAddToCart(page, setores, quantidade, aceitarQualquer, email, eventData.id, log);
       
       if (success) {
         // Atualiza a contagem isolada por evento
@@ -540,6 +573,12 @@ export async function runBotPersistent(
 
       // 2. Aguarda o intervalo da configuração OU o console log do site
       try {
+        // Se já tentou 3 vezes nesta sessão, sai para reiniciar ou passar para próxima
+        if (attemptCount >= 3) {
+          await log("warn", "Limite de 3 tentativas atingido nesta sessão. Fechando para reiniciar ou alternar conta...");
+          return false;
+        }
+
         await new Promise<void>((resolve, reject) => {
           resolveUpdate = resolve;
           
@@ -558,9 +597,22 @@ export async function runBotPersistent(
         await page.waitForTimeout(500); // Aguarda o DOM renderizar
       } catch (err: any) {
         if (err.message === "INTERVAL_TICK") {
-          // Apenas o tempo passou (polling normal)
-          // Se quiser recarregar a página a cada X tentativas, pode adicionar aqui
-          // Mas normalmente apenas checar o DOM de novo já basta.
+          // A cada 3 tentativas sem sucesso, recarrega a página para garantir que
+          // o bot não foi redirecionado silenciosamente pelo FutebolCard
+          if (attemptCount % 3 === 0) {
+            const currentUrl = page.url();
+            if (!currentUrl.includes(url.split("?")[0].split("/").pop()!)) {
+              await log("warn", `⚠️ URL mudou (${currentUrl}). Renavegando para o evento...`);
+            } else {
+              await log("info", `🔄 Recarregando página do evento (tentativa #${attemptCount})...`);
+            }
+            try {
+              await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30_000 });
+              await page.waitForTimeout(2000);
+            } catch {
+              await log("warn", "Falha ao recarregar. Tentando continuar...");
+            }
+          }
         } else {
           throw err;
         }

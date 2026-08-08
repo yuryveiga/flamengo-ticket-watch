@@ -91,3 +91,27 @@ export const deleteAccount = createServerFn({ method: "POST" })
     await localDb.write(db);
     return { ok: true };
   });
+
+// ─── Test All Logins ──────────────────────────────────────────────────────────
+export const enqueueTestAllLoginsFn = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const db = await localDb.read();
+    
+    // Deleta comandos de test_all_logins anteriores pendentes para este usuário
+    db.bot_commands = db.bot_commands.filter(
+      (c) => !(c.command === "test_all_logins" && c.user_id === context.userId)
+    );
+    
+    db.bot_commands.push({
+      id: crypto.randomUUID(),
+      event_id: "test-all-logins",
+      user_id: context.userId,
+      command: "test_all_logins",
+      created_at: new Date().toISOString(),
+      processed_at: null,
+    });
+    
+    await localDb.write(db);
+    return { ok: true };
+  });
