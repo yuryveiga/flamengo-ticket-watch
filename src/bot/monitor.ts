@@ -1,17 +1,16 @@
 /**
- * TicketMonitor — Console Intercept Mode (sem login)
+ * TicketMonitor — Multi-Event Console Intercept (sem login)
  *
- * Abre um browser headless, navega direto para a página do evento
- * e intercepta o console.log do fcard-maps-ac.js que é emitido a cada ~30s.
+ * Lê automaticamente todos os eventos cadastrados no local-data.json,
+ * abre uma aba por evento e monitora cada um em paralelo.
  *
- * Quando a mensagem "Stadium - Done reading available tickets"
- * NÃO contiver "maximum booking null":
- *   1. Loga em tempo real no terminal
- *   2. Envia alerta no Telegram
- *   3. Aciona automaticamente o bot de compra (insere comando "start" no local-data.json)
+ * Quando detecta ingresso disponível:
+ *   1. Loga no terminal em tempo real
+ *   2. Loga no dashboard do painel (localDb)
+ *   3. Envia alerta no Telegram
+ *   4. Aciona automaticamente o bot de compra
  *
- * Uso: npx tsx src/bot/monitor.ts [eventId]
- * Exemplo: npx tsx src/bot/monitor.ts 37145
+ * Uso: npx tsx src/bot/monitor.ts
  */
 
 import { config } from "dotenv";
@@ -20,21 +19,17 @@ import { chromium } from "playwright-extra";
 import stealth from "puppeteer-extra-plugin-stealth";
 import axios from "axios";
 import { localDb } from "../lib/local-db";
+import type { EventRecord } from "../lib/local-db";
 
 config({ path: resolve(process.cwd(), ".env") });
 
 chromium.use(stealth());
 
-// ─── Configuração ─────────────────────────────────────────────────────────────
+// ─── Constantes ───────────────────────────────────────────────────────────────
 
-const EVENT_ID = process.argv[2] ?? "37145";
-const BASE_URL = "https://www.futebolcard.com";
-const EVENT_URL = `${BASE_URL}/buy/sector?event=${EVENT_ID}`;
-
-// Sinaliza ausência de ingressos
+const BASE_URL        = "https://www.futebolcard.com";
 const EMPTY_SIGNATURE = "maximum booking null";
-
-const TELEGRAM_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+const TELEGRAM_TOKEN  = process.env.TELEGRAM_BOT_TOKEN;
 const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID;
 
 // ─── Logging colorido ─────────────────────────────────────────────────────────
@@ -61,79 +56,60 @@ const ICONS: Record<Level, string> = {
   BOT:     "🤖",
 };
 
-function log(level: Level, msg: string) {
+function log(level: Level, eventLabel: string, msg: string) {
   const ts = new Date().toLocaleTimeString("pt-BR");
-  console.log(`${C[level]}[${ts}] [${level.padEnd(7)}] ${ICONS[level]} ${msg}${R}`);
+  const label = eventLabel ? `[${eventLabel}] ` : "";
+  console.log(`${C[level]}[${ts}] [${level.padEnd(7)}] ${ICONS[level]} ${label}${msg}${R}`);
 }
 
 // ─── Telegram ─────────────────────────────────────────────────────────────────
 
 async function sendTelegram(message: string): Promise<void> {
-  if (!TELEGRAM_TOKEN || !TELEGRAM_CHAT_ID) {
-    log("WARN", "Telegram não configurado.");
-    return;
-  }
+  if (!TELEGRAM_TOKEN || !TELEGRAM_CHAT_ID) return;
   try {
     await axios.post(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
       chat_id: TELEGRAM_CHAT_ID,
       text: message,
       parse_mode: "HTML",
     });
-    log("SUCCESS", "📱 Alerta enviado ao Telegram!");
-  } catch (err: any) {
-    log("ERROR", `Falha ao enviar Telegram: ${err.message}`);
-  }
+  } catch {}
 }
 
-// ─── Busca evento no banco pelo ID da FutebolCard (via URL) ──────────────────
-
-async function findEvent(fcardId: string) {
-  const db = await localDb.read();
-  return db.events.find((e) => e.url?.includes(`event=${fcardId}`));
-}
-
-// ─── Loga no dashboard do painel ─────────────────────────────────────────────
+// ─── Dashboard log ────────────────────────────────────────────────────────────
 
 async function dashLog(
-  fcardId: string,
+  eventUuid: string,
   level: "info" | "warn" | "success" | "error" | "api",
   msg: string
 ) {
-  try {
-    const ev = await findEvent(fcardId);
-    if (ev) await localDb.appendLog(ev.id, level, msg);
-  } catch {}
+  try { await localDb.appendLog(eventUuid, level, msg); } catch {}
+}
+
+// ─── Extrai o ID numérico da FutebolCard a partir da URL do evento ────────────
+
+function extractFcardId(url: string): string | null {
+  const m = url.match(/event=(\d+)/);
+  return m ? m[1] : null;
 }
 
 // ─── Aciona bot de compra ─────────────────────────────────────────────────────
 
-async function triggerBuyBot(fcardId: string): Promise<void> {
-  log("BOT", "Acionando bot de compra...");
+async function triggerBuyBot(ev: EventRecord, label: string): Promise<void> {
+  log("BOT", label, "Acionando bot de compra...");
   try {
     const db = await localDb.read();
 
-    // Busca evento pela URL (id interno é UUID, não o ID da FutebolCard)
-    const ev = db.events.find((e) => e.url?.includes(`event=${fcardId}`));
-    if (!ev) {
-      log("WARN", `Evento ${fcardId} não encontrado no local-data.json. Bot não acionado.`);
-      log("WARN", "Cadastre este evento no painel antes de monitorar.");
-      return;
-    }
-
-    // Verifica se já há um comando start pendente (não processado)
     const alreadyPending = db.bot_commands.some(
       (c) => c.event_id === ev.id && c.command === "start" && !c.processed_at
     );
     if (alreadyPending) {
-      log("BOT", "Bot já possui comando start pendente. Nenhuma ação necessária.");
+      log("BOT", label, "Comando start já pendente. Nenhuma ação necessária.");
       return;
     }
 
-    // Atualiza status do evento para "monitorando"
     const evIdx = db.events.findIndex((e) => e.id === ev.id);
     if (evIdx !== -1) db.events[evIdx].status = "monitorando";
 
-    // Insere o comando start
     db.bot_commands.push({
       id: crypto.randomUUID(),
       event_id: ev.id,
@@ -144,32 +120,29 @@ async function triggerBuyBot(fcardId: string): Promise<void> {
     });
 
     await localDb.write(db);
-    log("SUCCESS", `🤖 Comando START enviado para o bot! Evento: ${ev.name ?? fcardId}`);
-    log("BOT", "O worker.ts processará este comando em até 3 segundos.");
+    log("SUCCESS", label, "🤖 Comando START enviado ao bot de compra!");
   } catch (err: any) {
-    log("ERROR", `Erro ao acionar bot: ${err.message}`);
+    log("ERROR", label, `Erro ao acionar bot: ${err.message}`);
   }
 }
 
-// ─── Monitor principal ────────────────────────────────────────────────────────
+// ─── Monitor de um evento (uma aba) ──────────────────────────────────────────
 
-async function startMonitor() {
-  log("INFO", `Iniciando browser (headless, stealth)...`);
+async function monitorEvent(
+  ev: EventRecord,
+  fcardId: string,
+  context: Awaited<ReturnType<typeof chromium.launchPersistentContext>>
+) {
+  const eventUrl = `${BASE_URL}/buy/sector?event=${fcardId}`;
+  const label    = ev.name ?? fcardId;
 
-  const userDataDir = resolve(process.cwd(), `chrome-monitor-${EVENT_ID}`);
-
-  const context = await chromium.launchPersistentContext(userDataDir, {
-    headless: true,
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
+  let alertSent    = false;
+  let botTriggered = false;
+  let msgCount     = 0;
 
   const page = await context.newPage();
 
-  let alertSent = false;
-  let botTriggered = false;
-  let msgCount = 0;
-
-  // ── Intercepta o console.log do site antes do carregamento ───────────────
+  // ── Hook de console.log ──────────────────────────────────────────────────
   await page.addInitScript(() => {
     const origLog   = console.log;
     const origInfo  = console.info;
@@ -187,134 +160,142 @@ async function startMonitor() {
       }
     }
 
-    console.log   = function (...args: any[]) { relay(...args); return origLog.apply(this, args); };
-    console.info  = function (...args: any[]) { relay(...args); return origInfo.apply(this, args); };
-    console.debug = function (...args: any[]) { relay(...args); return origDebug.apply(this, args); };
-    console.warn  = function (...args: any[]) { relay(...args); return origWarn.apply(this, args); };
+    console.log   = function (...a: any[]) { relay(...a); return origLog.apply(this, a); };
+    console.info  = function (...a: any[]) { relay(...a); return origInfo.apply(this, a); };
+    console.debug = function (...a: any[]) { relay(...a); return origDebug.apply(this, a); };
+    console.warn  = function (...a: any[]) { relay(...a); return origWarn.apply(this, a); };
   });
 
-  // Função exposta: recebe mensagem do browser e age no Node.js
+  // ── Relay do browser → Node.js ───────────────────────────────────────────
   await page.exposeFunction("__monitorRelay", async (text: string) => {
     msgCount++;
     const isAvailable = !text.toLowerCase().includes(EMPTY_SIGNATURE.toLowerCase());
-
-    log("RAW", `[Console #${msgCount}] ${text}`);
-
-    if (isAvailable) {
-      log("ALERT", `🎟️  INGRESSO DISPONÍVEL! Resposta diferente do padrão vazio.`);
-      await dashLog(EVENT_ID, "success", `🚨 INGRESSO DISPONÍVEL! Monitor detectou: ${text.slice(0, 200)}`);
-
-      if (!alertSent) {
-        alertSent = true;
-
-        // 1. Envia alerta Telegram
-        const telegramMsg =
-          `🚨 <b>INGRESSO DISPONÍVEL!</b>\n\n` +
-          `🎟️ Evento: <code>${EVENT_ID}</code>\n` +
-          `🔗 <a href="${EVENT_URL}">Ir para o evento</a>\n\n` +
-          `📋 Mensagem do site:\n<code>${text.slice(0, 600)}</code>\n\n` +
-          `🤖 Bot de compra acionado automaticamente!\n` +
-          `⏰ ${new Date().toLocaleString("pt-BR")}`;
-
-        await sendTelegram(telegramMsg);
-        await dashLog(EVENT_ID, "info", "📱 Alerta enviado ao Telegram.");
-
-        // 2. Aciona bot de compra automaticamente
-        if (!botTriggered) {
-          botTriggered = true;
-          await triggerBuyBot(EVENT_ID);
-          await dashLog(EVENT_ID, "info", "🤖 Comando START enviado ao bot de compra pelo monitor.");
-        }
-      }
-    } else {
-      await dashLog(EVENT_ID, "info", `🔍 Monitor: sem ingressos disponíveis (check #${msgCount}).`);
-      log("INFO", `Sem ingressos (padrão vazio confirmado).`);
-
-      // Reseta flags quando esgota novamente (para reacionar se voltar)
-      if (alertSent) {
-        alertSent = false;
-        botTriggered = false;
-        log("INFO", "Flags resetadas — monitorando novamente para próxima abertura de lote.");
-      }
-    }
+    log("RAW", label, `[Console #${msgCount}] ${text}`);
+    await handleDetection(isAvailable, text, ev, fcardId, eventUrl, label);
   });
 
-  // ── Fallback: intercepta a resposta de rede do endpoint de tickets ────────
-  // O fcard-maps-ac.js chama /buy/get-available-tickets a cada 30s.
-  // A resposta contém o texto "Stadium - Done reading available tickets".
-  // Isso garante captura mesmo que o hook de console.log do init script
-  // não pegue (ex: scripts carregados antes do hook).
+  // ── Fallback: interceptação de rede ─────────────────────────────────────
   page.on("response", async (res) => {
-    const url = res.url();
-    if (!url.includes("get-available-tickets")) return;
+    if (!res.url().includes("get-available-tickets")) return;
     try {
       const body = await res.text().catch(() => "");
       if (!body.includes("Stadium") && !body.includes("reading available tickets")) return;
       const isAvailable = !body.toLowerCase().includes(EMPTY_SIGNATURE.toLowerCase());
       msgCount++;
-      log("RAW", `[Network #${msgCount}] ${body.slice(0, 200)}`);
-      if (isAvailable && !alertSent) {
-        alertSent = true;
-        log("ALERT", `🎟️  INGRESSO DISPONÍVEL! (via rede)`);
-        await dashLog(EVENT_ID, "success", `🚨 INGRESSO DISPONÍVEL! API retornou: ${body.slice(0, 200)}`);
-        const telegramMsg =
-          `🚨 <b>INGRESSO DISPONÍVEL!</b>\n\n` +
-          `🎟️ Evento: <code>${EVENT_ID}</code>\n` +
-          `🔗 <a href="${EVENT_URL}">Ir para o evento</a>\n\n` +
-          `📋 Resposta da API:\n<code>${body.slice(0, 600)}</code>\n\n` +
-          `🤖 Bot de compra acionado automaticamente!\n` +
-          `⏰ ${new Date().toLocaleString("pt-BR")}`;
-        await sendTelegram(telegramMsg);
-        await dashLog(EVENT_ID, "info", "📱 Alerta enviado ao Telegram.");
-        if (!botTriggered) {
-          botTriggered = true;
-          await triggerBuyBot(EVENT_ID);
-          await dashLog(EVENT_ID, "info", "🤖 Comando START enviado ao bot de compra pelo monitor.");
-        }
-      } else if (!isAvailable && alertSent) {
-        alertSent = false;
-        botTriggered = false;
-        log("INFO", "Flags resetadas — monitorando novamente.");
-      } else if (!isAvailable) {
-        await dashLog(EVENT_ID, "info", `🔍 Monitor: sem ingressos disponíveis (rede check #${msgCount}).`);
-        log("INFO", "Sem ingressos (confirmado via rede).");
-      }
+      log("RAW", label, `[Network #${msgCount}] ${body.slice(0, 200)}`);
+      await handleDetection(isAvailable, body, ev, fcardId, eventUrl, label);
     } catch {}
   });
 
-  // ── Navega direto para o evento (sem login) ──────────────────────────────
-  log("INFO", `Navegando para: ${EVENT_URL}`);
-  await page.goto(EVENT_URL, { waitUntil: "domcontentloaded", timeout: 30_000 });
+  // ── Lógica de detecção centralizada ─────────────────────────────────────
+  async function handleDetection(
+    isAvailable: boolean,
+    responseText: string,
+    ev: EventRecord,
+    fcardId: string,
+    eventUrl: string,
+    label: string
+  ) {
+    if (isAvailable) {
+      log("ALERT", label, "🎟️  INGRESSO DISPONÍVEL!");
+      await dashLog(ev.id, "success", `🚨 INGRESSO DISPONÍVEL! Monitor detectou: ${responseText.slice(0, 200)}`);
+
+      if (!alertSent) {
+        alertSent = true;
+
+        const telegramMsg =
+          `🚨 <b>INGRESSO DISPONÍVEL!</b>\n\n` +
+          `🎟️ Evento: <b>${label}</b> (<code>${fcardId}</code>)\n` +
+          `🔗 <a href="${eventUrl}">Ir para o evento</a>\n\n` +
+          `📋 Resposta:\n<code>${responseText.slice(0, 500)}</code>\n\n` +
+          `🤖 Bot de compra acionado automaticamente!\n` +
+          `⏰ ${new Date().toLocaleString("pt-BR")}`;
+
+        await sendTelegram(telegramMsg);
+        await dashLog(ev.id, "info", "📱 Alerta enviado ao Telegram.");
+        log("SUCCESS", label, "📱 Alerta enviado ao Telegram!");
+
+        if (!botTriggered) {
+          botTriggered = true;
+          await triggerBuyBot(ev, label);
+          await dashLog(ev.id, "info", "🤖 Comando START enviado ao bot de compra pelo monitor.");
+        }
+      }
+    } else {
+      log("INFO", label, `Sem ingressos (check #${msgCount}).`);
+      await dashLog(ev.id, "info", `🔍 Monitor: sem ingressos disponíveis (check #${msgCount}).`);
+
+      if (alertSent) {
+        alertSent    = false;
+        botTriggered = false;
+        log("INFO", label, "Flags resetadas — monitorando novamente.");
+      }
+    }
+  }
+
+  // ── Navega para o evento ─────────────────────────────────────────────────
+  log("INFO", label, `Navegando para: ${eventUrl}`);
+  await page.goto(eventUrl, { waitUntil: "domcontentloaded", timeout: 30_000 });
   await page.waitForTimeout(2_000);
 
-  log("SUCCESS", "🎯 Monitor ativo! Aguardando respostas da API e console logs...");
-  log("INFO",    `O site consulta /buy/get-available-tickets a cada ~30s.`);
-  log("INFO",    `Alerta disparado quando NÃO contiver: "${EMPTY_SIGNATURE}"`);
-  log("INFO",    "Pressione Ctrl+C para encerrar.\n");
+  log("SUCCESS", label, "🎯 Monitor ativo! Aguardando atualizações a cada ~30s...");
+}
 
-  // ── Heartbeat ────────────────────────────────────────────────────────────
+// ─── Main ─────────────────────────────────────────────────────────────────────
+
+async function main() {
+  // Lê todos os eventos do banco
+  const db = await localDb.read();
+  const events = db.events ?? [];
+
+  if (events.length === 0) {
+    console.error("❌ Nenhum evento cadastrado no local-data.json. Cadastre um evento no painel.");
+    process.exit(1);
+  }
+
+  // Filtra eventos com URL válida
+  const validEvents = events
+    .map((ev) => ({ ev, fcardId: extractFcardId(ev.url ?? "") }))
+    .filter((x): x is { ev: EventRecord; fcardId: string } => x.fcardId !== null);
+
+  if (validEvents.length === 0) {
+    console.error("❌ Nenhum evento com URL válida encontrado.");
+    process.exit(1);
+  }
+
+  console.log("\x1b[35m══════════════════════════════════════════════════════\x1b[0m");
+  console.log("\x1b[35m🎟️  TicketMonitor — Multi-Evento (sem login)\x1b[0m");
+  console.log(`\x1b[36m   Eventos  : ${validEvents.length} encontrado(s)\x1b[0m`);
+  validEvents.forEach(({ ev, fcardId }) =>
+    console.log(`\x1b[36m     • ${ev.name ?? fcardId} (event=${fcardId})\x1b[0m`)
+  );
+  console.log(`\x1b[36m   Telegram : ${TELEGRAM_TOKEN ? "✅ configurado" : "❌ não configurado"}\x1b[0m`);
+  console.log(`\x1b[36m   Auto-bot : ✅ acionado ao detectar ingresso\x1b[0m`);
+  console.log("\x1b[35m══════════════════════════════════════════════════════\x1b[0m\n");
+
+  // Abre um único browser com uma aba por evento
+  const userDataDir = resolve(process.cwd(), "chrome-monitor-multi");
+  const context = await chromium.launchPersistentContext(userDataDir, {
+    headless: true,
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
+
+  // Inicia o monitor de cada evento em paralelo
+  await Promise.all(
+    validEvents.map(({ ev, fcardId }) => monitorEvent(ev, fcardId, context))
+  );
+
+  // Heartbeat global
   let tick = 0;
   setInterval(() => {
     tick++;
-    log("INFO", `Heartbeat #${tick} — monitor ativo | Msgs: ${msgCount} | Alerta: ${alertSent ? "🔴 ATIVO" : "🟢 aguardando"}`);
+    console.log(
+      `\x1b[36m[${new Date().toLocaleTimeString("pt-BR")}] Heartbeat #${tick} — ${validEvents.length} evento(s) monitorado(s)\x1b[0m`
+    );
   }, 60_000);
 
   // Mantém processo vivo
   await new Promise(() => {});
-}
-
-// ─── Entrada ──────────────────────────────────────────────────────────────────
-
-async function main() {
-  console.log("\x1b[35m══════════════════════════════════════════════════════\x1b[0m");
-  console.log("\x1b[35m🎟️  TicketMonitor — Console Intercept (sem login)\x1b[0m");
-  console.log(`\x1b[36m   Evento  : ${EVENT_ID}\x1b[0m`);
-  console.log(`\x1b[36m   URL     : ${EVENT_URL}\x1b[0m`);
-  console.log(`\x1b[36m   Telegram: ${TELEGRAM_TOKEN ? "✅ configurado" : "❌ não configurado"}\x1b[0m`);
-  console.log(`\x1b[36m   Auto-bot: ✅ acionado ao detectar ingresso\x1b[0m`);
-  console.log("\x1b[35m══════════════════════════════════════════════════════\x1b[0m\n");
-
-  await startMonitor();
 }
 
 main().catch((err) => {

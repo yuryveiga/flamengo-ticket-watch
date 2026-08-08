@@ -392,8 +392,8 @@ async function logHourlyStats() {
         .join(" | ");
 
       const msg = totalTickets > 0
-        ? `📊 [${now}] Relatório horário — ${totalTickets} ingresso(s) garantido(s). ${accountLines}`
-        : `📊 [${now}] Relatório horário — 0 ingressos encontrados até agora.`;
+        ? `📊 [${now}] Relatório horário — «${ev.name ?? ev.id.slice(0,8)}» — ${totalTickets} ingresso(s) garantido(s). ${accountLines}`
+        : `📊 [${now}] Relatório horário — «${ev.name ?? ev.id.slice(0,8)}» — 0 ingressos encontrados até agora.`;
 
       await pushLog(ev.id, "info", msg);
       console.log(`📊 [${ev.name ?? ev.id.slice(0,8)}] ${msg}`);
