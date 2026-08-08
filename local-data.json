@@ -1529,6 +1529,34 @@
       "level": "info",
       "message": "🔍 Monitor (a cada 5min): sem ingressos disponíveis (check #10).",
       "ts": "2026-08-08T21:32:26.848Z"
+    },
+    {
+      "id": "5bae65af-7bfa-4841-9f05-688a81ed860f",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "level": "info",
+      "message": "🔍 Monitor (a cada 5min): Stadium - Done reading available tickets - maximum booking null",
+      "ts": "2026-08-08T21:34:19.427Z"
+    },
+    {
+      "id": "ea10fbc6-22d1-402f-9913-75b3c300ba50",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "level": "info",
+      "message": "🔍 Monitor (a cada 5min): Stadium - Done reading available tickets - OUTRA MENSAGEM AQUI (teste)",
+      "ts": "2026-08-08T21:34:19.431Z"
+    },
+    {
+      "id": "2b718e80-123b-4840-be60-57c851b1acce",
+      "event_id": "2526dcea-b34a-4b1e-9da9-7d766ff8e756",
+      "level": "info",
+      "message": "🔍 Monitor (a cada 5min): Stadium - Done reading available tickets - maximum booking null",
+      "ts": "2026-08-08T21:34:19.433Z"
+    },
+    {
+      "id": "5465f118-e9b3-49f4-9c85-8fa8c0355c51",
+      "event_id": "2526dcea-b34a-4b1e-9da9-7d766ff8e756",
+      "level": "info",
+      "message": "🔍 Monitor (a cada 5min): Stadium - Done reading available tickets - OUTRA MENSAGEM AQUI (teste)",
+      "ts": "2026-08-08T21:34:19.436Z"
     }
   ]
 }

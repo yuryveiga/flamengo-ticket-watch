@@ -15,13 +15,21 @@ async function testDashLog() {
   for (const ev of db.events) {
     console.log(`\nTestando logs para o evento: ${ev.name}`);
 
-  // Simula 12 verificações
+  // Simula 12 verificações com a resposta real da API
   for (let msgCount = 1; msgCount <= 12; msgCount++) {
     const shouldLog = msgCount === 1 || msgCount % 10 === 0;
+    
+    // Simulando uma resposta da API (como se a mensagem mudasse num certo check)
+    let responseText = "Stadium - Done reading available tickets - maximum booking null";
+    
+    if (msgCount === 10) {
+      responseText = "Stadium - Done reading available tickets - OUTRA MENSAGEM AQUI (teste)";
+    }
+
     console.log(`[Check #${msgCount}] -> Vai logar no painel? ${shouldLog ? "SIM" : "NÃO"}`);
 
     if (shouldLog) {
-      const msg = `🔍 Monitor (a cada 5min): sem ingressos disponíveis (check #${msgCount}).`;
+      const msg = `🔍 Monitor (a cada 5min): ${responseText.slice(0, 250).trim()}`;
       await localDb.appendLog(ev.id, "info", msg);
       console.log(`   ✅ Inserido no DB: ${msg}`);
     }
