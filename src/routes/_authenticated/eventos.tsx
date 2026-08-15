@@ -24,16 +24,20 @@ export const Route = createFileRoute("/_authenticated/eventos")({
 // ─── Maracanã sectors ─────────────────────────────────────────────────────────
 
 const SETORES_PADRAO = [
-  "Sul Nível 1 | B",      "Sul Nível 2 | B",
-  "Sul Nível 1 | C",      "Sul Nível 2 | C",
-  "Leste Inferior",       "Oeste Inferior",
-  "Maracanã + | A",
+  // Setores Norte
+  "Norte Nível 1 | E",    "Norte Nível 2 | E",
+  "Norte Nível 1 | F",    "Norte Nível 2 | F",
   "Norte Inferior",       "Norte Superior",
+  // Setores Sul
+  "Sul Nível 1 | C",      "Sul Nível 2 | C",
+  "Sul Nível 1 | B",      "Sul Nível 2 | B",
   "Sul Inferior",         "Sul Superior",
-  "Leste Superior",       "Oeste Superior",
-  "Maracanã Mais",        "Cadeira Especial Leste",
-  "Cadeira Especial Oeste","Cadeira Cativa",
-  "Área VIP",             "Camarote",
+  // Setores Leste / Oeste
+  "Leste Superior",       "Leste Inferior",
+  "Oeste Superior",
+  // Outros (SEM Oeste Inferior e SEM Maracanã +)
+  "Cadeira Especial Leste","Cadeira Especial Oeste",
+  "Cadeira Cativa",
 ];
 
 // ─── Status badge ─────────────────────────────────────────────────────────────

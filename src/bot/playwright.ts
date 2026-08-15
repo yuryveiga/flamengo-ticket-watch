@@ -383,6 +383,9 @@ async function tryAddToCart(
   if (aceitarQualquer) {
     await log("info", "Tentando qualquer setor disponível...");
     
+    // Setores que devem ser ignorados mesmo no modo "aceitar qualquer"
+    const SETORES_BLOQUEADOS = ["oeste inferior", "maracanã +", "maracanã mais", "maracana +"];
+    
     // Pega todos os setores renderizados
     const allSectors = page.locator("h4.match_sector-name");
     const count = await allSectors.count();
@@ -390,7 +393,15 @@ async function tryAddToCart(
     for (let i = 0; i < count; i++) {
       const sec = allSectors.nth(i);
       if (await sec.isVisible({ timeout: 1000 })) {
-        await log("info", `Tentando setor genérico #${i + 1}...`);
+        const sectorName = (await sec.textContent() ?? "").toLowerCase().trim();
+        
+        // Pula setores bloqueados
+        if (SETORES_BLOQUEADOS.some((b) => sectorName.includes(b))) {
+          await log("info", `Setor ignorado (bloqueado): "${await sec.textContent()}"`);
+          continue;
+        }
+        
+        await log("info", `Tentando setor genérico #${i + 1}: "${await sec.textContent()}"...`);
         await sec.click().catch(() => {});
         await page.waitForTimeout(800);
         
@@ -616,12 +627,6 @@ export async function runBotPersistent(
 
       // 2. Aguarda o intervalo da configuração OU o console log do site
       try {
-        // Se já tentou 3 vezes nesta sessão, sai para reiniciar ou passar para próxima
-        if (attemptCount >= 3) {
-          await log("warn", "Limite de 3 tentativas atingido nesta sessão. Fechando para reiniciar ou alternar conta...");
-          return false;
-        }
-
         let timerId: NodeJS.Timeout;
         await new Promise<void>((resolve, reject) => {
           resolveUpdate = () => {
