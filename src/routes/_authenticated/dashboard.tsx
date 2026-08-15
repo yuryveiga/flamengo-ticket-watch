@@ -4,7 +4,6 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { listEvents, enqueueCommand, setStatus } from "@/lib/events.functions";
 import { getEventLogs, clearEventLogs } from "@/lib/logs.functions";
-import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Play, Square, Trash2, Download } from "lucide-react";
 
@@ -13,7 +12,6 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   component: Dashboard,
 });
 
-type LogRow = { id: number; ts: string; level: string; message: string };
 type EventRow = Awaited<ReturnType<typeof listEvents>>[number];
 
 function Dashboard() {
@@ -98,7 +96,7 @@ function Dashboard() {
         </div>
       ) : null}
 
-      <SuccessBanner eventIds={events.map((e) => e.id)} />
+      <SuccessBanner eventIds={events.map((e) => e.id)} events={events} />
     </div>
   );
 }
@@ -120,25 +118,17 @@ function StatusPanel({
     : event.status === "expirado"
       ? "bg-red-500"
       : "bg-gray-500";
-  const [checks, setChecks] = useState(0);
-  const [lastCheck, setLastCheck] = useState<string>("—");
-
-  useEffect(() => {
-    const ch = supabase
-      .channel(`logs-stat-${event.id}`)
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "logs", filter: `event_id=eq.${event.id}` },
-        (p) => {
-          setChecks((c) => c + 1);
-          setLastCheck(new Date((p.new as { ts: string }).ts).toLocaleTimeString());
-        },
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(ch);
-    };
-  }, [event.id]);
+  const getLogsFn = useServerFn(getEventLogs);
+  const { data: statLogs = [] } = useQuery({
+    queryKey: ["logs", event.id],
+    queryFn: () => getLogsFn({ data: { event_id: event.id, limit: 200 } }),
+    refetchInterval: 2000,
+  });
+  const checks = statLogs.length;
+  const lastCheck =
+    statLogs.length > 0
+      ? new Date(statLogs[statLogs.length - 1].ts).toLocaleTimeString("pt-BR")
+      : "—";
 
   return (
     <section className="rounded-xl border border-border bg-card p-5 space-y-4">
@@ -284,58 +274,56 @@ export function LogTerminal({ eventId }: { eventId: string }) {
   );
 }
 
-function SuccessBanner({ eventIds }: { eventIds: string[] }) {
+function SuccessBanner({ eventIds, events }: { eventIds: string[]; events: EventRow[] }) {
+  const getLogsFn = useServerFn(getEventLogs);
   const [result, setResult] = useState<{
     setor: string | null;
     quantidade: number | null;
     email?: string;
     url?: string;
   } | null>(null);
+  const seenLogIds = useRef(new Set<string>());
 
-  useEffect(() => {
-    if (eventIds.length === 0) return;
-    const ch = supabase
-      .channel("results-banner")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "results" },
-        async (p) => {
-          const r = p.new as {
-            event_id: string;
-            setor: string | null;
-            quantidade: number | null;
-            status: string;
-          };
-          if (r.status !== "Sucesso" || !eventIds.includes(r.event_id)) return;
-          const { data: ev } = await supabase
-            .from("events")
-            .select("config, url")
-            .eq("id", r.event_id)
-            .single();
-          setResult({
-            setor: r.setor,
-            quantidade: r.quantidade,
-            email: (ev?.config as { email?: string })?.email,
-            url: ev?.url,
-          });
-          try {
-            new Audio(
-              "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=",
-            )
-              .play()
-              .catch(() => {});
-            if (typeof Notification !== "undefined" && Notification.permission === "granted")
-              new Notification("✅ Ingresso adicionado ao carrinho!");
-          } catch {
-            /* ignore */
+  // Faz polling nos logs de todos os eventos buscando mensagens de sucesso no carrinho
+  useQuery({
+    queryKey: ["banner-success", eventIds.join(",")],
+    queryFn: async () => {
+      for (const id of eventIds) {
+        const logs = await getLogsFn({ data: { event_id: id, limit: 50 } });
+        for (const l of logs) {
+          if (
+            l.level === "success" &&
+            l.message.toLowerCase().includes("carrinho") &&
+            !seenLogIds.current.has(l.id)
+          ) {
+            seenLogIds.current.add(l.id);
+            const ev = events.find((e) => e.id === id);
+            setResult({
+              setor: null,
+              quantidade: null,
+              email: (ev?.config as any)?.email,
+              url: ev?.url,
+            });
+            try {
+              new Audio(
+                "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=",
+              )
+                .play()
+                .catch(() => {});
+              if (typeof Notification !== "undefined" && Notification.permission === "granted")
+                new Notification("✅ Ingresso adicionado ao carrinho!");
+            } catch {
+              /* ignore */
+            }
+            return null; // para de iterar na primeira detecção
           }
-        },
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(ch);
-    };
-  }, [eventIds]);
+        }
+      }
+      return null;
+    },
+    refetchInterval: 2000,
+    enabled: eventIds.length > 0 && !result,
+  });
 
   useEffect(() => {
     if (typeof Notification !== "undefined" && Notification.permission === "default")

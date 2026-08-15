@@ -8,7 +8,7 @@ chromium.use(stealth());
 import type { LogLevel } from "../lib/local-db";
 import path from "path";
 import fs from "fs";
-import { sleep } from "../lib/utils";
+import { sleep, toSectorUrl } from "../lib/utils";
 import axios from "axios";
 
 // ─── Alertas Telegram ────────────────────────────────────────────────────────
@@ -45,7 +45,16 @@ export interface EventData {
     quantidade?: number;
     aceitar_qualquer?: boolean;
     headless?: boolean;
+    intervalo?: number;
+    loop_continuo?: boolean;
   };
+}
+
+// Declara a função exposta pelo Playwright no contexto do browser
+declare global {
+  interface Window {
+    onFcardUpdate: () => Promise<void>;
+  }
 }
 
 export interface StopSignal {
@@ -373,13 +382,45 @@ async function tryAddToCart(
   // Fallback: any available button
   if (aceitarQualquer) {
     await log("info", "Tentando qualquer setor disponível...");
-    const anyBtn = page.locator("button:has-text('Comprar'), button:has-text('Adicionar')").first();
-    if (await anyBtn.isVisible({ timeout: 2000 })) {
-      await anyBtn.click();
-      await page.waitForTimeout(1500);
-      await log("success", `🎟 INGRESSO NO CARRINHO! (setor automático · ${quantidade}x) (Conta: ${email})`);
-      await sendTelegramAlert(`🚨 *INGRESSO GARANTIDO!* 🚨\n\n🎟 **Setor:** (Automático)\n👤 **Conta:** ${email}\n⚽ **Evento:** ${eventId}`, log);
-      return true;
+    
+    // Pega todos os setores renderizados
+    const allSectors = page.locator("h4.match_sector-name");
+    const count = await allSectors.count();
+    
+    for (let i = 0; i < count; i++) {
+      const sec = allSectors.nth(i);
+      if (await sec.isVisible({ timeout: 1000 })) {
+        await log("info", `Tentando setor genérico #${i + 1}...`);
+        await sec.click().catch(() => {});
+        await page.waitForTimeout(800);
+        
+        // Verifica se abriu modal de erro de limite
+        const isLimit = await page.locator("#alert-modal").isVisible({ timeout: 1000 }).catch(() => false);
+        if (isLimit) {
+          await page.keyboard.press("Escape").catch(() => {});
+          await page.locator("#alert-modal button").last().click({ timeout: 1500 }).catch(() => {});
+          continue; // tenta o próximo
+        }
+        
+        try { await setQuantity(page, quantidade, log); } catch {}
+        
+        const cartBtn = page.locator("button:has-text('Adicionar ao carrinho'), button:has-text('Comprar'), button:has-text('Selecionar'), button:has-text('Continuar')").first();
+        if (await cartBtn.isVisible({ timeout: 2000 })) {
+          await cartBtn.click({ force: true, timeout: 15000 });
+          await log("wait", "Botão de compra clicado. Aguardando...");
+          
+          await solveCaptcha(page, log);
+          
+          try {
+            await page.waitForURL("**/shopping-cart**", { timeout: 20_000 });
+            await log("success", `🎟 INGRESSO NO CARRINHO! (setor automático #${i + 1} · ${quantidade}x) (Conta: ${email})`);
+            await sendTelegramAlert(`🚨 *INGRESSO GARANTIDO!* 🚨\n\n🎟 **Setor:** (Automático)\n👤 **Conta:** ${email}\n⚽ **Evento:** ${eventId}`, log);
+            return true;
+          } catch {
+            await log("warn", "Fallback automático: clique realizado mas o carrinho não abriu. Tentando o próximo...");
+          }
+        }
+      }
     }
   }
 
@@ -433,7 +474,9 @@ export async function runBotPersistent(
   log: LogFn,
   stopSignal: StopSignal,
 ): Promise<boolean> {
-  const { login_url, url, config } = eventData;
+  const { login_url, config } = eventData;
+  // Normaliza para /buy/sector independente do que foi cadastrado
+  const url         = toSectorUrl(eventData.url);
   const email       = config.email ?? "";
   const setores     = config.setores ?? [];
   const quantidade  = config.quantidade ?? 1;
@@ -579,16 +622,18 @@ export async function runBotPersistent(
           return false;
         }
 
+        let timerId: NodeJS.Timeout;
         await new Promise<void>((resolve, reject) => {
-          resolveUpdate = resolve;
+          resolveUpdate = () => {
+            clearTimeout(timerId);
+            resolve();
+          };
           
           // Timeout baseado no intervalo configurado pelo usuário (default 30s se não existir)
           const waitTimeMs = (config.intervalo || 30) * 1000;
-          setTimeout(() => {
-            if (resolveUpdate) {
-              resolveUpdate = null;
-              reject(new Error("INTERVAL_TICK"));
-            }
+          timerId = setTimeout(() => {
+            resolveUpdate = null;
+            reject(new Error("INTERVAL_TICK"));
           }, waitTimeMs);
         });
         

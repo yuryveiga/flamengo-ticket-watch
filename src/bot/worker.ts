@@ -325,7 +325,7 @@ async function processCommands() {
         
         for (let i = 0; i < userAccounts.length; i++) {
           const acc = userAccounts[i];
-          const senha = await decryptText(acc.senha_enc);
+          const senha = await decryptText(acc.senha_enc).catch(() => "");
           
           await pushLog("test-all-logins", "info", `---`);
           await pushLog("test-all-logins", "info", `[CONTA ${i + 1}/${userAccounts.length}] Testando ${acc.email}...`);

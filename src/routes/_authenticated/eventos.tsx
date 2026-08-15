@@ -511,7 +511,7 @@ function EventosPage() {
           {events.map((ev) => {
             const meta = statusMeta[ev.status as keyof typeof statusMeta] ?? statusMeta.pausado;
             const isRunning = ev.status === "monitorando";
-            const name = ev.name || new URL(ev.url).hostname;
+            const name = ev.name || (() => { try { return new URL(ev.url).hostname; } catch { return ev.url; } })();
             return (
               <div key={ev.id} className="rounded-xl border border-border bg-card p-4">
                 <div className="flex items-start gap-3">

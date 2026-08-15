@@ -169,33 +169,68 @@ async function monitorEvent(
   // ── Relay do browser → Node.js ───────────────────────────────────────────
   await page.exposeFunction("__monitorRelay", async (text: string) => {
     msgCount++;
-    const isAvailable = !text.toLowerCase().includes(EMPTY_SIGNATURE.toLowerCase());
+    let isAvailable = !text.toLowerCase().includes(EMPTY_SIGNATURE.toLowerCase());
+    
+    // Fallback: se o log diz que não tem, vamos verificar no DOM para ter certeza
+    // (Útil porque o site às vezes loga 'maximum booking null' mesmo com ingresso)
+    if (!isAvailable) {
+      const hasSectors = await page.evaluate(() => {
+        const sectors = document.querySelectorAll("h4.match_sector-name, button.btn-comprar, .match_sector");
+        return sectors.length > 0;
+      }).catch(() => false);
+      if (hasSectors) {
+        isAvailable = true;
+        text = text + " (Tickets detectados no DOM!)";
+      }
+    }
+
     log("RAW", label, `[Console #${msgCount}] ${text}`);
+    // Loga no dashboard o raw console output para o usuário
+    await dashLog(ev.id, "info", `🔍 Resposta do Servidor/Console: ${text.slice(0, 200)}`);
+
     await handleDetection(isAvailable, text, ev, fcardId, eventUrl, label);
   });
 
   // ── Fallback: interceptação de rede ─────────────────────────────────────
   page.on("response", async (res) => {
-    if (!res.url().includes("get-available-tickets")) return;
+    const type = res.request().resourceType();
+    if (type !== "fetch" && type !== "xhr") return;
+    
     try {
+      const url = res.url();
       const body = await res.text().catch(() => "");
-      if (!body.includes("Stadium") && !body.includes("reading available tickets")) return;
-      const isAvailable = !body.toLowerCase().includes(EMPTY_SIGNATURE.toLowerCase());
-      msgCount++;
-      log("RAW", label, `[Network #${msgCount}] ${body.slice(0, 200)}`);
-      await handleDetection(isAvailable, body, ev, fcardId, eventUrl, label);
+      // Se a resposta for vazia ou for só HTML, ignorar
+      if (!body || body.startsWith("<")) return;
+
+      // Se parece resposta de checagem do BD para detecção
+      if (body.includes("Stadium") || body.includes("reading available tickets") || body.includes("maximum booking null") || url.includes("status") || body.includes("available")) {
+        let isAvailable = !body.toLowerCase().includes(EMPTY_SIGNATURE.toLowerCase()) && !body.toLowerCase().includes("maximum booking null");
+        
+        if (!isAvailable) {
+          const hasSectors = await page.evaluate(() => {
+            const sectors = document.querySelectorAll("h4.match_sector-name, button.btn-comprar, .match_sector");
+            return sectors.length > 0;
+          }).catch(() => false);
+          if (hasSectors) {
+            isAvailable = true;
+          }
+        }
+
+        msgCount++;
+        log("RAW", label, `[Network #${msgCount}] ${body.slice(0, 200)}`);
+        
+        // Passa para detecção
+        await handleDetection(isAvailable, body, ev, fcardId, eventUrl, label);
+      }
     } catch {}
   });
 
   // ── Lógica de detecção centralizada ─────────────────────────────────────
-  async function handleDetection(
-    isAvailable: boolean,
-    responseText: string,
-    ev: EventRecord,
-    fcardId: string,
-    eventUrl: string,
-    label: string
-  ) {
+  let lastActivity = Date.now();
+
+  const handleDetection = async (isAvailable: boolean, responseText: string, ev: any, fcardId: any, eventUrl: string, label: string) => {
+    lastActivity = Date.now();
+    
     if (isAvailable) {
       log("ALERT", label, "🎟️  INGRESSO DISPONÍVEL!");
       await dashLog(ev.id, "success", `🚨 INGRESSO DISPONÍVEL! Monitor detectou: ${responseText.slice(0, 200)}`);
@@ -224,9 +259,9 @@ async function monitorEvent(
     } else {
       log("INFO", label, `Sem ingressos (check #${msgCount}).`);
       
-      // Log no dashboard a cada 10 checks (~5 minutos, considerando consultas a cada 30s)
-      if (msgCount === 1 || msgCount % 10 === 0) {
-        await dashLog(ev.id, "info", `🔍 Monitor (a cada 5min): ${responseText.slice(0, 250).trim()}`);
+      // Log no dashboard a cada 2 checks (~1 minuto) para mostrar a resposta do servidor minuto a minuto
+      if (msgCount === 1 || msgCount % 2 === 0) {
+        await dashLog(ev.id, "info", `🔍 Resposta do BD/Servidor: ${responseText.slice(0, 250).trim()}`);
       }
 
       if (alertSent) {
@@ -243,62 +278,109 @@ async function monitorEvent(
   await page.waitForTimeout(2_000);
 
   log("SUCCESS", label, "🎯 Monitor ativo! Aguardando atualizações a cada ~30s...");
+
+  // ── Polling Ativo (Minuto a Minuto) ──────────────────────────────────────
+  const hbInterval = setInterval(async () => {
+    try {
+      const now = Date.now();
+      const timeSinceLastActivity = now - lastActivity;
+      
+      // Se estamos há mais de 2 minutos sem resposta, fecha a aba e recomeça do zero
+      if (timeSinceLastActivity > 120_000) {
+        await dashLog(ev.id, "wait", `⏱️ Heartbeat: Sem contato há >2m. Fechando aba e recomeçando do zero...`);
+        clearInterval(hbInterval);
+        await page.close().catch(() => {});
+        // Reinicia o monitoramento deste evento
+        setTimeout(() => monitorEvent(ev, fcardId, context).catch(console.error), 2000);
+        return;
+      }
+
+      await dashLog(ev.id, "wait", `⏱️ Heartbeat 1m: Consultando BD do site...`);
+      await page.evaluate(() => {
+        if (typeof (window as any).onFcardUpdate === "function") {
+          (window as any).onFcardUpdate();
+        } else {
+          location.reload();
+        }
+      });
+    } catch {}
+  }, 60_000);
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
-  // Lê todos os eventos do banco
-  const db = await localDb.read();
-  const events = db.events ?? [];
+  // IDs de eventos com aba já aberta — evita duplicatas
+  const activeIds = new Set<string>();
 
-  if (events.length === 0) {
+  // Valida que existe ao menos 1 evento cadastrado na inicialização
+  const dbInit = await localDb.read();
+  if ((dbInit.events ?? []).length === 0) {
     console.error("❌ Nenhum evento cadastrado no local-data.json. Cadastre um evento no painel.");
     process.exit(1);
   }
 
-  // Filtra eventos com URL válida
-  const validEvents = events
-    .map((ev) => ({ ev, fcardId: extractFcardId(ev.url ?? "") }))
-    .filter((x): x is { ev: EventRecord; fcardId: string } => x.fcardId !== null);
-
-  if (validEvents.length === 0) {
-    console.error("❌ Nenhum evento com URL válida encontrado.");
-    process.exit(1);
-  }
-
-  console.log("\x1b[35m══════════════════════════════════════════════════════\x1b[0m");
-  console.log("\x1b[35m🎟️  TicketMonitor — Multi-Evento (sem login)\x1b[0m");
-  console.log(`\x1b[36m   Eventos  : ${validEvents.length} encontrado(s)\x1b[0m`);
-  validEvents.forEach(({ ev, fcardId }) =>
-    console.log(`\x1b[36m     • ${ev.name ?? fcardId} (event=${fcardId})\x1b[0m`)
-  );
-  console.log(`\x1b[36m   Telegram : ${TELEGRAM_TOKEN ? "✅ configurado" : "❌ não configurado"}\x1b[0m`);
-  console.log(`\x1b[36m   Auto-bot : ✅ acionado ao detectar ingresso\x1b[0m`);
-  console.log("\x1b[35m══════════════════════════════════════════════════════\x1b[0m\n");
-
-  // Abre um único browser com uma aba por evento
+  // Browser compartilhado — uma aba por evento
   const userDataDir = resolve(process.cwd(), "chrome-monitor-multi");
   const context = await chromium.launchPersistentContext(userDataDir, {
     headless: true,
     args: ["--no-sandbox", "--disable-setuid-sandbox"],
   });
 
-  // Inicia o monitor de cada evento em paralelo
-  await Promise.all(
-    validEvents.map(({ ev, fcardId }) => monitorEvent(ev, fcardId, context))
-  );
+  // ── Sincronização dinâmica ────────────────────────────────────────────────
+  // Relê o local-data.json e abre nova aba para qualquer evento ainda não monitorado.
+  async function syncEvents() {
+    let db;
+    try { db = await localDb.read(); } catch { return; }
 
-  // Heartbeat global
+    const novos = (db.events ?? [])
+      .map((ev) => ({ ev, fcardId: extractFcardId(ev.url ?? "") }))
+      .filter((x): x is { ev: EventRecord; fcardId: string } =>
+        x.fcardId !== null && !activeIds.has(x.ev.id)
+      );
+
+    for (const { ev, fcardId } of novos) {
+      activeIds.add(ev.id);
+      const label = ev.name ?? fcardId;
+      console.log(
+        `\x1b[35m[${new Date().toLocaleTimeString("pt-BR")}] ➕ Novo evento detectado: ${label} (event=${fcardId})\x1b[0m`
+      );
+      monitorEvent(ev, fcardId, context).catch((err) => {
+        console.error(`[Monitor] Erro em ${label}:`, err.message);
+        activeIds.delete(ev.id); // permite tentar novamente no próximo ciclo
+      });
+    }
+  }
+
+  // Sync inicial
+  await syncEvents();
+
+  // Banner
+  const dbNow = await localDb.read();
+  console.log("\x1b[35m══════════════════════════════════════════════════════\x1b[0m");
+  console.log("\x1b[35m🎟️  TicketMonitor — Multi-Evento (sem login)\x1b[0m");
+  console.log(`\x1b[36m   Eventos  : ${activeIds.size} monitorado(s)\x1b[0m`);
+  (dbNow.events ?? []).forEach((ev) => {
+    const fcardId = extractFcardId(ev.url ?? "");
+    if (fcardId) console.log(`\x1b[36m     • ${ev.name ?? fcardId} (event=${fcardId})\x1b[0m`);
+  });
+  console.log(`\x1b[36m   Telegram : ${TELEGRAM_TOKEN ? "✅ configurado" : "❌ não configurado"}\x1b[0m`);
+  console.log(`\x1b[36m   Auto-bot : ✅ acionado ao detectar ingresso\x1b[0m`);
+  console.log(`\x1b[36m   Hot-reload: ✅ detecta novos eventos a cada 30s\x1b[0m`);
+  console.log("\x1b[35m══════════════════════════════════════════════════════\x1b[0m\n");
+
+  // Sync periódico a cada 30s
+  setInterval(syncEvents, 30_000);
+
+  // Heartbeat
   let tick = 0;
   setInterval(() => {
     tick++;
     console.log(
-      `\x1b[36m[${new Date().toLocaleTimeString("pt-BR")}] Heartbeat #${tick} — ${validEvents.length} evento(s) monitorado(s)\x1b[0m`
+      `\x1b[36m[${new Date().toLocaleTimeString("pt-BR")}] Heartbeat #${tick} — ${activeIds.size} evento(s) monitorado(s)\x1b[0m`
     );
   }, 60_000);
 
-  // Mantém processo vivo
   await new Promise(() => {});
 }
 
