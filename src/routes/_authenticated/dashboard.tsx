@@ -124,7 +124,31 @@ function StatusPanel({
     queryFn: () => getLogsFn({ data: { event_id: event.id, limit: 200 } }),
     refetchInterval: 2000,
   });
-  const checks = statLogs.length;
+
+  // ── Melhoria 6: Contador de tentativas e tempo ativo ────────────────────────
+  const attemptLogs = statLogs.filter(
+    (l) => l.level === "api" && l.message.includes("Verificando disponibilidade")
+  );
+  const attemptCount = attemptLogs.length;
+  const firstAttemptTs = attemptLogs.length > 0 ? new Date(attemptLogs[0].ts).getTime() : null;
+  const [elapsed, setElapsed] = useState("00:00");
+  useEffect(() => {
+    if (!isRunning || !firstAttemptTs) { setElapsed("00:00"); return; }
+    const tick = () => {
+      const s = Math.floor((Date.now() - firstAttemptTs) / 1000);
+      const m = Math.floor(s / 60).toString().padStart(2, "0");
+      const ss = (s % 60).toString().padStart(2, "0");
+      setElapsed(`${m}:${ss}`);
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [isRunning, firstAttemptTs]);
+
+  // ── Melhoria 5: Setor sendo verificado agora ──────────────────────────────
+  const lastLog = statLogs[statLogs.length - 1];
+  const currentSectorMatch = lastLog?.message.match(/Procurando setor: "(.+?)"/);
+  const currentSector = currentSectorMatch ? currentSectorMatch[1] : null;
   const lastCheck =
     statLogs.length > 0
       ? new Date(statLogs[statLogs.length - 1].ts).toLocaleTimeString("pt-BR")
@@ -137,6 +161,12 @@ function StatusPanel({
         <span className="font-bold uppercase text-sm">
           {isRunning ? "Ativo" : event.status === "expirado" ? "Expirado" : "Parado"}
         </span>
+        {/* Melhoria 5: badge do setor atual */}
+        {isRunning && currentSector && (
+          <span className="ml-auto text-xs bg-sky-900/50 text-sky-300 border border-sky-700 rounded px-2 py-0.5 animate-pulse">
+            🔍 {currentSector}
+          </span>
+        )}
       </div>
       <div>
         <p className="text-xs text-muted-foreground">Evento</p>
@@ -145,8 +175,9 @@ function StatusPanel({
       <div className="grid grid-cols-2 gap-3">
         <Stat label="Setor alvo" value={event.config.setores[0] || "—"} />
         <Stat label="Quantidade" value={String(event.config.quantidade)} />
-        <Stat label="Verificações" value={String(checks)} />
-        <Stat label="Último check" value={lastCheck} />
+        {/* Melhoria 6: tentativas + tempo ativo */}
+        <Stat label="Tentativas" value={isRunning ? String(attemptCount) : "—"} />
+        <Stat label="Tempo ativo" value={isRunning ? elapsed : "—"} />
       </div>
       <div className="flex gap-2 flex-wrap">
         {isRunning ? (
@@ -284,6 +315,25 @@ function SuccessBanner({ eventIds, events }: { eventIds: string[]; events: Event
   } | null>(null);
   const seenLogIds = useRef(new Set<string>());
 
+  // ── Melhoria 7: Som real via AudioContext (880Hz por 1.5s) ───────────────
+  function playSuccessSound() {
+    try {
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      osc.frequency.setValueAtTime(1100, ctx.currentTime + 0.3);
+      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.6);
+      gain.gain.setValueAtTime(0.4, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1.5);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 1.5);
+    } catch { /* ignore */ }
+  }
+
   // Faz polling nos logs de todos os eventos buscando mensagens de sucesso no carrinho
   useQuery({
     queryKey: ["banner-success", eventIds.join(",")],
@@ -298,24 +348,19 @@ function SuccessBanner({ eventIds, events }: { eventIds: string[]; events: Event
           ) {
             seenLogIds.current.add(l.id);
             const ev = events.find((e) => e.id === id);
+            // ── Melhoria 7: Extrair setor e quantidade do log ─────────────────
+            const setorMatch = l.message.match(/Setor: "(.+?)"/);
+            const qtdMatch = l.message.match(/· (\d+)x/);
             setResult({
-              setor: null,
-              quantidade: null,
+              setor: setorMatch?.[1] ?? null,
+              quantidade: qtdMatch ? parseInt(qtdMatch[1]) : null,
               email: (ev?.config as any)?.email,
               url: ev?.url,
             });
-            try {
-              new Audio(
-                "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQAAAAA=",
-              )
-                .play()
-                .catch(() => {});
-              if (typeof Notification !== "undefined" && Notification.permission === "granted")
-                new Notification("✅ Ingresso adicionado ao carrinho!");
-            } catch {
-              /* ignore */
-            }
-            return null; // para de iterar na primeira detecção
+            playSuccessSound();
+            if (typeof Notification !== "undefined" && Notification.permission === "granted")
+              new Notification("✅ Ingresso adicionado ao carrinho!");
+            return null;
           }
         }
       }

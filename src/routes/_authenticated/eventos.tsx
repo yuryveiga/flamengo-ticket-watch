@@ -75,7 +75,7 @@ const defaultWizard: WizardData = {
   setores: [],
   aceitar_qualquer: false,
   headless: true,
-  intervalo: 30,
+  intervalo: 10,
   loop_continuo: false,
 };
 

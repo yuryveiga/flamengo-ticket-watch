@@ -271,7 +271,6 @@ async function tryAddToCart(
     await log("info", `Procurando setor: "${setor}"...`);
 
     // Busca especificamente no h4.match_sector-name, comparando de forma case-insensitive e ignorando espaços extras
-    // Exemplo do site: <h4 class="match_sector-name">OESTE INFERIOR</h4>
     const sectorEl = page.locator("h4.match_sector-name").filter({
       hasText: new RegExp(setor.trim().replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&"), "i")
     }).first();
@@ -283,8 +282,22 @@ async function tryAddToCart(
       continue;
     }
 
-    await log("info", `"${setor}" encontrado! Selecionando...`);
-    // Clica no elemento pai (card do setor) para garantir que o clique funciona
+    // ── Melhoria 1: Verificar CSS antes de clicar ─────────────────────────────
+    // Inspeciona o card pai do setor para classes que indicam indisponibilidade
+    const isDisabledByCss = await sectorEl.evaluate((el) => {
+      const card = el.closest('[class]') ?? el.parentElement ?? el;
+      const cls = (card.className ?? "").toLowerCase();
+      const attrs = (card.getAttribute('data-available') ?? card.getAttribute('data-disabled') ?? "").toLowerCase();
+      return cls.includes('disabled') || cls.includes('sold-out') || cls.includes('unavailable')
+        || cls.includes('esgotado') || attrs === 'false' || attrs.includes('sold');
+    }).catch(() => false);
+
+    if (isDisabledByCss) {
+      await log("warn", `"${setor}" marcado como indisponível pelo CSS. Pulando sem clicar.`);
+      continue;
+    }
+
+    await log("info", `"${setor}" encontrado e disponível! Selecionando...`);
     await sectorEl.click().catch(() => {});
     await page.waitForTimeout(800);
 
@@ -306,6 +319,14 @@ async function tryAddToCart(
     ).first();
 
     if (await cartBtn.isVisible({ timeout: 3000 })) {
+      // ── Melhoria 3: Detectar CAPTCHA ANTES de clicar comprar ─────────────────
+      const captchaVisibleBefore = await page.locator(".g-recaptcha, #g-recaptcha, div[data-sitekey], iframe[src*='recaptcha']").isVisible({ timeout: 500 }).catch(() => false);
+      if (captchaVisibleBefore) {
+        await log("warn", "⚠️ CAPTCHA detectado ANTES do clique. Resolvendo previamente...");
+        await solveCaptcha(page, log);
+        await page.waitForTimeout(1000);
+      }
+
       await page.screenshot({ path: "debug-before-cart.png" });
       await cartBtn.click({ force: true, timeout: 15000 });
       await log("wait", "Botão de compra clicado. Aguardando o site registrar no carrinho...");
@@ -575,6 +596,19 @@ export async function runBotPersistent(
     }
   });
 
+  // ── Melhoria 2: Interceptação via WebSocket ───────────────────────────────
+  page.on("websocket", (ws) => {
+    ws.on("framereceived", (frame) => {
+      // Qualquer frame de dados recebido via WS indica atualização do site
+      if (frame.payload && frame.payload.length > 2) {
+        if (resolveUpdate) {
+          resolveUpdate();
+          resolveUpdate = null;
+        }
+      }
+    });
+  });
+
   try {
     // Step 1: Login
     await doLogin(page, login_url, email, decryptedSenha, log);
@@ -587,6 +621,9 @@ export async function runBotPersistent(
     await log("info", "🎯 Modo de interceptação ativo! Checando DOM imediatamente e aguardando atualizações...");
 
     let attemptCount = 0;
+    // ── Melhoria 4: Rastrear última vez que a página respondeu corretamente ────
+    let lastSuccessfulCheckAt = Date.now();
+    const SESSION_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutos sem resposta = reconectar do zero
 
     // Step 3: Loop combinando polling e interceptação
     while (!stopSignal.stop) {
@@ -635,7 +672,7 @@ export async function runBotPersistent(
           };
           
           // Timeout baseado no intervalo configurado pelo usuário (default 30s se não existir)
-          const waitTimeMs = (config.intervalo || 30) * 1000;
+          const waitTimeMs = (config.intervalo || 10) * 1000;
           timerId = setTimeout(() => {
             resolveUpdate = null;
             reject(new Error("INTERVAL_TICK"));
@@ -647,8 +684,16 @@ export async function runBotPersistent(
         await page.waitForTimeout(500); // Aguarda o DOM renderizar
       } catch (err: any) {
         if (err.message === "INTERVAL_TICK") {
-          // A cada 3 tentativas sem sucesso, recarrega a página para garantir que
-          // o bot não foi redirecionado silenciosamente pelo FutebolCard
+          // ── Melhoria 4: Timeout de sessão com reconexão total ────────────────
+          const sinceLastCheck = Date.now() - lastSuccessfulCheckAt;
+          if (sinceLastCheck > SESSION_TIMEOUT_MS) {
+            await log("warn", `⏰ Sem resposta válida há ${Math.round(sinceLastCheck / 60000)}min. Reconectando do zero...`);
+            try { await context.close(); } catch {}
+            // Re-lança erro para o worker reiniciar o loop completo
+            throw new Error("SESSION_TIMEOUT");
+          }
+
+          // A cada 3 tentativas sem sucesso, recarrega a página
           if (attemptCount % 3 === 0) {
             const currentUrl = page.url();
             if (!currentUrl.includes(url.split("?")[0].split("/").pop()!)) {
@@ -659,6 +704,7 @@ export async function runBotPersistent(
             try {
               await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30_000 });
               await page.waitForTimeout(2000);
+              lastSuccessfulCheckAt = Date.now(); // Página carregou — resetar timer
             } catch {
               await log("warn", "Falha ao recarregar. Tentando continuar...");
             }
@@ -667,6 +713,9 @@ export async function runBotPersistent(
           throw err;
         }
       }
+
+      // Atualiza o timer de sessão a cada ciclo bem-sucedido
+      lastSuccessfulCheckAt = Date.now();
     }
 
     return false;
