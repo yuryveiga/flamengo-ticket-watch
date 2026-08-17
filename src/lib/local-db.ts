@@ -17,6 +17,13 @@ export type EventConfig = {
   aceitar_qualquer: boolean;
   headless: boolean;
   loop_continuo: boolean;
+
+  // Timers e Agendamento
+  timer_duration_minutes?: number;
+  timer_start_time?: string;
+  timer_end_time?: string;
+  timer_loop_run_minutes?: number;
+  timer_loop_pause_minutes?: number;
 };
 
 export type EventRecord = {
@@ -27,6 +34,7 @@ export type EventRecord = {
   name: string | null;
   status: EventStatus;
   config: Partial<EventConfig>;
+  stats?: { started_at: number; attempts: number; anomalous_responses?: number };
   created_at: string;
   expires_at: string | null;
 };
@@ -101,7 +109,17 @@ async function readDbRaw(): Promise<LocalDbData> {
 // Escrita interna sem lock — apenas para uso dentro do chain do mutex
 async function writeDbRaw(data: LocalDbData): Promise<void> {
   try { await fs.copyFile(DATA_FILE, DATA_FILE + ".bak"); } catch {}
-  await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), "utf-8");
+  const tmpFile = `${DATA_FILE}.${crypto.randomUUID()}.tmp`;
+  await fs.writeFile(tmpFile, JSON.stringify(data, null, 2), "utf-8");
+  for (let i = 0; i < 10; i++) {
+    try {
+      await fs.rename(tmpFile, DATA_FILE);
+      break;
+    } catch (e: any) {
+      if (i === 9) throw e;
+      await new Promise((r) => setTimeout(r, 50));
+    }
+  }
 }
 
 // Leitura pública — aguarda escritas pendentes antes de ler
@@ -161,6 +179,35 @@ async function clearEventLogs(eventId: string): Promise<void> {
   await writeDb(db);
 }
 
+async function updateEventStats(eventId: string, statsDelta: { started_at?: number; addAttempts?: number; setAttempts?: number; addAnomalous?: number }): Promise<void> {
+  const doUpdate = async () => {
+    const db = await readDbRaw();
+    const event = db.events.find((e) => e.id === eventId);
+    if (!event) return;
+    
+    if (!event.stats) {
+      event.stats = { started_at: Date.now(), attempts: 0, anomalous_responses: 0 };
+    }
+    
+    if (statsDelta.started_at !== undefined) {
+      event.stats.started_at = statsDelta.started_at;
+    }
+    if (statsDelta.setAttempts !== undefined) {
+      event.stats.attempts = statsDelta.setAttempts;
+    }
+    if (statsDelta.addAttempts !== undefined) {
+      event.stats.attempts += statsDelta.addAttempts;
+    }
+    if (statsDelta.addAnomalous !== undefined) {
+      event.stats.anomalous_responses = (event.stats.anomalous_responses || 0) + statsDelta.addAnomalous;
+    }
+    
+    await writeDbRaw(db);
+  };
+  writeLock = writeLock.then(doUpdate, doUpdate);
+  await writeLock;
+}
+
 // ─── Export ───────────────────────────────────────────────────────────────────
 
 export const localDb = {
@@ -169,4 +216,5 @@ export const localDb = {
   appendLog,
   getEventLogs,
   clearEventLogs,
+  updateEventStats,
 };

@@ -51,7 +51,7 @@ const statusMeta = {
 
 // ─── Wizard state ─────────────────────────────────────────────────────────────
 
-type WizardStep = 1 | 2 | 3;
+type WizardStep = 1 | 2 | 3 | 4;
 
 interface WizardData {
   login_url: string;
@@ -64,6 +64,11 @@ interface WizardData {
   headless: boolean;
   intervalo: number;
   loop_continuo: boolean;
+  timer_duration_minutes: number;
+  timer_start_time: string;
+  timer_end_time: string;
+  timer_loop_run_minutes: number;
+  timer_loop_pause_minutes: number;
 }
 
 const defaultWizard: WizardData = {
@@ -77,6 +82,11 @@ const defaultWizard: WizardData = {
   headless: true,
   intervalo: 10,
   loop_continuo: false,
+  timer_duration_minutes: 0,
+  timer_start_time: "",
+  timer_end_time: "",
+  timer_loop_run_minutes: 0,
+  timer_loop_pause_minutes: 0,
 };
 
 // ─── Step indicator ───────────────────────────────────────────────────────────
@@ -86,6 +96,7 @@ function StepDots({ step }: { step: WizardStep }) {
     { n: 1, icon: <Link2 className="h-3.5 w-3.5" />, label: "URLs" },
     { n: 2, icon: <Users className="h-3.5 w-3.5" />, label: "Conta" },
     { n: 3, icon: <MapPin className="h-3.5 w-3.5" />, label: "Setores" },
+    { n: 4, icon: <Play className="h-3.5 w-3.5" />, label: "Agendamento" },
   ];
   return (
     <div className="flex items-center gap-2 justify-center">
@@ -144,6 +155,11 @@ function EventWizard({ event, onCreated, onCancel }: { event?: any, onCreated: (
     headless: event.config?.headless ?? true,
     intervalo: event.config?.intervalo || 30,
     loop_continuo: event.config?.loop_continuo || false,
+    timer_duration_minutes: event.config?.timer_duration_minutes || 0,
+    timer_start_time: event.config?.timer_start_time || "",
+    timer_end_time: event.config?.timer_end_time || "",
+    timer_loop_run_minutes: event.config?.timer_loop_run_minutes || 0,
+    timer_loop_pause_minutes: event.config?.timer_loop_pause_minutes || 0,
   } : defaultWizard);
   const [creating, setCreating] = useState(false);
   const [novoSetor, setNovoSetor] = useState("");
@@ -212,6 +228,11 @@ function EventWizard({ event, onCreated, onCancel }: { event?: any, onCreated: (
             aceitar_qualquer: data.aceitar_qualquer,
             headless: data.headless,
             loop_continuo: data.loop_continuo,
+            timer_duration_minutes: data.timer_duration_minutes || undefined,
+            timer_start_time: data.timer_start_time || undefined,
+            timer_end_time: data.timer_end_time || undefined,
+            timer_loop_run_minutes: data.timer_loop_run_minutes || undefined,
+            timer_loop_pause_minutes: data.timer_loop_pause_minutes || undefined,
           },
         },
       });
@@ -421,7 +442,97 @@ function EventWizard({ event, onCreated, onCancel }: { event?: any, onCreated: (
               <ChevronLeft className="h-4 w-4" /> Voltar
             </button>
             <button
-              disabled={creating || (data.setores.length === 0 && !data.aceitar_qualquer)}
+              disabled={data.setores.length === 0 && !data.aceitar_qualquer}
+              onClick={() => setStep(4)}
+              className="flex-1 py-2.5 rounded-md bg-primary text-primary-foreground font-semibold text-sm flex items-center justify-center gap-1 disabled:opacity-40"
+            >
+              Próxima <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Step 4: Scheduling & Timers ───────────────────────── */}
+      {step === 4 && (
+        <div className="space-y-6">
+          
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold border-b border-border pb-2">1. Janela de Horário (Opcional)</h3>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-medium text-muted-foreground">Início Automático</label>
+                <input
+                  type="time"
+                  value={data.timer_start_time}
+                  onChange={(e) => set("timer_start_time", e.target.value)}
+                  className="mt-1 w-full px-3 py-2 rounded-md bg-background border border-border text-sm"
+                />
+                <p className="mt-1 text-[10px] text-muted-foreground">O bot só ligará após esse horário.</p>
+              </div>
+              <div>
+                <label className="text-xs font-medium text-muted-foreground">Término Automático</label>
+                <input
+                  type="time"
+                  value={data.timer_end_time}
+                  onChange={(e) => set("timer_end_time", e.target.value)}
+                  className="mt-1 w-full px-3 py-2 rounded-md bg-background border border-border text-sm"
+                />
+                <p className="mt-1 text-[10px] text-muted-foreground">O bot desligará ao chegar nesse horário.</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold border-b border-border pb-2">2. Duração Absoluta (Opcional)</h3>
+            <div>
+              <label className="text-xs font-medium text-muted-foreground">Desligar automaticamente após (minutos)</label>
+              <input
+                type="number"
+                min="0"
+                value={data.timer_duration_minutes || ""}
+                onChange={(e) => set("timer_duration_minutes", Number(e.target.value))}
+                placeholder="Ex: 120 (para 2 horas)"
+                className="mt-1 w-full px-3 py-2 rounded-md bg-background border border-border text-sm"
+              />
+              <p className="mt-1 text-[10px] text-muted-foreground">Útil para evitar esquecer o bot ligado gastando CPU.</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="text-sm font-bold border-b border-border pb-2">3. Prevenção de Ban (Descanso / Loop)</h3>
+            <p className="text-xs text-muted-foreground">Simula um comportamento humano desligando o navegador periodicamente.</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-medium text-muted-foreground">Rodar por (minutos)</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={data.timer_loop_run_minutes || ""}
+                  onChange={(e) => set("timer_loop_run_minutes", Number(e.target.value))}
+                  placeholder="Ex: 45"
+                  className="mt-1 w-full px-3 py-2 rounded-md bg-background border border-border text-sm"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-medium text-muted-foreground">Pausar por (minutos)</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={data.timer_loop_pause_minutes || ""}
+                  onChange={(e) => set("timer_loop_pause_minutes", Number(e.target.value))}
+                  placeholder="Ex: 15"
+                  className="mt-1 w-full px-3 py-2 rounded-md bg-background border border-border text-sm"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="flex gap-2 pt-2">
+            <button onClick={() => setStep(3)} className="flex-1 py-2.5 rounded-md border border-border font-semibold text-sm flex items-center justify-center gap-1">
+              <ChevronLeft className="h-4 w-4" /> Voltar
+            </button>
+            <button
+              disabled={creating}
               onClick={handleCreate}
               className="flex-1 py-2.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-40 transition-colors"
             >

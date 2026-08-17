@@ -16,6 +16,11 @@ const configSchema = z.object({
   aceitar_qualquer: z.boolean().default(false),
   headless: z.boolean().default(true),
   loop_continuo: z.boolean().default(false),
+  timer_duration_minutes: z.number().int().min(0).optional(),
+  timer_start_time: z.string().optional(),
+  timer_end_time: z.string().optional(),
+  timer_loop_run_minutes: z.number().int().min(0).optional(),
+  timer_loop_pause_minutes: z.number().int().min(0).optional(),
 });
 
 // ─── List ─────────────────────────────────────────────────────────────────────
@@ -151,6 +156,11 @@ export const updateConfig = createServerFn({ method: "POST" })
       aceitar_qualquer: data.config.aceitar_qualquer,
       headless: data.config.headless,
       loop_continuo: data.config.loop_continuo,
+      timer_duration_minutes: data.config.timer_duration_minutes,
+      timer_start_time: data.config.timer_start_time,
+      timer_end_time: data.config.timer_end_time,
+      timer_loop_run_minutes: data.config.timer_loop_run_minutes,
+      timer_loop_pause_minutes: data.config.timer_loop_pause_minutes,
     };
 
     await localDb.write(db);
@@ -231,5 +241,10 @@ function sanitizeConfig(c: Record<string, unknown> | Partial<any>) {
     aceitar_qualquer: Boolean(c.aceitar_qualquer),
     headless: c.headless !== false,
     loop_continuo: Boolean(c.loop_continuo),
+    timer_duration_minutes: c.timer_duration_minutes as number | undefined,
+    timer_start_time: c.timer_start_time as string | undefined,
+    timer_end_time: c.timer_end_time as string | undefined,
+    timer_loop_run_minutes: c.timer_loop_run_minutes as number | undefined,
+    timer_loop_pause_minutes: c.timer_loop_pause_minutes as number | undefined,
   };
 }

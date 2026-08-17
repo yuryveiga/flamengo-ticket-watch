@@ -100,28 +100,85 @@ async function runEventLoop(eventId: string) {
       return;
     }
 
-    const conf = ev.config as any;
-
-    let accountsToRun: any[] = [];
-    if (conf.account_id === "ALL") {
-      if (db.accounts && db.accounts.length > 0) {
-        accountsToRun = db.accounts;
-      }
-    } else if (conf.account_id) {
-      const acc = db.accounts.find((a) => a.id === conf.account_id);
-      if (acc) accountsToRun = [acc];
-    } else {
-      accountsToRun = [{ email: conf.email, senha_enc: conf.senha_enc }];
-    }
-
-    let running = true;
     let rodada = 1;
 
+    await localDb.updateEventStats(eventId, { started_at: Date.now(), setAttempts: 0 });
+
     do {
+      // ── HOT RELOAD CONFIG: lê o banco a cada rodada ──
+      const dbFresh = await localDb.read();
+      const evFresh = dbFresh.events.find((e) => e.id === eventId);
+      if (!evFresh || evFresh.status !== "monitorando") {
+        break; // Evento foi removido ou pausado
+      }
+      const conf = evFresh.config as any;
+
+      let accountsToRun: any[] = [];
+      if (conf.account_id === "ALL") {
+        if (dbFresh.accounts && dbFresh.accounts.length > 0) {
+          accountsToRun = dbFresh.accounts;
+        }
+      } else if (conf.account_id) {
+        const acc = dbFresh.accounts.find((a) => a.id === conf.account_id);
+        if (acc) accountsToRun = [acc];
+      } else {
+        accountsToRun = [{ email: conf.email, senha_enc: conf.senha_enc }];
+      }
+
+      let running = true;
       if (conf.loop_continuo) {
         await pushLog(eventId, "info", `🚀 Iniciando rodada contínua #${rodada} para fila de ${accountsToRun.length} conta(s)...`);
       } else {
         await pushLog(eventId, "info", `🚀 Iniciando fila: ${accountsToRun.length} conta(s) detectada(s)...`);
+      }
+
+      // ── Melhoria 8: Janela de Horário ──────────────────────────────────────────
+      if (conf.timer_start_time || conf.timer_end_time) {
+        const now = new Date();
+        const currentTotalMin = now.getHours() * 60 + now.getMinutes();
+
+        let startMin = 0;
+        if (conf.timer_start_time) {
+          const [h, m] = conf.timer_start_time.split(':').map(Number);
+          startMin = h * 60 + m;
+        }
+
+        let endMin = 24 * 60;
+        if (conf.timer_end_time) {
+          const [h, m] = conf.timer_end_time.split(':').map(Number);
+          endMin = h * 60 + m;
+        }
+
+        let isWithinWindow = false;
+        if (startMin <= endMin) {
+          isWithinWindow = currentTotalMin >= startMin && currentTotalMin < endMin;
+        } else {
+          isWithinWindow = currentTotalMin >= startMin || currentTotalMin < endMin;
+        }
+
+        if (!isWithinWindow) {
+          await pushLog(eventId, "info", `🕒 Fora da janela de horário configurada (${conf.timer_start_time||'00:00'} às ${conf.timer_end_time||'23:59'}). Dormindo por 1 min...`);
+          for (let w = 0; w < 60; w++) {
+            if (stopSignal.stop) { running = false; break; }
+            await new Promise(r => setTimeout(r, 1000));
+          }
+          if (stopSignal.stop) break;
+          continue; // Pula o processamento das contas nesta rodada
+        }
+      }
+
+      // ── Melhoria 8: Duração Máxima (Absoluta) ──────────────────────────────────
+      if (conf.timer_duration_minutes) {
+        const freshDb = await localDb.readRaw();
+        const evFresh = freshDb.events.find(e => e.id === eventId);
+        if (evFresh?.stats?.started_at) {
+          const runningMs = Date.now() - evFresh.stats.started_at;
+          if (runningMs > conf.timer_duration_minutes * 60000) {
+            await pushLog(eventId, "warn", `⏳ Duração máxima atingida (${conf.timer_duration_minutes} min). Encerrando o evento permanentemente.`);
+            running = false;
+            break;
+          }
+        }
       }
 
       for (let i = 0; i < accountsToRun.length; i++) {
@@ -154,9 +211,9 @@ async function runEventLoop(eventId: string) {
           try {
             success = await runBotPersistent(
               {
-                id: ev.id,
-                login_url: ev.login_url,
-                url: ev.url,
+                id: evFresh.id,
+                login_url: evFresh.login_url,
+                url: evFresh.url,
                 config: {
                   ...conf,
                   email: acc.email,
@@ -169,7 +226,21 @@ async function runEventLoop(eventId: string) {
               stopSignal,
             );
 
-            if (success) break; // Conseguiu ingresso, não precisa do ciclo 2
+            if (success === true) break; // Conseguiu ingresso, não precisa do ciclo 2
+            
+            // Tratamento de loop pause request
+            if (success === "pause_requested") {
+              const pauseMins = conf.timer_loop_pause_minutes || 15;
+              await pushLog(eventId, "info", `☕ Pausa programada de ${pauseMins} min para descanso do bot...`);
+              for (let w = 0; w < pauseMins * 60; w++) {
+                if (stopSignal.stop) break;
+                await new Promise(r => setTimeout(r, 1000));
+              }
+              // Após a pausa, tentamos de novo? Sim, reinicia o cycle
+              cycle--;
+              continue;
+            }
+
           } catch (err: any) {
             if (cycle < 2) {
               await pushLog(eventId, "error", `❌ Erro na conta ${acc.email}: ${err.message}. Fechando e tentando novamente...`);
@@ -179,10 +250,10 @@ async function runEventLoop(eventId: string) {
           }
         }
 
-        if (success) {
+        if (success === true) {
           await pushLog(eventId, "success", `✅ Fim do processamento para ${acc.email}. Ingresso garantido!`);
         } else {
-          await pushLog(eventId, "warn", `⚠️ Fim do processamento para ${acc.email} após 2 ciclos. Nenhum ingresso adicionado. Passando para a próxima...`);
+          await pushLog(eventId, "warn", `⚠️ Fim do processamento para ${acc.email} após tentativas. Passando para a próxima...`);
         }
       }
 
@@ -190,20 +261,13 @@ async function runEventLoop(eventId: string) {
         break;
       }
 
-      if (!conf.loop_continuo) {
-        running = false;
-      } else {
+      if (running && conf.loop_continuo && !stopSignal.stop) {
         rodada++;
-        await pushLog(eventId, "info", `⏳ Rodada contínua #${rodada - 1} finalizada. Aguardando 1 minuto antes de recomeçar...`);
-        for (let w = 0; w < 60; w++) {
-          if (stopSignal.stop) {
-            running = false;
-            break;
-          }
-          await new Promise(r => setTimeout(r, 1000));
-        }
+        await new Promise((r) => setTimeout(r, 2000));
+      } else {
+        running = false;
       }
-    } while (running);
+    } while (running && !stopSignal.stop);
 
     // Finalizou todas as contas — atualiza status com segurança
     const freshDb = await localDb.read();

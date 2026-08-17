@@ -125,25 +125,24 @@ function StatusPanel({
     refetchInterval: 2000,
   });
 
-  // ── Melhoria 6: Contador de tentativas e tempo ativo ────────────────────────
-  const attemptLogs = statLogs.filter(
-    (l) => l.level === "api" && l.message.includes("Verificando disponibilidade")
-  );
-  const attemptCount = attemptLogs.length;
-  const firstAttemptTs = attemptLogs.length > 0 ? new Date(attemptLogs[0].ts).getTime() : null;
+  // ── Melhoria 6: Contador de tentativas e tempo ativo (Lendo do DB Local) ────────────────────────
+  const attemptCount = (event as any).stats?.attempts || 0;
+  const anomalousCount = (event as any).stats?.anomalous_responses || 0;
+  const startedAtTs = (event as any).stats?.started_at || null;
   const [elapsed, setElapsed] = useState("00:00");
   useEffect(() => {
-    if (!isRunning || !firstAttemptTs) { setElapsed("00:00"); return; }
+    if (!isRunning || !startedAtTs) { setElapsed("00:00"); return; }
     const tick = () => {
-      const s = Math.floor((Date.now() - firstAttemptTs) / 1000);
-      const m = Math.floor(s / 60).toString().padStart(2, "0");
+      const s = Math.floor((Date.now() - startedAtTs) / 1000);
+      const h = Math.floor(s / 3600);
+      const m = Math.floor((s % 3600) / 60).toString().padStart(2, "0");
       const ss = (s % 60).toString().padStart(2, "0");
-      setElapsed(`${m}:${ss}`);
+      setElapsed(h > 0 ? `${h}:${m}:${ss}` : `${m}:${ss}`);
     };
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
-  }, [isRunning, firstAttemptTs]);
+  }, [isRunning, startedAtTs]);
 
   // ── Melhoria 5: Setor sendo verificado agora ──────────────────────────────
   const lastLog = statLogs[statLogs.length - 1];
@@ -172,9 +171,10 @@ function StatusPanel({
         <p className="text-xs text-muted-foreground">Evento</p>
         <p className="font-semibold break-all">{event.name || event.url}</p>
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
         <Stat label="Setor alvo" value={event.config.setores[0] || "—"} />
         <Stat label="Quantidade" value={String(event.config.quantidade)} />
+        <Stat label="Respostas Anômalas" value={String(anomalousCount)} />
         {/* Melhoria 6: tentativas + tempo ativo */}
         <Stat label="Tentativas" value={isRunning ? String(attemptCount) : "—"} />
         <Stat label="Tempo ativo" value={isRunning ? elapsed : "—"} />

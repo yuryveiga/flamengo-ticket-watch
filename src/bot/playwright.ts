@@ -10,6 +10,30 @@ import path from "path";
 import fs from "fs";
 import { sleep, toSectorUrl } from "../lib/utils";
 import axios from "axios";
+import { localDb } from "../lib/local-db";
+
+// ─── Mapa de Nomes de Setores → IDs do FutebolCard ───────────────────────────
+// IDs extraídos diretamente do HTML de /buy/sector?event=37145
+// Atualizar conforme novos eventos surgem (data-sector no HTML)
+const SECTOR_ID_MAP: Record<string, string> = {
+  "norte nível 1 | e":  "8468571",
+  "norte nível 2 | e":  "8468578",
+  "norte nível 1 | f":  "8468591",
+  "norte nível 2 | f":  "8468596",
+  "sul nível 1 | c":    "8468689",
+  "sul nível 2 | c":    "8468679",
+  "leste superior":     "8468635",
+  "leste inferior":     "8468626",
+  "oeste inferior":     "8468650",
+  "maracanã + | a":     "8468658",
+};
+
+// ─── Nota: Disponibilidade via API ───────────────────────────────────────────
+// Não fazemos polling manual da API — o site já chama /buy/get-available-tickets
+// a cada 30s. Interceptamos essa resposta via page.on('response') mais abaixo,
+// o que é muito mais confiável: o request já possui cookies e CSRF token corretos.
+// O JSON capturado é logado como [API INTERCEPTADA] para análise do formato real.
+
 
 // ─── Alertas Telegram ────────────────────────────────────────────────────────
 async function sendTelegramAlert(message: string, log: LogFn) {
@@ -47,6 +71,7 @@ export interface EventData {
     headless?: boolean;
     intervalo?: number;
     loop_continuo?: boolean;
+    timer_loop_run_minutes?: number;
   };
 }
 
@@ -266,6 +291,7 @@ async function tryAddToCart(
   email: string,
   eventId: string,
   log: LogFn,
+  sectorDropTracker: Map<string, number>
 ): Promise<boolean> {
   for (const setor of setores) {
     await log("info", `Procurando setor: "${setor}"...`);
@@ -277,25 +303,36 @@ async function tryAddToCart(
 
     const isVisible = await sectorEl.isVisible({ timeout: 1500 }).catch(() => false);
 
-    if (!isVisible) {
-      await log("warn", `"${setor}" não disponível.`);
-      continue;
-    }
-
     // ── Melhoria 1: Verificar CSS antes de clicar ─────────────────────────────
     // Inspeciona o card pai do setor para classes que indicam indisponibilidade
-    const isDisabledByCss = await sectorEl.evaluate((el) => {
-      const card = el.closest('[class]') ?? el.parentElement ?? el;
-      const cls = (card.className ?? "").toLowerCase();
-      const attrs = (card.getAttribute('data-available') ?? card.getAttribute('data-disabled') ?? "").toLowerCase();
-      return cls.includes('disabled') || cls.includes('sold-out') || cls.includes('unavailable')
-        || cls.includes('esgotado') || attrs === 'false' || attrs.includes('sold');
-    }).catch(() => false);
+    let isDisabledByCss = false;
+    if (isVisible) {
+      isDisabledByCss = await sectorEl.evaluate((el) => {
+        const card = el.closest('[class]') ?? el.parentElement ?? el;
+        const cls = (card.className ?? "").toLowerCase();
+        const attrs = (card.getAttribute('data-available') ?? card.getAttribute('data-disabled') ?? "").toLowerCase();
+        return cls.includes('disabled') || cls.includes('sold-out') || cls.includes('unavailable')
+          || cls.includes('esgotado') || attrs === 'false' || attrs.includes('sold');
+      }).catch(() => false);
+    }
 
-    if (isDisabledByCss) {
-      await log("warn", `"${setor}" marcado como indisponível pelo CSS. Pulando sem clicar.`);
+    if (!isVisible || isDisabledByCss) {
+      if (!isVisible) {
+        await log("warn", `"${setor}" não disponível.`);
+      } else {
+        await log("warn", `"${setor}" marcado como indisponível pelo CSS. Pulando sem clicar.`);
+      }
+      
+      // Se estava registrado como disponível (-1), significa que alguém acabou de colocar no carrinho
+      if (sectorDropTracker.get(setor) === -1) {
+         sectorDropTracker.set(setor, Date.now());
+         await log("warn", `[PREDADOR] O setor "${setor}" acabou de esgotar (alguém reservou). Agendando Overclock para a janela de 15 minutos...`);
+      }
       continue;
     }
+
+    // Se o setor está disponível, marcamos como -1
+    sectorDropTracker.set(setor, -1);
 
     await log("info", `"${setor}" encontrado e disponível! Selecionando...`);
     await sectorEl.click().catch(() => {});
@@ -505,7 +542,7 @@ export async function runBotPersistent(
   decryptedSenha: string,
   log: LogFn,
   stopSignal: StopSignal,
-): Promise<boolean> {
+): Promise<boolean | "pause_requested"> {
   const { login_url, config } = eventData;
   // Normaliza para /buy/sector independente do que foi cadastrado
   const url         = toSectorUrl(eventData.url);
@@ -551,14 +588,22 @@ export async function runBotPersistent(
   // O PersistentContext já abre com uma aba vazia
   const page = context.pages().length > 0 ? context.pages()[0] : await context.newPage();
 
-  let resolveUpdate: (() => void) | null = null;
+  // ── Tracking de Carrinhos Abandonados ──────────────────────────────────────
+  const sectorDropTracker = new Map<string, number>();
+
+  let resolveUpdate: ((data?: string[]) => void) | null = null;
   
   // Expor função para o browser chamar quando interceptar o log
-  await page.exposeFunction("onFcardUpdate", () => {
+  await page.exposeFunction("onFcardUpdate", async () => {
     if (resolveUpdate) {
       resolveUpdate();
       resolveUpdate = null;
     }
+  });
+
+  await page.exposeFunction("onAnomalousResponse", async () => {
+    await log("warn", "⚠️ [ANOMALIA] A consulta do servidor não retornou 'maximum booking null'!");
+    localDb.updateEventStats(eventData.id, { addAnomalous: 1 }).catch(() => {});
   });
 
   // Injetar script antes de tudo para hackear o console.log original do site
@@ -570,7 +615,15 @@ export async function runBotPersistent(
     function checkArgs(args: any[]) {
       const text = args.map(a => String(a)).join(" ");
       if (text.includes("reading available tickets")) {
-        window.onFcardUpdate().catch(() => {});
+        if (!text.includes("maximum booking null")) {
+          // Detectamos a resposta anômala solicitada pelo usuário
+          if ((window as any).onAnomalousResponse) {
+             (window as any).onAnomalousResponse().catch(() => {});
+          }
+        }
+        if ((window as any).onFcardUpdate) {
+          (window as any).onFcardUpdate().catch(() => {});
+        }
       }
     }
     
@@ -579,19 +632,40 @@ export async function runBotPersistent(
     console.debug = function(...args) { checkArgs(args); return origDebug.apply(this, args); };
   });
 
-  // Interceptação de Rede (Network) Ultra-Rápida
+  // ── Interceptação de Rede: Foca no endpoint exato de disponibilidade ────────
   page.on("response", async (res) => {
-    const type = res.request().resourceType();
-    const url = res.url().toLowerCase();
+    const resUrl = res.url();
     
-    // Se for uma chamada de dados (XHR/Fetch) para a própria API/Site do FutebolCard
-    if ((type === "fetch" || type === "xhr") && url.includes("futebolcard")) {
-      // Ignora chamadas óbvias de analytics/tracking
-      if (!url.includes("google") && !url.includes("analytics") && !url.includes("facebook")) {
+    // Prioridade máxima: a própria API de disponibilidade que o site usa a cada 30s
+    if (resUrl.includes("get-available-tickets")) {
+      try {
+        const json = await res.json();
+        const jsonStr = JSON.stringify(json);
+        await log("api", `[API INTERCEPTADA] /get-available-tickets → ${jsonStr.substring(0, 300)}`);
+        
+        // Dispara atualização imediata para o loop principal processar
         if (resolveUpdate) {
           resolveUpdate();
           resolveUpdate = null;
         }
+      } catch {
+        // Resposta não-JSON, dispara update mesmo assim
+        if (resolveUpdate) {
+          resolveUpdate();
+          resolveUpdate = null;
+        }
+      }
+      return;
+    }
+
+    // Fallback: qualquer XHR/Fetch do FutebolCard (não-analytics)
+    const type = res.request().resourceType();
+    const urlLower = resUrl.toLowerCase();
+    if ((type === "fetch" || type === "xhr") && urlLower.includes("futebolcard")
+        && !urlLower.includes("google") && !urlLower.includes("analytics") && !urlLower.includes("facebook")) {
+      if (resolveUpdate) {
+        resolveUpdate();
+        resolveUpdate = null;
       }
     }
   });
@@ -626,12 +700,34 @@ export async function runBotPersistent(
     const SESSION_TIMEOUT_MS = 5 * 60 * 1000; // 5 minutos sem resposta = reconectar do zero
 
     // Step 3: Loop combinando polling e interceptação
+    const runStartTime = Date.now();
     while (!stopSignal.stop) {
       attemptCount++;
+      if (attemptCount % 5 === 0) {
+        localDb.updateEventStats(eventData.id, { addAttempts: 5 }).catch(() => {});
+      }
+
+      // ── Guarda de Sessão: detecta redirecionamento para /login em todo ciclo ──
+      const currentPageUrl = page.url();
+      if (currentPageUrl.includes("/login") || currentPageUrl.includes("login?")) {
+        await log("warn", `🔒 Sessão expirada detectada (URL: ${currentPageUrl}). Fazendo re-login automático...`);
+        try {
+          await doLogin(page, login_url, email, decryptedSenha, log);
+          await log("info", "✅ Re-login concluído. Navegando de volta para o evento...");
+          await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30_000 });
+          await page.waitForTimeout(2000);
+          lastSuccessfulCheckAt = Date.now();
+        } catch (loginErr: any) {
+          await log("error", `❌ Falha no re-login: ${loginErr.message}. Tentando novamente no próximo ciclo...`);
+          await page.waitForTimeout(5000);
+          continue;
+        }
+      }
+
       await log("api", `🔄 Verificando disponibilidade (tentativa #${attemptCount})...`);
 
-      // 1. Tenta comprar imediatamente
-      const success = await tryAddToCart(page, setores, quantidade, aceitarQualquer, email, eventData.id, log);
+      // 1. Tenta comprar (DOM como confirmação final)
+      const success = await tryAddToCart(page, setores, quantidade, aceitarQualquer, email, eventData.id, log, sectorDropTracker);
       
       if (success) {
         // Atualiza a contagem isolada por evento
@@ -658,7 +754,40 @@ export async function runBotPersistent(
         return true;
       }
 
-      await log("wait", `Nenhum setor disponível. Aguardando ${config.intervalo || 30}s ou atualização do site...`);
+      // ── Melhoria 8: Checagem do Timer de Loop (Descanso) ───────────────
+      if (config.timer_loop_run_minutes) {
+        const runningMs = Date.now() - runStartTime;
+        if (runningMs > config.timer_loop_run_minutes * 60000) {
+          await log("warn", `⏰ Tempo de execução contínuo atingido (${config.timer_loop_run_minutes} min). Solicitando pausa de descanso...`);
+          return "pause_requested";
+        }
+      }
+
+      // ── Melhoria 2: Lógica de Intervalo Dinâmico (Overclock) ──────────
+      let dynamicWaitTimeMs = (config.intervalo || 10) * 1000;
+      let isOverclockActive = false;
+
+      for (const [s, dropTime] of sectorDropTracker.entries()) {
+        if (dropTime > 0) {
+          const elapsed = Date.now() - dropTime;
+          // Se estamos entre 14m50s e 15m10s (exemplo de janela preditiva)
+          if (elapsed >= 14 * 60 * 1000 + 50 * 1000 && elapsed <= 15 * 60 * 1000 + 10 * 1000) {
+            dynamicWaitTimeMs = 1000; // 1 segundo de intervalo (Overclock)
+            isOverclockActive = true;
+            break;
+          }
+          // Se já passou de 16 minutos, limpa do tracker pra não ficar pesando
+          if (elapsed > 16 * 60 * 1000) {
+            sectorDropTracker.delete(s);
+          }
+        }
+      }
+
+      if (isOverclockActive) {
+        await log("api", `🔥 [OVERCLOCK ATIVADO] Polling super-agressivo (1s) para pegar carrinho caindo...`);
+      } else {
+        await log("wait", `Nenhum setor disponível. Aguardando ${dynamicWaitTimeMs / 1000}s ou atualização do site...`);
+      }
 
       if (stopSignal.stop) break;
 
@@ -671,12 +800,10 @@ export async function runBotPersistent(
             resolve();
           };
           
-          // Timeout baseado no intervalo configurado pelo usuário (default 30s se não existir)
-          const waitTimeMs = (config.intervalo || 10) * 1000;
           timerId = setTimeout(() => {
             resolveUpdate = null;
             reject(new Error("INTERVAL_TICK"));
-          }, waitTimeMs);
+          }, dynamicWaitTimeMs);
         });
         
         // Se chegou aqui, a promessa foi resolvida pelo console log (onFcardUpdate)!
@@ -695,16 +822,19 @@ export async function runBotPersistent(
 
           // A cada 3 tentativas sem sucesso, recarrega a página
           if (attemptCount % 3 === 0) {
-            const currentUrl = page.url();
-            if (!currentUrl.includes(url.split("?")[0].split("/").pop()!)) {
-              await log("warn", `⚠️ URL mudou (${currentUrl}). Renavegando para o evento...`);
-            } else {
-              await log("info", `🔄 Recarregando página do evento (tentativa #${attemptCount})...`);
-            }
+            await log("info", `🔄 Recarregando página do evento (tentativa #${attemptCount})...`);
             try {
               await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30_000 });
-              await page.waitForTimeout(2000);
-              lastSuccessfulCheckAt = Date.now(); // Página carregou — resetar timer
+              await page.waitForTimeout(1500);
+              // Verifica se foi parar na tela de login após o goto
+              const urlAfterGoto = page.url();
+              if (urlAfterGoto.includes("/login")) {
+                await log("warn", "🔒 Após reload, caiu no /login. Fazendo re-login...");
+                await doLogin(page, login_url, email, decryptedSenha, log);
+                await page.goto(url, { waitUntil: "domcontentloaded", timeout: 30_000 });
+                await page.waitForTimeout(2000);
+              }
+              lastSuccessfulCheckAt = Date.now();
             } catch {
               await log("warn", "Falha ao recarregar. Tentando continuar...");
             }
