@@ -228,6 +228,10 @@ async function runEventLoop(eventId: string) {
 
             if (success === true) break; // Conseguiu ingresso, não precisa do ciclo 2
             
+            if (success === "out_of_window") {
+              break;
+            }
+
             // Tratamento de loop pause request
             if (success === "pause_requested") {
               const pauseMins = conf.timer_loop_pause_minutes || 15;
@@ -248,6 +252,10 @@ async function runEventLoop(eventId: string) {
               await pushLog(eventId, "error", `❌ Erro na conta ${acc.email}: ${err.message}. Pulando para a próxima...`);
             }
           }
+        }
+
+        if (success === "out_of_window") {
+          break; // break accountsToRun loop to re-evaluate window at the top
         }
 
         if (success === true) {

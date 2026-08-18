@@ -702,6 +702,33 @@ export async function runBotPersistent(
     // Step 3: Loop combinando polling e interceptação
     const runStartTime = Date.now();
     while (!stopSignal.stop) {
+      // ── Verifica se saiu da janela de horário ──
+      if (config.timer_start_time || config.timer_end_time) {
+        const now = new Date();
+        const currentTotalMin = now.getHours() * 60 + now.getMinutes();
+        let startMin = 0;
+        if (config.timer_start_time) {
+          const [h, m] = config.timer_start_time.split(':').map(Number);
+          startMin = h * 60 + m;
+        }
+        let endMin = 24 * 60;
+        if (config.timer_end_time) {
+          const [h, m] = config.timer_end_time.split(':').map(Number);
+          endMin = h * 60 + m;
+        }
+        let isWithinWindow = false;
+        if (startMin <= endMin) {
+          isWithinWindow = currentTotalMin >= startMin && currentTotalMin < endMin;
+        } else {
+          isWithinWindow = currentTotalMin >= startMin || currentTotalMin < endMin;
+        }
+        if (!isWithinWindow) {
+          await log("info", `🕒 Horário de funcionamento encerrado (${config.timer_start_time||'00:00'} às ${config.timer_end_time||'23:59'}). Saindo da sessão...`);
+          try { await context.close(); } catch {}
+          return "out_of_window";
+        }
+      }
+
       attemptCount++;
       if (attemptCount % 5 === 0) {
         localDb.updateEventStats(eventData.id, { addAttempts: 5 }).catch(() => {});
