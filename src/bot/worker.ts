@@ -101,6 +101,7 @@ async function runEventLoop(eventId: string) {
     }
 
     let rodada = 1;
+    let running = true;
 
     await localDb.updateEventStats(eventId, { started_at: Date.now(), setAttempts: 0 });
 
@@ -125,7 +126,6 @@ async function runEventLoop(eventId: string) {
         accountsToRun = [{ email: conf.email, senha_enc: conf.senha_enc }];
       }
 
-      let running = true;
       if (conf.loop_continuo) {
         await pushLog(eventId, "info", `🚀 Iniciando rodada contínua #${rodada} para fila de ${accountsToRun.length} conta(s)...`);
       } else {

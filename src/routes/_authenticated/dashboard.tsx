@@ -351,10 +351,11 @@ function SuccessBanner({ eventIds, events }: { eventIds: string[]; events: Event
             // ── Melhoria 7: Extrair setor e quantidade do log ─────────────────
             const setorMatch = l.message.match(/Setor: "(.+?)"/);
             const qtdMatch = l.message.match(/· (\d+)x/);
+            const emailMatch = l.message.match(/\(Conta: (.+?)\)/);
             setResult({
               setor: setorMatch?.[1] ?? null,
               quantidade: qtdMatch ? parseInt(qtdMatch[1]) : null,
-              email: (ev?.config as any)?.email,
+              email: emailMatch?.[1] || (ev?.config as any)?.email,
               url: ev?.url,
             });
             playSuccessSound();
