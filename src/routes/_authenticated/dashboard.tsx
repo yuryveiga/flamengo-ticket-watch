@@ -22,6 +22,7 @@ function Dashboard() {
   const { data: events = [], refetch } = useQuery({
     queryKey: ["events"],
     queryFn: () => listEventsFn(),
+    refetchInterval: 3000,
   });
 
   const [activeId, setActiveId] = useState<string | null>(null);
