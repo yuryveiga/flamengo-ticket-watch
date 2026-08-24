@@ -427,13 +427,6 @@ async function processCommands() {
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
-console.log("🚀 TicketBot Worker iniciado (Modo Local — Interceptação de Ciclo)");
-console.log("   Estratégia: browser persistente + intercepção do fcard-maps-ac.js");
-console.log("   Aguardando comandos...\n");
-
-// ─── Telegram Command Listener ────────────────────────────────────────────────
-// Fica em loop ouvindo mensagens do Telegram. Aceita comandos apenas do
-// TELEGRAM_CHAT_ID configurado no .env (segurança).
 
 let telegramLastUpdateId = 0;
 
@@ -442,22 +435,34 @@ async function sendTelegram(text: string) {
   const chatId = process.env.TELEGRAM_CHAT_ID;
   if (!token || !chatId) return;
   try {
-    const https = await import("https");
-    const body = JSON.stringify({ chat_id: chatId, text, parse_mode: "Markdown" });
+    const https = await import('https');
+    const body = JSON.stringify({ chat_id: chatId, text, parse_mode: 'Markdown' });
     await new Promise<void>((resolve, reject) => {
       const req = https.request(
         `https://api.telegram.org/bot${token}/sendMessage`,
-        { method: "POST", headers: { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(body) } },
-        (res) => { res.resume(); res.on("end", resolve); }
+        { method: 'POST', headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) } },
+        (res) => { res.resume(); res.on('end', resolve); }
       );
-      req.on("error", reject);
+      req.on('error', reject);
       req.write(body);
       req.end();
     });
   } catch (err: any) {
-    console.error("[TELEGRAM] Erro ao enviar mensagem:", err.message);
+    console.error('[TELEGRAM] Erro ao enviar mensagem:', err.message);
   }
 }
+
+// ─── Wizard de sessão por chat ────────────────────────────────────────────────
+// Guarda em que etapa do wizard cada chat está.
+type WizardStep =
+  | "novo_url" | "novo_nome" | "novo_setor" | "novo_qtd"
+  | "editar_menu" | "editar_setor" | "editar_qtd" | "editar_nome";
+
+interface WizardSession {
+  step: WizardStep;
+  data: Record<string, any>;
+}
+const wizardSessions = new Map<string, WizardSession>();
 
 async function processTelegramCommands() {
   const token = process.env.TELEGRAM_BOT_TOKEN;
@@ -484,15 +489,157 @@ async function processTelegramCommands() {
       // Segurança: só aceita do seu chat
       if (String(msg.chat.id) !== String(chatId)) continue;
 
-      const text = msg.text.trim().toLowerCase();
-      console.log(`\n📱 [TELEGRAM] Comando recebido: "${text}"`);
+      const rawText = msg.text.trim();
+      const text = rawText.toLowerCase();
+      console.log(`\n📱 [TELEGRAM] Comando recebido: "${rawText}"`);
 
       const db = await localDb.read();
       const eventos = db.events || [];
+      const session = wizardSessions.get(chatId);
 
-      if (text === "/iniciar" || text === "iniciar compra") {
+      // ── Cancelar qualquer wizard em andamento ─────────────────────────────
+      if (text === "/cancelar" || text === "/cancel") {
+        if (wizardSessions.has(chatId)) {
+          wizardSessions.delete(chatId);
+          await sendTelegram("❌ Operação cancelada.");
+        } else {
+          await sendTelegram("Nenhuma operação em andamento.");
+        }
+        continue;
+      }
+
+      // ── Se há sessão de wizard ativa, processar resposta ──────────────────
+      if (session) {
+        const { step, data: wdata } = session;
+
+        // WIZARD: /novo
+        if (step === "novo_url") {
+          if (!rawText.startsWith("http")) {
+            await sendTelegram("❌ URL inválida. Precisa começar com http. Tente novamente ou /cancelar.");
+            continue;
+          }
+          wdata.url = rawText;
+          wizardSessions.set(chatId, { step: "novo_nome", data: wdata });
+          await sendTelegram("📛 Qual o nome do evento? (ex: Fla x Bota)\n\nOu envie /pular para usar o nome automático.");
+
+        } else if (step === "novo_nome") {
+          wdata.name = text === "/pular" ? null : rawText;
+          wizardSessions.set(chatId, { step: "novo_setor", data: wdata });
+          await sendTelegram("🏟 Qual setor você quer? (ex: Sul, Leste Inferior)\n\nPode enviar vários separados por vírgula.");
+
+        } else if (step === "novo_setor") {
+          wdata.setores = rawText.split(",").map((s: string) => s.trim()).filter(Boolean);
+          wizardSessions.set(chatId, { step: "novo_qtd", data: wdata });
+          await sendTelegram("🔢 Quantos ingressos? Envie 1, 2, 3 ou 4.");
+
+        } else if (step === "novo_qtd") {
+          const qtd = parseInt(rawText);
+          if (isNaN(qtd) || qtd < 1 || qtd > 4) {
+            await sendTelegram("❌ Quantidade inválida. Envie 1, 2, 3 ou 4.");
+            continue;
+          }
+          wdata.quantidade = qtd;
+          wizardSessions.delete(chatId);
+
+          // Cria o evento
+          const { randomUUID } = await import("crypto");
+          const novoEvento = {
+            id: randomUUID(),
+            user_id: "local-user-id",
+            login_url: "https://ingressos.flamengo.com.br/login",
+            url: wdata.url,
+            name: wdata.name,
+            status: "pausado" as const,
+            config: {
+              account_id: "ALL",
+              email: "TODAS",
+              senha_enc: "",
+              setores: wdata.setores,
+              quantidade: qtd,
+              intervalo: 30,
+              aceitar_qualquer: false,
+              headless: true,
+              loop_continuo: true,
+            },
+            created_at: new Date().toISOString(),
+            expires_at: null,
+          };
+          const freshDb = await localDb.read();
+          freshDb.events.push(novoEvento as any);
+          await localDb.write(freshDb);
+
+          await sendTelegram(
+            `✅ *Evento criado com sucesso!*\n\n` +
+            `📛 Nome: *${novoEvento.name || "Sem nome"}*\n` +
+            `🔗 URL: ${novoEvento.url}\n` +
+            `🏟 Setor(es): *${wdata.setores.join(", ")}*\n` +
+            `🔢 Quantidade: *${qtd}*\n\n` +
+            `Envie /iniciar para começar a monitorar.`
+          );
+        }
+
+        // WIZARD: /editar
+        else if (step === "editar_menu") {
+          const ev = eventos[0];
+          if (!ev) { wizardSessions.delete(chatId); continue; }
+
+          if (rawText === "1") {
+            wizardSessions.set(chatId, { step: "editar_setor", data: { eventId: ev.id } });
+            await sendTelegram(`🏟 Setor atual: *${(ev.config as any)?.setores?.join(", ")}*\n\nDigite o novo setor (ou vários separados por vírgula):`);
+          } else if (rawText === "2") {
+            wizardSessions.set(chatId, { step: "editar_qtd", data: { eventId: ev.id } });
+            await sendTelegram(`🔢 Quantidade atual: *${(ev.config as any)?.quantidade}*\n\nDigite a nova quantidade (1-4):`);
+          } else if (rawText === "3") {
+            wizardSessions.set(chatId, { step: "editar_nome", data: { eventId: ev.id } });
+            await sendTelegram(`📛 Nome atual: *${ev.name || "Sem nome"}*\n\nDigite o novo nome:`);
+          } else {
+            await sendTelegram("❌ Opção inválida. Envie 1, 2 ou 3.\n\nOu /cancelar para sair.");
+          }
+
+        } else if (step === "editar_setor") {
+          const novosSetores = rawText.split(",").map((s: string) => s.trim()).filter(Boolean);
+          const freshDb = await localDb.read();
+          const idx = freshDb.events.findIndex((e) => e.id === wdata.eventId);
+          if (idx !== -1) {
+            (freshDb.events[idx].config as any).setores = novosSetores;
+            await localDb.write(freshDb);
+          }
+          wizardSessions.delete(chatId);
+          await sendTelegram(`✅ Setor(es) atualizado(s) para: *${novosSetores.join(", ")}*`);
+
+        } else if (step === "editar_qtd") {
+          const qtd = parseInt(rawText);
+          if (isNaN(qtd) || qtd < 1 || qtd > 4) {
+            await sendTelegram("❌ Quantidade inválida. Envie 1, 2, 3 ou 4.");
+            continue;
+          }
+          const freshDb = await localDb.read();
+          const idx = freshDb.events.findIndex((e) => e.id === wdata.eventId);
+          if (idx !== -1) {
+            (freshDb.events[idx].config as any).quantidade = qtd;
+            await localDb.write(freshDb);
+          }
+          wizardSessions.delete(chatId);
+          await sendTelegram(`✅ Quantidade atualizada para: *${qtd}*`);
+
+        } else if (step === "editar_nome") {
+          const freshDb = await localDb.read();
+          const idx = freshDb.events.findIndex((e) => e.id === wdata.eventId);
+          if (idx !== -1) {
+            freshDb.events[idx].name = rawText;
+            await localDb.write(freshDb);
+          }
+          wizardSessions.delete(chatId);
+          await sendTelegram(`✅ Nome atualizado para: *${rawText}*`);
+        }
+
+        continue; // não cai nos comandos abaixo enquanto estiver no wizard
+      }
+
+      // ── Comandos normais ──────────────────────────────────────────────────
+      if (text === "/iniciar" || text === "/start" || text === "iniciar compra") {
         if (eventos.length === 0) {
-          await sendTelegram("❌ Nenhum evento cadastrado no painel.");
+          await sendTelegram("❌ Nenhum evento cadastrado.\n\nEnvie /novo para criar um.");
           continue;
         }
         const ev = eventos[0];
@@ -508,7 +655,7 @@ async function processTelegramCommands() {
         runEventLoop(ev.id).catch((err) => console.error(`[ERRO] Loop Telegram: ${err.message}`));
         await sendTelegram(`✅ *Bot iniciado!*\n\n⚽ Evento: *${ev.name || ev.id.slice(0, 8)}*\nAguardando ingressos disponíveis...`);
 
-      } else if (text === "/parar" || text === "parar compra") {
+      } else if (text === "/parar" || text === "/stop" || text === "parar compra") {
         if (activeLoops.size === 0) {
           await sendTelegram("⚠️ Nenhum bot está rodando no momento.");
           continue;
@@ -525,7 +672,11 @@ async function processTelegramCommands() {
 
       } else if (text === "/status" || text === "status") {
         if (activeLoops.size === 0) {
-          await sendTelegram("💤 *Status:* Nenhum bot rodando.\n\nEnvie `/iniciar` para começar.");
+          const ev = eventos[0];
+          const info = ev
+            ? `\n\n📋 Evento cadastrado: *${ev.name || ev.id.slice(0, 8)}*\n🏟 Setor: *${(ev.config as any)?.setores?.join(", ")}*\n🔢 Qtd: *${(ev.config as any)?.quantidade}*`
+            : "";
+          await sendTelegram(`💤 *Status:* Nenhum bot rodando.\n\nEnvie /iniciar para começar.${info}`);
         } else {
           const linhas: string[] = [];
           for (const [eventId] of activeLoops) {
