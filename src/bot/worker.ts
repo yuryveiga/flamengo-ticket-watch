@@ -555,7 +555,8 @@ type WizardStep =
   | "editar_conta_email"
   | "editar_conta_senha"
   | "apagar_conta_pick"
-  | "apagar_conta_confirm";
+  | "apagar_conta_confirm"
+  | "apagar_evento_confirm";
 
 interface WizardSession {
   step: WizardStep;
@@ -751,6 +752,22 @@ async function processTelegramCommands() {
           }
           wizardSessions.delete(chatId);
           await sendTelegram(`✅ Nome atualizado para: *${rawText}*`);
+        } else if (step === "apagar_evento_confirm") {
+          if (text === "sim") {
+            const freshDb = await localDb.read();
+            freshDb.events = freshDb.events.filter((e) => e.id !== wdata.eventId);
+            await localDb.write(freshDb);
+            wizardSessions.delete(chatId);
+            if (activeLoops.has(wdata.eventId)) {
+              activeLoops.get(wdata.eventId).stop = true;
+              activeLoops.delete(wdata.eventId);
+            }
+            await sendTelegram(`🗑 Evento *${wdata.eventName}* apagado com sucesso.`);
+          } else {
+            await sendTelegram(
+              "❌ Operação cancelada. Envie /cancelar para sair do wizard ou *sim* para confirmar.",
+            );
+          }
         } else if (step === "conta_label") {
           wdata.label = rawText;
           wizardSessions.set(chatId, { step: "conta_email", data: wdata });
@@ -934,6 +951,19 @@ async function processTelegramCommands() {
         await sendTelegram(
           "➕ *Criar novo evento*\n\nPasso 1/4 — Cole a URL do evento:\n(ex: https://ingressos.flamengo.com.br/buy/sector?event=37247)\n\nOu /cancelar para sair.",
         );
+      } else if (text === "/apagar_evento" || text === "/apagar") {
+        if (eventos.length === 0) {
+          await sendTelegram("❌ Nenhum evento cadastrado.");
+          continue;
+        }
+        const ev = eventos[0];
+        wizardSessions.set(chatId, {
+          step: "apagar_evento_confirm",
+          data: { eventId: ev.id, eventName: ev.name || ev.id.slice(0, 8) },
+        });
+        await sendTelegram(
+          `⚠️ Confirma apagar o evento *${ev.name || ev.id.slice(0, 8)}*?\n\nEnvie *sim* para confirmar ou /cancelar.`,
+        );
       } else if (text === "/editar") {
         if (eventos.length === 0) {
           await sendTelegram("❌ Nenhum evento cadastrado. Use /novo para criar um.");
@@ -995,6 +1025,8 @@ async function processTelegramCommands() {
             `⏹ /parar — Para a busca\n` +
             `📊 /status — Status do bot\n` +
             `➕ /novo — Criar novo evento\n` +
+            `✏️ /editar — Editar evento\n` +
+            `🗑 /apagar\_evento — Apagar evento\n` +
             `✏️ /editar — Editar evento\n` +
             `👥 /contas — Listar contas\n` +
             `➕ /nova\\_conta — Adicionar conta\n` +
