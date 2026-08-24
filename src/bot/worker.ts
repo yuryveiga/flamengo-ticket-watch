@@ -431,13 +431,136 @@ console.log("🚀 TicketBot Worker iniciado (Modo Local — Interceptação de C
 console.log("   Estratégia: browser persistente + intercepção do fcard-maps-ac.js");
 console.log("   Aguardando comandos...\n");
 
+// ─── Telegram Command Listener ────────────────────────────────────────────────
+// Fica em loop ouvindo mensagens do Telegram. Aceita comandos apenas do
+// TELEGRAM_CHAT_ID configurado no .env (segurança).
+
+let telegramLastUpdateId = 0;
+
+async function sendTelegram(text: string) {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) return;
+  try {
+    const https = await import("https");
+    const body = JSON.stringify({ chat_id: chatId, text, parse_mode: "Markdown" });
+    await new Promise<void>((resolve, reject) => {
+      const req = https.request(
+        `https://api.telegram.org/bot${token}/sendMessage`,
+        { method: "POST", headers: { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(body) } },
+        (res) => { res.resume(); res.on("end", resolve); }
+      );
+      req.on("error", reject);
+      req.write(body);
+      req.end();
+    });
+  } catch (err: any) {
+    console.error("[TELEGRAM] Erro ao enviar mensagem:", err.message);
+  }
+}
+
+async function processTelegramCommands() {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!token || !chatId) return;
+
+  try {
+    const https = await import("https");
+    const url = `https://api.telegram.org/bot${token}/getUpdates?offset=${telegramLastUpdateId + 1}&timeout=0`;
+    const data = await new Promise<any>((res, rej) => {
+      https.get(url, (r) => {
+        let raw = "";
+        r.on("data", (chunk) => (raw += chunk));
+        r.on("end", () => { try { res(JSON.parse(raw)); } catch { rej(new Error("JSON inválido")); } });
+      }).on("error", rej);
+    });
+
+    if (!data.ok || !data.result?.length) return;
+
+    for (const update of data.result) {
+      telegramLastUpdateId = update.update_id;
+      const msg = update.message || update.edited_message;
+      if (!msg?.text) continue;
+      // Segurança: só aceita do seu chat
+      if (String(msg.chat.id) !== String(chatId)) continue;
+
+      const text = msg.text.trim().toLowerCase();
+      console.log(`\n📱 [TELEGRAM] Comando recebido: "${text}"`);
+
+      const db = await localDb.read();
+      const eventos = db.events || [];
+
+      if (text === "/iniciar" || text === "iniciar compra") {
+        if (eventos.length === 0) {
+          await sendTelegram("❌ Nenhum evento cadastrado no painel.");
+          continue;
+        }
+        const ev = eventos[0];
+        if (activeLoops.has(ev.id)) {
+          await sendTelegram(`⚠️ O bot já está rodando para *${ev.name || ev.id.slice(0, 8)}*!`);
+          continue;
+        }
+        const freshDb = await localDb.read();
+        const idx = freshDb.events.findIndex((e) => e.id === ev.id);
+        if (idx !== -1) { freshDb.events[idx].status = "monitorando"; await localDb.write(freshDb); }
+        const stopSignal = { stop: false };
+        activeLoops.set(ev.id, stopSignal);
+        runEventLoop(ev.id).catch((err) => console.error(`[ERRO] Loop Telegram: ${err.message}`));
+        await sendTelegram(`✅ *Bot iniciado!*\n\n⚽ Evento: *${ev.name || ev.id.slice(0, 8)}*\nAguardando ingressos disponíveis...`);
+
+      } else if (text === "/parar" || text === "parar compra") {
+        if (activeLoops.size === 0) {
+          await sendTelegram("⚠️ Nenhum bot está rodando no momento.");
+          continue;
+        }
+        for (const [eventId, signal] of activeLoops) {
+          signal.stop = true;
+          const ev = eventos.find((e) => e.id === eventId);
+          await pushLog(eventId, "warn", "⏹ Bot parado via Telegram.");
+          const freshDb = await localDb.read();
+          const idx = freshDb.events.findIndex((e) => e.id === eventId);
+          if (idx !== -1) { freshDb.events[idx].status = "pausado"; await localDb.write(freshDb); }
+          await sendTelegram(`🛑 *Bot parado!*\n\n⚽ Evento: *${ev?.name || eventId.slice(0, 8)}*`);
+        }
+
+      } else if (text === "/status" || text === "status") {
+        if (activeLoops.size === 0) {
+          await sendTelegram("💤 *Status:* Nenhum bot rodando.\n\nEnvie `/iniciar` para começar.");
+        } else {
+          const linhas: string[] = [];
+          for (const [eventId] of activeLoops) {
+            const ev = eventos.find((e) => e.id === eventId);
+            linhas.push(`▶️ *${ev?.name || eventId.slice(0, 8)}* — rodando`);
+          }
+          await sendTelegram(`🤖 *Status:*\n\n${linhas.join("\n")}`);
+        }
+
+      } else if (text === "/ajuda" || text === "/help") {
+        await sendTelegram(
+          `🎟 *Comandos disponíveis:*\n\n` +
+          `/iniciar — Inicia a busca por ingressos\n` +
+          `/parar — Para a busca\n` +
+          `/status — Mostra se o bot está rodando\n` +
+          `/ajuda — Exibe esta mensagem`
+        );
+      }
+    }
+  } catch (err: any) {
+    if (!err.message?.includes("ENOTFOUND") && !err.message?.includes("ETIMEDOUT")) {
+      console.error("[TELEGRAM] Erro no polling:", err.message);
+    }
+  }
+}
+
 setInterval(async () => {
   try {
     await processCommands();
+    await processTelegramCommands();
   } catch (err: any) {
     console.error("[ERRO] Loop de comandos:", err.message);
   }
 }, 3000);
+
 
 // ─── Relatório horário por evento ─────────────────────────────────────────────────────
 
