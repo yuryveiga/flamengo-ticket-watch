@@ -929,15 +929,34 @@ async function processTelegramCommands() {
           }
           await sendTelegram(`🤖 *Status:*\n\n${linhas.join("\n")}`);
         }
+      } else if (text === "/novo") {
+        wizardSessions.set(chatId, { step: "novo_url", data: {} });
+        await sendTelegram(
+          "➕ *Criar novo evento*\n\nPasso 1/4 — Cole a URL do evento:\n(ex: https://ingressos.flamengo.com.br/buy/sector?event=37247)\n\nOu /cancelar para sair.",
+        );
+      } else if (text === "/editar") {
+        if (eventos.length === 0) {
+          await sendTelegram("❌ Nenhum evento cadastrado. Use /novo para criar um.");
+          continue;
+        }
+        const ev = eventos[0];
+        const conf = ev.config as any;
+        wizardSessions.set(chatId, { step: "editar_menu", data: { eventId: ev.id } });
+        await sendTelegram(
+          `✏️ *Editar evento: ${ev.name || ev.id.slice(0, 8)}*\n\n` +
+            `🏟 Setor atual: *${conf?.setores?.join(", ") || "—"}*\n` +
+            `🔢 Quantidade atual: *${conf?.quantidade || "—"}*\n\n` +
+            `O que deseja alterar?\n1 — Setor\n2 — Quantidade\n3 — Nome\n\nOu /cancelar para sair.`,
+        );
       } else if (text === "/contas") {
         const freshDb = await localDb.read();
         const contas = freshDb.accounts;
         if (contas.length === 0) {
-          await sendTelegram("👤 Nenhuma conta cadastrada.\n\nUse /nova_conta para adicionar.");
+          await sendTelegram("👤 Nenhuma conta cadastrada.\n\nUse /nova\\_conta para adicionar.");
         } else {
           const linhas = contas.map((c, i) => `${i + 1}. *${c.label}* — ${c.email}`).join("\n");
           await sendTelegram(
-            `👥 *Contas cadastradas (${contas.length}):*\n\n${linhas}\n\n/nova_conta · /editar_conta · /apagar_conta`,
+            `👥 *Contas cadastradas (${contas.length}):*\n\n${linhas}\n\n/nova\\_conta · /editar\\_conta · /apagar\\_conta`,
           );
         }
       } else if (text === "/nova_conta") {
@@ -949,7 +968,7 @@ async function processTelegramCommands() {
         const freshDb = await localDb.read();
         const contas = freshDb.accounts;
         if (contas.length === 0) {
-          await sendTelegram("❌ Nenhuma conta cadastrada. Use /nova_conta para adicionar.");
+          await sendTelegram("❌ Nenhuma conta cadastrada. Use /nova\\_conta para adicionar.");
           continue;
         }
         const linhas = contas.map((c, i) => `${i + 1}. *${c.label}* — ${c.email}`).join("\n");
@@ -978,9 +997,9 @@ async function processTelegramCommands() {
             `➕ /novo — Criar novo evento\n` +
             `✏️ /editar — Editar evento\n` +
             `👥 /contas — Listar contas\n` +
-            `➕ /nova_conta — Adicionar conta\n` +
-            `✏️ /editar_conta — Editar conta\n` +
-            `🗑 /apagar_conta — Apagar conta\n` +
+            `➕ /nova\\_conta — Adicionar conta\n` +
+            `✏️ /editar\\_conta — Editar conta\n` +
+            `🗑 /apagar\\_conta — Apagar conta\n` +
             `❌ /cancelar — Cancela operação atual`,
         );
       }
