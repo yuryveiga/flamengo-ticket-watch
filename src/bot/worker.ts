@@ -1092,3 +1092,44 @@ async function logHourlyStats() {
 // Dispara imediatamente ao subir e depois a cada 30 minutos
 logHourlyStats();
 setInterval(logHourlyStats, 30 * 60 * 1000);
+
+
+// ─── AUTO-START DO BOT ────────────────────────────────────────────────────────
+// Inicia o bot automaticamente ao rodar o worker se houver um evento cadastrado
+setTimeout(async () => {
+  try {
+    const db = await localDb.read();
+    if (db.events && db.events.length > 0) {
+      const ev = db.events[0];
+      if (!activeLoops.has(ev.id) && ev.status !== "pausado") {
+        console.log(`[AUTO-START] Iniciando automaticamente o evento: ${ev.name || ev.id.slice(0,8)}`);
+        const stopSignal = { stop: false };
+        activeLoops.set(ev.id, stopSignal);
+        runEventLoop(ev.id).catch((err) => console.error(`[ERRO] Loop Telegram: ${err.message}`));
+        
+        await pushLog(ev.id, "info", "✅ Bot iniciado automaticamente após reinício.");
+        
+        // Envia mensagem no Telegram
+        const token = process.env.TELEGRAM_BOT_TOKEN;
+        const chatId = process.env.TELEGRAM_CHAT_ID;
+        if (token && chatId) {
+          const https = require("https");
+          const body = JSON.stringify({
+            chat_id: chatId,
+            text: `✅ *Bot iniciado automaticamente!*\n\n⚽ Evento: *${ev.name || ev.id.slice(0, 8)}*\nAguardando ingressos disponíveis...`,
+            parse_mode: "Markdown"
+          });
+          const req = https.request(`https://api.telegram.org/bot${token}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "Content-Length": Buffer.byteLength(body) }
+          }, (res) => { res.resume(); });
+          req.on('error', () => {});
+          req.write(body);
+          req.end();
+        }
+      }
+    }
+  } catch (err) {
+    console.error("[ERRO AUTO-START]", err.message);
+  }
+}, 3000);
