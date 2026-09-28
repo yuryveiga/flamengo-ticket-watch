@@ -1,76 +1,47 @@
 {
   "events": [
     {
-      "id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "user_id": "local-user-id",
       "login_url": "https://ingressos.flamengo.com.br/login",
-      "url": "https://ingressos.flamengo.com.br/buy/sector?event=37145",
-      "name": "fla x cru",
-      "status": "monitorando",
+      "url": "https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "name": "fla x flu",
+      "status": "pausado",
       "config": {
         "account_id": "ALL",
         "email": "TODAS",
         "senha_enc": "",
         "setores": [
-          "Norte Nível 1 | E",
-          "Norte Nível 2 | E",
-          "Norte Nível 1 | F",
-          "Norte Nível 2 | F",
-          "Sul Nível 1 | C",
-          "Sul Nível 2 | C",
-          "Leste Superior",
-          "Leste Inferior"
+          "Sul",
+          "Norte",
+          "Oeste",
+          "Leste Superior"
         ],
         "quantidade": 1,
         "intervalo": 10,
-        "aceitar_qualquer": true,
+        "aceitar_qualquer": false,
         "headless": true,
         "loop_continuo": true,
-        "timer_start_time": "06:00",
-        "timer_end_time": "01:00",
-        "timer_loop_run_minutes": 50,
-        "timer_loop_pause_minutes": 8
+        "timer_loop_run_minutes": 45,
+        "timer_loop_pause_minutes": 10
       },
-      "created_at": "2026-08-07T16:30:46.548Z",
+      "created_at": "2026-09-28T20:28:58.353Z",
       "expires_at": null,
       "stats": {
-        "started_at": 1786964256568,
-        "attempts": 765
+        "started_at": 1790628053942,
+        "attempts": 0,
+        "anomalous_responses": 0
       }
     }
   ],
   "accounts": [
     {
-      "id": "ef725bba-748a-4d00-ac3a-a465a08477de",
+      "id": "19fa571e-6ac2-4b14-a490-6494385556f3",
       "user_id": "local-user-id",
-      "label": "Eu112",
-      "email": "veiga.yury@gmail.com",
-      "senha_enc": "v1:fVfqMXD846m0uWHl:HdTBPk1ZJ6d16994SQUNHySWFzUusbeBpGQJ3WkzB8w=",
-      "created_at": "2026-08-07T16:13:27.242Z"
-    },
-    {
-      "id": "771c7845-2809-44dc-9bd0-2e428e66947c",
-      "user_id": "local-user-id",
-      "label": "asdas",
-      "email": "kaianhomero@outlook.com",
-      "senha_enc": "v1:GBnHkDSrkPfvDtEG:/cQgV8jinXE0kdA5LI1G5pFnfV8qBdGV",
-      "created_at": "2026-08-07T16:13:43.422Z"
-    },
-    {
-      "id": "eefedea3-094d-449a-9825-1a511619d676",
-      "user_id": "local-user-id",
-      "label": "sdsdd",
-      "email": "leandrosmfacial@outlook.com",
-      "senha_enc": "v1:R7TLThBzC5SBQyOv:gaehznbc05V+AJlspHhsOfkaER1Hw1Rr",
-      "created_at": "2026-08-07T16:20:01.742Z"
-    },
-    {
-      "id": "26fb138f-6cae-49c0-b3a9-ddfd10fbf29f",
-      "user_id": "local-user-id",
-      "label": "sdsd",
-      "email": "tiagorfacial@outlook.com",
-      "senha_enc": "v1:QoKEI+6rXEw1g+tw:SAtfsIMVnSx75H+nuWi1KT9j7v4lJOgV",
-      "created_at": "2026-08-07T16:20:16.310Z"
+      "label": "Liberta GUi",
+      "email": "guibrunog@outlook.com",
+      "senha_enc": "v1:pFMnhCxyFAM7atnI:lLoJ6v+SLJUQW6l58uGeoC3Uux4OkGh8",
+      "created_at": "2026-09-28T20:27:33.852Z"
     }
   ],
   "bot_commands": [
@@ -257,1408 +228,804 @@
       "command": "start",
       "created_at": "2026-08-17T10:56:20.767Z",
       "processed_at": "2026-08-17T10:57:36.514Z"
+    },
+    {
+      "id": "5a610525-de33-469d-acbd-424ebcb41c1a",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-08-17T18:35:50.858Z",
+      "processed_at": "2026-08-17T18:35:51.575Z"
+    },
+    {
+      "id": "81ef3573-0dc2-4115-9b79-45a21d080df6",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-17T18:36:09.406Z",
+      "processed_at": "2026-08-17T18:36:09.593Z"
+    },
+    {
+      "id": "07c89e88-2e61-498d-9f0f-ae565d6c2cfa",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-08-18T03:27:09.846Z",
+      "processed_at": "2026-08-18T03:27:12.286Z"
+    },
+    {
+      "id": "0918bcb5-4c74-4923-bffc-82eddb581c2c",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-18T03:27:14.096Z",
+      "processed_at": "2026-08-18T03:27:15.287Z"
+    },
+    {
+      "id": "317152aa-cc1b-4581-8672-a6b510dcad40",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-08-18T03:27:58.761Z",
+      "processed_at": "2026-08-18T03:27:59.583Z"
+    },
+    {
+      "id": "64497dd6-2991-4138-a1bb-736dd094578c",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-18T03:28:03.653Z",
+      "processed_at": "2026-08-18T03:28:05.602Z"
+    },
+    {
+      "id": "301241b5-4cd3-4bd9-9fe8-36517e694d2f",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-08-18T04:27:22.982Z",
+      "processed_at": "2026-08-18T04:27:24.594Z"
+    },
+    {
+      "id": "ff3c316a-9cea-424b-8837-d114b8dd56ac",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-18T04:27:27.181Z",
+      "processed_at": "2026-08-18T04:27:27.596Z"
+    },
+    {
+      "id": "d130ea3a-725b-471d-885c-fded08e7af31",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-08-18T04:31:27.255Z",
+      "processed_at": "2026-08-18T04:31:28.891Z"
+    },
+    {
+      "id": "2a226636-88dc-4866-b1b0-8ccb0bb93fd0",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-18T04:31:30.409Z",
+      "processed_at": "2026-08-18T04:31:31.898Z"
+    },
+    {
+      "id": "d7fe16c3-a72c-4304-9ca1-adbcfc56375e",
+      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-08-18T18:14:08.366Z",
+      "processed_at": "2026-08-18T18:14:12.329Z"
+    },
+    {
+      "id": "f125cced-04c4-4a02-b20d-8583a330b752",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-23T00:01:00.674Z",
+      "processed_at": "2026-08-23T00:01:02.822Z"
+    },
+    {
+      "id": "30536e5c-6726-4fc4-a932-e3d2bca94322",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-08-23T00:07:46.739Z",
+      "processed_at": "2026-08-23T00:07:48.791Z"
+    },
+    {
+      "id": "5a6116f3-7e01-4a5b-b7c6-3f7b7cb6285d",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-23T00:07:50.433Z",
+      "processed_at": "2026-08-23T00:07:51.795Z"
+    },
+    {
+      "id": "fa45ec88-0d92-461c-99e2-27b35fdf9e16",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-08-23T00:08:47.432Z",
+      "processed_at": "2026-08-23T00:08:48.955Z"
+    },
+    {
+      "id": "895cd45b-8153-4011-8009-a2e8ec4e9e64",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-28T20:43:27.745Z",
+      "processed_at": "2026-08-28T20:43:30.214Z"
+    },
+    {
+      "id": "3ea24b10-d5a8-4b09-97e3-cd89790f1471",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-08-28T20:46:38.416Z",
+      "processed_at": "2026-08-28T20:46:39.715Z"
+    },
+    {
+      "id": "8e31b9c6-d832-4ba5-8885-7967ba9bbbaa",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-28T20:46:57.378Z",
+      "processed_at": "2026-08-28T20:46:57.756Z"
+    },
+    {
+      "id": "e2a538b4-8e22-42e2-84ca-f839ff4eb1fb",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-28T20:50:09.122Z",
+      "processed_at": "2026-08-28T20:50:10.162Z"
+    },
+    {
+      "id": "68e202c0-c483-42f6-b58b-6bc6583649cb",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-08-28T21:12:19.884Z",
+      "processed_at": "2026-08-28T21:12:22.234Z"
+    },
+    {
+      "id": "aa921fc2-199d-476d-a334-54bb56a3a7e5",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-28T21:13:00.762Z",
+      "processed_at": "2026-08-28T21:13:01.417Z"
+    },
+    {
+      "id": "c1d5ae60-6b5b-4491-8f18-c5400d19365d",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-08-28T21:20:00.414Z",
+      "processed_at": "2026-08-28T21:20:02.505Z"
+    },
+    {
+      "id": "1be26fb0-287f-471e-bd1a-9d7acac46ed9",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-28T21:30:15.005Z",
+      "processed_at": "2026-08-28T21:30:16.029Z"
+    },
+    {
+      "id": "c72ea2f9-46e6-4c4c-903a-86a3448e4c2d",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-08-28T21:36:20.585Z",
+      "processed_at": "2026-08-28T21:36:22.793Z"
+    },
+    {
+      "id": "5e24a81b-af61-470e-8232-fec6874f3160",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-28T21:36:26.371Z",
+      "processed_at": "2026-08-28T21:36:28.808Z"
+    },
+    {
+      "id": "7564ed25-e207-43ac-888a-9c3503f7e003",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-29T06:31:26.556Z",
+      "processed_at": "2026-08-29T06:31:28.971Z"
+    },
+    {
+      "id": "aac5beec-203d-40bd-8fba-5bd9a23b8591",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-08-29T16:41:14.761Z",
+      "processed_at": "2026-08-29T16:41:16.029Z"
+    },
+    {
+      "id": "a1b67ca4-da5f-4c88-9203-036ef2961d51",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-29T17:15:19.075Z",
+      "processed_at": "2026-08-29T17:15:20.718Z"
+    },
+    {
+      "id": "57d5268a-5f14-417a-98b6-90aaf526b052",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-08-30T02:21:39.068Z",
+      "processed_at": "2026-08-30T02:21:41.413Z"
+    },
+    {
+      "id": "9450044b-2f1f-4775-91c6-631ad7b74c79",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-30T02:21:50.779Z",
+      "processed_at": "2026-08-30T02:21:53.446Z"
+    },
+    {
+      "id": "94a3ad95-3330-4207-97a8-92d1a37d1446",
+      "event_id": "530fd668-0761-4f77-a625-799be9965e7c",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-08-30T02:28:51.554Z",
+      "processed_at": "2026-08-30T02:28:54.477Z"
+    },
+    {
+      "id": "37a6a84e-1aab-4082-8397-10afeb246b9d",
+      "event_id": "02565a30-e9cd-4dd0-a1a3-af4b68861c37",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-09-05T17:36:22.515Z",
+      "processed_at": "2026-09-05T17:36:24.213Z"
+    },
+    {
+      "id": "e91fc895-db93-473e-98c6-244ee6e991ff",
+      "event_id": "02565a30-e9cd-4dd0-a1a3-af4b68861c37",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-09-05T17:37:37.925Z",
+      "processed_at": "2026-09-05T17:37:39.399Z"
+    },
+    {
+      "id": "f25c2e94-145a-4b3d-805c-66b6f8759a68",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-09-28T20:28:58.427Z",
+      "processed_at": "2026-09-28T20:28:59.262Z"
+    },
+    {
+      "id": "57290093-f7b4-4ad1-ac1b-66b5539827f0",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-09-28T20:30:24.042Z",
+      "processed_at": "2026-09-28T20:30:26.445Z"
+    },
+    {
+      "id": "e1db7bb0-3593-4555-b6f7-5afa81d3f563",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-09-28T20:35:40.394Z",
+      "processed_at": "2026-09-28T20:35:42.130Z"
+    },
+    {
+      "id": "84edb778-86e6-4dac-a319-4fc108e7c270",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-09-28T20:36:12.550Z",
+      "processed_at": "2026-09-28T20:36:15.181Z"
+    },
+    {
+      "id": "50b62fc6-e2ed-4f1c-8158-25231dd1f7d8",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-09-28T20:40:51.765Z",
+      "processed_at": "2026-09-28T20:40:53.892Z"
+    },
+    {
+      "id": "7a7ce311-3324-412a-8ef2-6f9c15fe5675",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-09-28T20:42:25.394Z",
+      "processed_at": "2026-09-28T20:42:27.121Z"
+    },
+    {
+      "id": "a90df93d-c688-4b1c-ae0f-d5b8a5410297",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-09-28T20:42:27.821Z",
+      "processed_at": "2026-09-28T20:42:30.131Z"
     }
   ],
   "logs": [
     {
-      "id": "f1c1b71f-5a44-4098-82bb-e4ec98a679c6",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Leste Inferior\" não disponível.",
-      "ts": "2026-08-17T15:26:44.863Z"
-    },
-    {
-      "id": "2c2e0cd8-c520-4872-a250-d171ba099c93",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "id": "1fb45693-0bab-4f9c-978f-5fa48298fdbd",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "info",
-      "message": "Tentando qualquer setor disponível...",
-      "ts": "2026-08-17T15:26:44.884Z"
+      "message": "🤖 Bot iniciado. Preparando sessão...",
+      "ts": "2026-09-28T20:40:53.926Z"
     },
     {
-      "id": "482d4a9d-2c16-4edb-941e-0ec849bef8d5",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "id": "90f4408d-97f5-4320-bbd3-bcc7311d4032",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "🚀 Iniciando rodada contínua #1 para fila de 1 conta(s)...",
+      "ts": "2026-09-28T20:40:53.960Z"
+    },
+    {
+      "id": "854aa607-30a1-4760-bc43-b88eb7e42987",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "==================================================",
+      "ts": "2026-09-28T20:40:53.976Z"
+    },
+    {
+      "id": "b8868d9e-268c-488d-a4cb-d11c3ad3b0b1",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "[CONTA 1/1] Iniciando automação para guibrunog@outlook.com...",
+      "ts": "2026-09-28T20:40:53.997Z"
+    },
+    {
+      "id": "c9529237-6061-4a5a-baab-d4096af3f9ca",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "🚀 Iniciando bot SIMPLIFICADO para guibrunog@outlook.com",
+      "ts": "2026-09-28T20:40:54.012Z"
+    },
+    {
+      "id": "0127e9e5-51d7-4598-8028-59da54c86acd",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "wait",
-      "message": "Nenhum setor disponível. Aguardando 10s ou atualização do site...",
-      "ts": "2026-08-17T15:26:44.906Z"
+      "message": "1. Navegando para a URL de login...",
+      "ts": "2026-09-28T20:40:54.503Z"
     },
     {
-      "id": "06432752-a705-48e0-977e-ddf5fe2c2a37",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "🔒 Sessão expirada detectada (URL: https://ingressos.flamengo.com.br/login). Fazendo re-login automático...",
-      "ts": "2026-08-17T15:26:54.931Z"
-    },
-    {
-      "id": "3e1401be-0b84-498d-951c-5221eeb55aa2",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Navegando para URL de login: https://ingressos.flamengo.com.br/login",
-      "ts": "2026-08-17T15:26:54.974Z"
-    },
-    {
-      "id": "9933743d-58ae-488d-9bcf-dc8d6048c26a",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "id": "29019e7a-b286-4716-8b7e-e1bd270a7e06",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "api",
-      "message": "E-mail preenchido: veiga.yury@gmail.com",
-      "ts": "2026-08-17T15:26:56.281Z"
+      "message": "Preenchendo credenciais...",
+      "ts": "2026-09-28T20:40:57.087Z"
     },
     {
-      "id": "4dfa9ebd-7a39-47bd-bb35-1b87432bf403",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "Senha preenchida.",
-      "ts": "2026-08-17T15:26:56.348Z"
-    },
-    {
-      "id": "2d19cdd5-0ba8-4023-91f8-fbc5c138828f",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "id": "eb0b134d-74e8-40e1-833e-7b2b19b9aa40",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "wait",
-      "message": "Aguardando resposta do login...",
-      "ts": "2026-08-17T15:26:56.579Z"
+      "message": "Aguardando login terminar (verificando mudança de URL)...",
+      "ts": "2026-09-28T20:40:57.282Z"
     },
     {
-      "id": "f35be632-42b0-4307-9bb5-610e8dbf6abe",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "id": "b6e7676f-a37c-4038-b969-4bbdb46b45c7",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "📋 Modal de termos detectado! Aceitando termos de coleta de dados...",
+      "ts": "2026-09-28T20:40:59.304Z"
+    },
+    {
+      "id": "6ed29e08-e772-4f9a-b850-6f644b7d9f12",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "success",
-      "message": "Login efetuado com sucesso!",
-      "ts": "2026-08-17T15:26:58.329Z"
+      "message": "✅ Termos aceitos com sucesso!",
+      "ts": "2026-09-28T20:41:01.939Z"
     },
     {
-      "id": "7a38cd24-c918-4a17-b82b-c5bb09505c11",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "✅ Re-login concluído. Navegando de volta para o evento...",
-      "ts": "2026-08-17T15:26:58.368Z"
-    },
-    {
-      "id": "f4577376-e860-460b-b2f4-955b5129fa28",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "🔄 Verificando disponibilidade (tentativa #116)...",
-      "ts": "2026-08-17T15:27:01.039Z"
-    },
-    {
-      "id": "bf6445d9-ead6-4ee8-82f4-902683f36f97",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 1 | E\"...",
-      "ts": "2026-08-17T15:27:01.069Z"
-    },
-    {
-      "id": "1a02708f-5007-4d69-9979-ddcad579fb3d",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 1 | E\" não disponível.",
-      "ts": "2026-08-17T15:27:01.088Z"
-    },
-    {
-      "id": "6238b776-d56f-4127-9ab7-97bc64d4b8cc",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 2 | E\"...",
-      "ts": "2026-08-17T15:27:01.106Z"
-    },
-    {
-      "id": "ec49b2b6-c2e2-4f33-8796-0dcdfb089f14",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 2 | E\" não disponível.",
-      "ts": "2026-08-17T15:27:01.125Z"
-    },
-    {
-      "id": "649bf126-2f61-4c36-bc3e-c0675964cb0a",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 1 | F\"...",
-      "ts": "2026-08-17T15:27:01.143Z"
-    },
-    {
-      "id": "77b9ac48-4527-4fcd-811a-4db005e9bc64",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 1 | F\" não disponível.",
-      "ts": "2026-08-17T15:27:01.164Z"
-    },
-    {
-      "id": "7a9f8fd8-f752-4dd7-b072-3fe4ec579dd4",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 2 | F\"...",
-      "ts": "2026-08-17T15:27:01.182Z"
-    },
-    {
-      "id": "1e024abc-dae1-46b3-9562-8d1f4202e33e",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 2 | F\" não disponível.",
-      "ts": "2026-08-17T15:27:01.199Z"
-    },
-    {
-      "id": "c270a5c6-123d-4e80-bc26-a7ee0eb02d68",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Sul Nível 1 | C\"...",
-      "ts": "2026-08-17T15:27:01.218Z"
-    },
-    {
-      "id": "f4c9fa53-0fd6-4927-a0b6-decf79128914",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Sul Nível 1 | C\" não disponível.",
-      "ts": "2026-08-17T15:27:01.234Z"
-    },
-    {
-      "id": "623a8c89-5885-41a1-93c0-9070fd09d9c2",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Sul Nível 2 | C\"...",
-      "ts": "2026-08-17T15:27:01.255Z"
-    },
-    {
-      "id": "2d94cf3c-eedd-4d88-8a5a-6277863eecaf",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Sul Nível 2 | C\" não disponível.",
-      "ts": "2026-08-17T15:27:01.272Z"
-    },
-    {
-      "id": "c82c1b44-76e9-4b18-bf7a-fd7717803f06",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Leste Superior\"...",
-      "ts": "2026-08-17T15:27:01.292Z"
-    },
-    {
-      "id": "7472cf9c-e047-4034-a3bf-8d579d5860bb",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Leste Superior\" não disponível.",
-      "ts": "2026-08-17T15:27:01.316Z"
-    },
-    {
-      "id": "33b97240-a38c-4cdd-8a19-e4acb7d8ab84",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Leste Inferior\"...",
-      "ts": "2026-08-17T15:27:01.336Z"
-    },
-    {
-      "id": "3c83519e-afcc-4df3-aa84-bd5e533048e8",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Leste Inferior\" não disponível.",
-      "ts": "2026-08-17T15:27:01.357Z"
-    },
-    {
-      "id": "1c25f28c-a62d-40f0-8341-0cdc4be3cdd4",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Tentando qualquer setor disponível...",
-      "ts": "2026-08-17T15:27:01.382Z"
-    },
-    {
-      "id": "b9f27f4d-a31b-4334-8c85-72b9c3589555",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Nenhum setor disponível. Aguardando 10s ou atualização do site...",
-      "ts": "2026-08-17T15:27:01.398Z"
-    },
-    {
-      "id": "de744bdc-b106-4631-9a35-d5efdcb70377",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "🔒 Sessão expirada detectada (URL: https://ingressos.flamengo.com.br/login). Fazendo re-login automático...",
-      "ts": "2026-08-17T15:27:11.420Z"
-    },
-    {
-      "id": "0f9b520d-cd60-4c90-8435-8f8209c5d952",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Navegando para URL de login: https://ingressos.flamengo.com.br/login",
-      "ts": "2026-08-17T15:27:11.441Z"
-    },
-    {
-      "id": "8165351f-d1b3-4c19-8161-163c82037111",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "E-mail preenchido: veiga.yury@gmail.com",
-      "ts": "2026-08-17T15:27:12.026Z"
-    },
-    {
-      "id": "ca4416e7-b148-4cc3-8e50-a413e44126bd",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "Senha preenchida.",
-      "ts": "2026-08-17T15:27:12.111Z"
-    },
-    {
-      "id": "26d5fc3c-c1e8-4c25-beea-0e26aeba54b0",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Aguardando resposta do login...",
-      "ts": "2026-08-17T15:27:12.233Z"
-    },
-    {
-      "id": "c4925727-2878-46ac-9545-f3fdae99dd1c",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "id": "ad0e46e7-32c7-4fb4-87c3-918e0d4729fc",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "success",
-      "message": "Login efetuado com sucesso!",
-      "ts": "2026-08-17T15:27:14.086Z"
+      "message": "Login efetuado com sucesso (ou bypass)!",
+      "ts": "2026-09-28T20:41:04.851Z"
     },
     {
-      "id": "95165ab7-477e-4d99-a7b8-af8709b68870",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "✅ Re-login concluído. Navegando de volta para o evento...",
-      "ts": "2026-08-17T15:27:14.108Z"
-    },
-    {
-      "id": "1a2566c4-31a8-4bc5-85df-71ececb8bdb0",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "🔄 Verificando disponibilidade (tentativa #117)...",
-      "ts": "2026-08-17T15:27:16.746Z"
-    },
-    {
-      "id": "61e84e6d-d96a-4a53-8f3c-bd0f2c399fbc",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 1 | E\"...",
-      "ts": "2026-08-17T15:27:16.788Z"
-    },
-    {
-      "id": "f2dbc45c-ec52-4b4a-96f9-b5e87ca44761",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 1 | E\" não disponível.",
-      "ts": "2026-08-17T15:27:16.832Z"
-    },
-    {
-      "id": "c9e2e1b9-63ad-4f69-a854-8d8cafcd592c",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 2 | E\"...",
-      "ts": "2026-08-17T15:27:16.867Z"
-    },
-    {
-      "id": "0a6147d1-01cd-4367-893b-ca5d5f0b9790",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 2 | E\" não disponível.",
-      "ts": "2026-08-17T15:27:16.899Z"
-    },
-    {
-      "id": "dde6bafa-a857-4953-826d-57fc6777db82",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 1 | F\"...",
-      "ts": "2026-08-17T15:27:16.945Z"
-    },
-    {
-      "id": "efbefc7b-70ba-4fd4-b7b1-0a0398d06c16",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 1 | F\" não disponível.",
-      "ts": "2026-08-17T15:27:16.983Z"
-    },
-    {
-      "id": "d30e873d-8435-4d52-8fee-4f929a1782f0",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 2 | F\"...",
-      "ts": "2026-08-17T15:27:17.017Z"
-    },
-    {
-      "id": "90c77d31-7b43-4a76-aa02-ede323fb61d9",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 2 | F\" não disponível.",
-      "ts": "2026-08-17T15:27:17.052Z"
-    },
-    {
-      "id": "e4eb2c82-332e-41db-a0a8-db3323214661",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Sul Nível 1 | C\"...",
-      "ts": "2026-08-17T15:27:17.084Z"
-    },
-    {
-      "id": "551e2953-3165-4e01-80ee-ef9f9a164e33",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Sul Nível 1 | C\" não disponível.",
-      "ts": "2026-08-17T15:27:17.124Z"
-    },
-    {
-      "id": "7858d143-5888-4ed9-940c-99a482145d74",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Sul Nível 2 | C\"...",
-      "ts": "2026-08-17T15:27:17.160Z"
-    },
-    {
-      "id": "e678a67b-133b-482b-9ed3-25ca38ec2a69",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Sul Nível 2 | C\" não disponível.",
-      "ts": "2026-08-17T15:27:17.200Z"
-    },
-    {
-      "id": "20a18c7a-4677-4ded-bf07-c85bab954676",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Leste Superior\"...",
-      "ts": "2026-08-17T15:27:17.239Z"
-    },
-    {
-      "id": "7a478794-b26e-4fcb-a710-08c5c3397c5e",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Leste Superior\" não disponível.",
-      "ts": "2026-08-17T15:27:17.282Z"
-    },
-    {
-      "id": "6faae667-1486-48d3-af89-f795b96d8ce9",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Leste Inferior\"...",
-      "ts": "2026-08-17T15:27:17.315Z"
-    },
-    {
-      "id": "362b25ba-c19e-4421-a5c4-a605f79adb5c",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Leste Inferior\" não disponível.",
-      "ts": "2026-08-17T15:27:17.363Z"
-    },
-    {
-      "id": "ae92f540-5f11-49f0-99f4-6b2bb737d68b",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Tentando qualquer setor disponível...",
-      "ts": "2026-08-17T15:27:17.400Z"
-    },
-    {
-      "id": "35ae7178-1b71-432f-8166-f4192956a1ae",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "id": "db074ca7-d323-46bc-b0ea-75b76a06667b",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "wait",
-      "message": "Nenhum setor disponível. Aguardando 10s ou atualização do site...",
-      "ts": "2026-08-17T15:27:17.431Z"
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-09-28T20:41:04.867Z"
     },
     {
-      "id": "6bcf6742-8256-481f-b9de-fce47687b37c",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "id": "c30b4ff7-dc84-42fd-b592-f9734c63ee5f",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "info",
-      "message": "🔄 Recarregando página do evento (tentativa #117)...",
-      "ts": "2026-08-17T15:27:27.453Z"
+      "message": "3. Procurando setores...",
+      "ts": "2026-09-28T20:41:08.956Z"
     },
     {
-      "id": "189c6999-5038-41ff-84d3-f9f8d38d0226",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "id": "038d9202-cf61-411b-a837-0f22e919e29c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Sul\"",
+      "ts": "2026-09-28T20:41:09.041Z"
+    },
+    {
+      "id": "1db519e1-fdd6-416f-a8f9-4eecbc2fdfeb",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "warn",
-      "message": "🔒 Após reload, caiu no /login. Fazendo re-login...",
-      "ts": "2026-08-17T15:27:30.649Z"
+      "message": "\"Sul\" não existe na página.",
+      "ts": "2026-09-28T20:41:09.069Z"
     },
     {
-      "id": "23c08097-700d-4abb-b1e7-e0103385eebd",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Navegando para URL de login: https://ingressos.flamengo.com.br/login",
-      "ts": "2026-08-17T15:27:30.674Z"
-    },
-    {
-      "id": "c5d7a4d0-75c8-4a36-b200-620941d85b7d",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "id": "cd9bb2ee-3b37-4d50-887a-e193106ece46",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "info",
-      "message": "📊 [17/08/2026, 12:27:31] Relatório horário — «fla x cru» — 0 ingressos encontrados até agora.",
-      "ts": "2026-08-17T15:27:31.329Z"
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-09-28T20:41:09.093Z"
     },
     {
-      "id": "66b9e064-bac5-4177-9919-a2d354842f50",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "E-mail preenchido: veiga.yury@gmail.com",
-      "ts": "2026-08-17T15:27:31.608Z"
+      "id": "c87c6726-9063-4a90-ad0a-578fc0ff8e6f",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-09-28T20:41:09.143Z"
     },
     {
-      "id": "b848cecb-82ff-47df-98eb-e59a510e4208",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "Senha preenchida.",
-      "ts": "2026-08-17T15:27:31.722Z"
+      "id": "9336076d-e676-463f-a791-50ad0ea08118",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste\"",
+      "ts": "2026-09-28T20:41:09.165Z"
     },
     {
-      "id": "61be0acd-024e-48e5-b181-cadc59b57c1d",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "id": "a6e8260c-66cd-40d5-9028-76d7b1039072",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste\" aparece esgotado (sold).",
+      "ts": "2026-09-28T20:41:09.207Z"
+    },
+    {
+      "id": "0ddea37b-83ae-4c83-9d16-80b5d5c2867c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "wait",
-      "message": "Aguardando resposta do login...",
-      "ts": "2026-08-17T15:27:31.865Z"
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-09-28T20:41:09.230Z"
     },
     {
-      "id": "0cbced77-2963-4a6f-9efc-89cf115e77cc",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
+      "id": "8cf47db8-5ef5-467c-97c3-91d0e88c1af9",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-09-28T20:41:19.240Z"
+    },
+    {
+      "id": "75b8ec73-ed42-47bd-851d-0a002a4c7f00",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-09-28T20:41:23.176Z"
+    },
+    {
+      "id": "662d37d9-7f65-455a-a52b-305def17b56b",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Sul\"",
+      "ts": "2026-09-28T20:41:23.281Z"
+    },
+    {
+      "id": "1f896a69-fbf4-4436-8e59-cb2ed3eb6174",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Sul\" não existe na página.",
+      "ts": "2026-09-28T20:41:23.306Z"
+    },
+    {
+      "id": "e9020036-3bc7-44e9-afca-3a310c353cc9",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-09-28T20:41:23.335Z"
+    },
+    {
+      "id": "df12bda6-47a5-4420-9f2d-3d532fe87361",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-09-28T20:41:23.396Z"
+    },
+    {
+      "id": "c490f860-0a7f-4660-9f92-7aacf97b670a",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste\"",
+      "ts": "2026-09-28T20:41:23.420Z"
+    },
+    {
+      "id": "509ecdcf-0f14-432a-88fb-5c08afb212ef",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste\" aparece esgotado (sold).",
+      "ts": "2026-09-28T20:41:23.487Z"
+    },
+    {
+      "id": "1398c0b8-1e7e-4dfb-b00a-ebd78e40b662",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-09-28T20:41:23.514Z"
+    },
+    {
+      "id": "93bd6260-b65a-4ce9-a301-12bceef9adfe",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-09-28T20:41:33.537Z"
+    },
+    {
+      "id": "8feee60f-fe16-4b98-a4e6-fd87088612bd",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-09-28T20:41:37.514Z"
+    },
+    {
+      "id": "8ac7c6b7-b409-477f-ad37-b51a11d21b20",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Sul\"",
+      "ts": "2026-09-28T20:41:37.587Z"
+    },
+    {
+      "id": "fbcbf104-9940-4d75-917f-25ba98f241ef",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Sul\" não existe na página.",
+      "ts": "2026-09-28T20:41:37.617Z"
+    },
+    {
+      "id": "65229c77-1a90-4377-b6e2-1c2b61de912d",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-09-28T20:41:37.647Z"
+    },
+    {
+      "id": "130f1a1e-2beb-4f13-a73f-d07efaa92c75",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-09-28T20:41:37.722Z"
+    },
+    {
+      "id": "2ab80c80-6a82-49aa-822e-f45a93e95997",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste\"",
+      "ts": "2026-09-28T20:41:37.750Z"
+    },
+    {
+      "id": "4241297e-683a-444e-bc7b-c7704bd33ef4",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste\" aparece esgotado (sold).",
+      "ts": "2026-09-28T20:41:37.806Z"
+    },
+    {
+      "id": "c5445215-db16-48df-a9af-57d287acd06f",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-09-28T20:41:37.834Z"
+    },
+    {
+      "id": "267402b2-b253-4ac7-8a06-3914e8103f8a",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-09-28T20:41:47.855Z"
+    },
+    {
+      "id": "d853ddbf-3e58-44e3-9569-0ddc43177476",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-09-28T20:41:51.807Z"
+    },
+    {
+      "id": "832a79d0-c90d-405f-b80f-930a4a89dd0c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Sul\"",
+      "ts": "2026-09-28T20:41:51.889Z"
+    },
+    {
+      "id": "41571814-256d-47e6-af09-e9279e9104e3",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Sul\" não existe na página.",
+      "ts": "2026-09-28T20:41:51.922Z"
+    },
+    {
+      "id": "73a026b0-9df8-4e73-b7a0-f73ebbecf480",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-09-28T20:41:51.953Z"
+    },
+    {
+      "id": "ba165000-a9cb-4ca5-8d69-efba58568996",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-09-28T20:41:52.022Z"
+    },
+    {
+      "id": "7d11982a-9f4e-4cc7-b8f2-29015449319e",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste\"",
+      "ts": "2026-09-28T20:41:52.055Z"
+    },
+    {
+      "id": "81d7322e-698b-4597-a958-ba45adebe493",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste\" aparece esgotado (sold).",
+      "ts": "2026-09-28T20:41:52.134Z"
+    },
+    {
+      "id": "569bbc15-6f1c-4785-acab-56844c447f3e",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-09-28T20:41:52.166Z"
+    },
+    {
+      "id": "feec332f-7daf-420e-ab5c-f9e781ea98ea",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-09-28T20:42:02.189Z"
+    },
+    {
+      "id": "87da731c-2abb-4f82-9115-3808fb704c3c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-09-28T20:42:06.371Z"
+    },
+    {
+      "id": "13281242-cdba-43d4-8764-7a0917b8ee0c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Sul\"",
+      "ts": "2026-09-28T20:42:06.440Z"
+    },
+    {
+      "id": "174e77f9-2165-438e-9271-74ed70fe3b2c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Sul\" não existe na página.",
+      "ts": "2026-09-28T20:42:06.466Z"
+    },
+    {
+      "id": "320e8469-cfcd-41ba-bdb9-0dceb8ddba46",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-09-28T20:42:06.492Z"
+    },
+    {
+      "id": "61a48685-cbd0-4147-a94c-ce71780a10c7",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-09-28T20:42:06.555Z"
+    },
+    {
+      "id": "b965f715-330c-41df-980c-63f2ad1b0086",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste\"",
+      "ts": "2026-09-28T20:42:06.580Z"
+    },
+    {
+      "id": "18bdd3f2-4971-409a-8caf-a4e10d0e22c2",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste\" aparece esgotado (sold).",
+      "ts": "2026-09-28T20:42:06.640Z"
+    },
+    {
+      "id": "e21fa22c-4644-48b2-ae5f-961c871fb775",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-09-28T20:42:06.669Z"
+    },
+    {
+      "id": "e03df6c5-1a9a-47f4-ad90-9a0c09e2c2db",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-09-28T20:42:16.687Z"
+    },
+    {
+      "id": "173a46f5-b05f-43c5-9583-3877dc9ad059",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-09-28T20:42:20.603Z"
+    },
+    {
+      "id": "c9319f3f-5a7a-44fa-8a9f-a7d9fbc8a2c5",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Sul\"",
+      "ts": "2026-09-28T20:42:20.684Z"
+    },
+    {
+      "id": "4a1327c0-af0a-437c-94db-7cadb9313e7f",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Sul\" não existe na página.",
+      "ts": "2026-09-28T20:42:20.712Z"
+    },
+    {
+      "id": "4429d7d5-18d6-4c01-9aae-c303360c5cde",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-09-28T20:42:20.738Z"
+    },
+    {
+      "id": "c18d95d3-e05a-40e7-86a6-cc7353968b56",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-09-28T20:42:20.805Z"
+    },
+    {
+      "id": "d64076a9-ba28-4f24-97fe-248ea1ac47e4",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste\"",
+      "ts": "2026-09-28T20:42:20.834Z"
+    },
+    {
+      "id": "0eee4989-b94d-4ed4-b357-e424247f161f",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste\" aparece esgotado (sold).",
+      "ts": "2026-09-28T20:42:20.901Z"
+    },
+    {
+      "id": "277cbe73-de6b-4aa6-b253-15f3cfed9670",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-09-28T20:42:20.929Z"
+    },
+    {
+      "id": "b32173bb-7416-4972-b855-1e09d80227ee",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "⏹ Bot parado pelo usuário.",
+      "ts": "2026-09-28T20:42:27.139Z"
+    },
+    {
+      "id": "8138d4f3-7216-41ce-872c-5af32d43ed23",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "⚠️ Fim do processamento para guibrunog@outlook.com após tentativas. Passando para a próxima...",
+      "ts": "2026-09-28T20:42:30.947Z"
+    },
+    {
+      "id": "a99f1684-fdf8-47c5-9502-94058ad5a42e",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "success",
-      "message": "Login efetuado com sucesso!",
-      "ts": "2026-08-17T15:27:33.583Z"
-    },
-    {
-      "id": "19fcfb74-4c16-46ab-b40f-ebebb988a587",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "🔒 Sessão expirada detectada (URL: https://ingressos.flamengo.com.br/login). Fazendo re-login automático...",
-      "ts": "2026-08-17T15:27:36.295Z"
-    },
-    {
-      "id": "a10814e0-481c-4ef7-addb-6afaa5261f17",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Navegando para URL de login: https://ingressos.flamengo.com.br/login",
-      "ts": "2026-08-17T15:27:36.343Z"
-    },
-    {
-      "id": "6141561d-ec8a-4181-b2ab-6dec2d307746",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "E-mail preenchido: veiga.yury@gmail.com",
-      "ts": "2026-08-17T15:27:37.308Z"
-    },
-    {
-      "id": "88f0ed59-4b95-4f61-9eea-211565c61b1b",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "Senha preenchida.",
-      "ts": "2026-08-17T15:27:37.500Z"
-    },
-    {
-      "id": "27e772ea-41da-4d56-9a77-d3315b192c78",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Aguardando resposta do login...",
-      "ts": "2026-08-17T15:27:37.774Z"
-    },
-    {
-      "id": "ad70db26-8bc6-454d-8ee5-1bb7b9637aed",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "success",
-      "message": "Login efetuado com sucesso!",
-      "ts": "2026-08-17T15:27:39.937Z"
-    },
-    {
-      "id": "9ec73066-dfaf-4225-8c58-c632fac704f1",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "✅ Re-login concluído. Navegando de volta para o evento...",
-      "ts": "2026-08-17T15:27:40.416Z"
-    },
-    {
-      "id": "d362940d-4844-4e52-8064-8959c5d20c3c",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "🔄 Verificando disponibilidade (tentativa #118)...",
-      "ts": "2026-08-17T15:27:43.692Z"
-    },
-    {
-      "id": "27b9a416-28e2-42b5-a721-c7f86f579c14",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 1 | E\"...",
-      "ts": "2026-08-17T15:27:43.751Z"
-    },
-    {
-      "id": "f5ebf370-6a42-4464-b9bb-bf356416dad2",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 1 | E\" não disponível.",
-      "ts": "2026-08-17T15:27:43.806Z"
-    },
-    {
-      "id": "23fdf1e7-fc79-4ee8-9367-93529839db56",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 2 | E\"...",
-      "ts": "2026-08-17T15:27:43.834Z"
-    },
-    {
-      "id": "cb2a8e58-2916-4f7d-94a2-46e3fa7af43b",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 2 | E\" não disponível.",
-      "ts": "2026-08-17T15:27:43.871Z"
-    },
-    {
-      "id": "e6928294-a9c9-4670-abd8-b192c5ef8155",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 1 | F\"...",
-      "ts": "2026-08-17T15:27:43.908Z"
-    },
-    {
-      "id": "cfbdd935-f74e-428d-a4ae-a3065c2becf2",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 1 | F\" não disponível.",
-      "ts": "2026-08-17T15:27:43.951Z"
-    },
-    {
-      "id": "25dadde3-b313-421a-93b8-0418ee5e0eef",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 2 | F\"...",
-      "ts": "2026-08-17T15:27:43.987Z"
-    },
-    {
-      "id": "32610935-0ce2-415b-8ad6-20f1df5c58a6",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 2 | F\" não disponível.",
-      "ts": "2026-08-17T15:27:44.038Z"
-    },
-    {
-      "id": "0498227a-eecc-4ef2-a4e4-d5b4230d5393",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Sul Nível 1 | C\"...",
-      "ts": "2026-08-17T15:27:44.071Z"
-    },
-    {
-      "id": "543c3d94-c886-47bd-9fd4-62e5ae357d62",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Sul Nível 1 | C\" não disponível.",
-      "ts": "2026-08-17T15:27:44.102Z"
-    },
-    {
-      "id": "9758c8e4-9d7e-41b2-8fc6-cd8540eee93b",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Sul Nível 2 | C\"...",
-      "ts": "2026-08-17T15:27:44.127Z"
-    },
-    {
-      "id": "a049bd3d-6ea9-4116-adcc-bc34d81fa85c",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Sul Nível 2 | C\" não disponível.",
-      "ts": "2026-08-17T15:27:44.153Z"
-    },
-    {
-      "id": "3d0f9965-cbe0-4730-8e2a-36793723c0da",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Leste Superior\"...",
-      "ts": "2026-08-17T15:27:44.175Z"
-    },
-    {
-      "id": "a0fc6855-1a42-4915-a221-7a804843fc71",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Leste Superior\" não disponível.",
-      "ts": "2026-08-17T15:27:44.206Z"
-    },
-    {
-      "id": "1cde24db-0f01-4c7c-a14d-03173540fd96",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Leste Inferior\"...",
-      "ts": "2026-08-17T15:27:44.235Z"
-    },
-    {
-      "id": "29a338f0-cfd3-44cf-bb8d-d420530da08c",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Leste Inferior\" não disponível.",
-      "ts": "2026-08-17T15:27:44.263Z"
-    },
-    {
-      "id": "4ca58dde-2f5f-4a7f-a3ae-52f777c587c4",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Tentando qualquer setor disponível...",
-      "ts": "2026-08-17T15:27:44.292Z"
-    },
-    {
-      "id": "bf09667e-27e2-4c0e-b245-c0ceddd63f0b",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Nenhum setor disponível. Aguardando 10s ou atualização do site...",
-      "ts": "2026-08-17T15:27:44.324Z"
-    },
-    {
-      "id": "a90031b5-c934-4e29-adca-d0d511884802",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "🔒 Sessão expirada detectada (URL: https://ingressos.flamengo.com.br/login). Fazendo re-login automático...",
-      "ts": "2026-08-17T15:27:54.345Z"
-    },
-    {
-      "id": "9dae7a51-4244-4c66-aad7-ac695b3b828a",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Navegando para URL de login: https://ingressos.flamengo.com.br/login",
-      "ts": "2026-08-17T15:27:54.368Z"
-    },
-    {
-      "id": "fa1f6b71-ffe8-446d-92dc-302455448e1d",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "E-mail preenchido: veiga.yury@gmail.com",
-      "ts": "2026-08-17T15:27:55.034Z"
-    },
-    {
-      "id": "25c17418-3205-448a-968b-33729d60d13b",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "Senha preenchida.",
-      "ts": "2026-08-17T15:27:55.192Z"
-    },
-    {
-      "id": "20637eff-9b0a-46b2-a66b-8210372ca4df",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Aguardando resposta do login...",
-      "ts": "2026-08-17T15:27:55.366Z"
-    },
-    {
-      "id": "f6357f4e-9d91-447c-9d66-2bda396761f8",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "success",
-      "message": "Login efetuado com sucesso!",
-      "ts": "2026-08-17T15:27:57.297Z"
-    },
-    {
-      "id": "1373057b-0866-4d3c-9dd8-3807a5b16ddb",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "✅ Re-login concluído. Navegando de volta para o evento...",
-      "ts": "2026-08-17T15:27:57.345Z"
-    },
-    {
-      "id": "6a505d1e-a119-45af-9102-beecebdd8aad",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "🔄 Verificando disponibilidade (tentativa #119)...",
-      "ts": "2026-08-17T15:28:00.071Z"
-    },
-    {
-      "id": "02b8fce5-27be-449b-be22-70d02e3cdfba",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 1 | E\"...",
-      "ts": "2026-08-17T15:28:00.105Z"
-    },
-    {
-      "id": "ee37f7d6-7135-4f96-b197-522ec51ceabe",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 1 | E\" não disponível.",
-      "ts": "2026-08-17T15:28:00.137Z"
-    },
-    {
-      "id": "75f27d7d-b5fd-4b41-9e74-7feb3fa44473",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 2 | E\"...",
-      "ts": "2026-08-17T15:28:00.178Z"
-    },
-    {
-      "id": "56f96a27-3dfc-4470-8f75-301c1483f5d8",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 2 | E\" não disponível.",
-      "ts": "2026-08-17T15:28:00.214Z"
-    },
-    {
-      "id": "337d0b5a-96ca-4fbe-b816-f6cfc8ae0ee4",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 1 | F\"...",
-      "ts": "2026-08-17T15:28:00.259Z"
-    },
-    {
-      "id": "d63ba341-79df-4fb5-aca5-63d634b190fa",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 1 | F\" não disponível.",
-      "ts": "2026-08-17T15:28:00.292Z"
-    },
-    {
-      "id": "95310775-abe2-47ec-845a-dc1075ac3426",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 2 | F\"...",
-      "ts": "2026-08-17T15:28:00.339Z"
-    },
-    {
-      "id": "1032af81-bb72-4d64-a386-1d1fc1ce95bc",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 2 | F\" não disponível.",
-      "ts": "2026-08-17T15:28:00.374Z"
-    },
-    {
-      "id": "5c6f641c-aab6-4559-a3d6-e9df064f9e59",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Sul Nível 1 | C\"...",
-      "ts": "2026-08-17T15:28:00.410Z"
-    },
-    {
-      "id": "c3c7670d-9b0c-41b3-825a-28d35e37cd95",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Sul Nível 1 | C\" não disponível.",
-      "ts": "2026-08-17T15:28:00.441Z"
-    },
-    {
-      "id": "a4e390ff-1e33-4fce-81e7-278ec190e705",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Sul Nível 2 | C\"...",
-      "ts": "2026-08-17T15:28:00.473Z"
-    },
-    {
-      "id": "2d3b0b27-8f98-442d-8c94-ea71334c912e",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Sul Nível 2 | C\" não disponível.",
-      "ts": "2026-08-17T15:28:00.510Z"
-    },
-    {
-      "id": "07f7fb34-3e40-4a3e-8580-8569f77e2a40",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Leste Superior\"...",
-      "ts": "2026-08-17T15:28:00.543Z"
-    },
-    {
-      "id": "967f08f7-75c4-454e-b79a-e95edc87b97c",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Leste Superior\" não disponível.",
-      "ts": "2026-08-17T15:28:00.570Z"
-    },
-    {
-      "id": "bf2220e1-9187-4906-9273-cf59b7f5198f",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Leste Inferior\"...",
-      "ts": "2026-08-17T15:28:00.606Z"
-    },
-    {
-      "id": "a02e87b0-d9ae-4e4a-a77f-e7b959d0fb15",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Leste Inferior\" não disponível.",
-      "ts": "2026-08-17T15:28:00.630Z"
-    },
-    {
-      "id": "e5d4a7a4-e245-41f8-997f-0d78c6a99ca2",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Tentando qualquer setor disponível...",
-      "ts": "2026-08-17T15:28:00.658Z"
-    },
-    {
-      "id": "00d177d0-1c4e-4b8e-b993-385ce705dca9",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Nenhum setor disponível. Aguardando 10s ou atualização do site...",
-      "ts": "2026-08-17T15:28:00.687Z"
-    },
-    {
-      "id": "f6de93bd-7625-47f7-9adb-a4bb39123219",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "🔒 Sessão expirada detectada (URL: https://ingressos.flamengo.com.br/login). Fazendo re-login automático...",
-      "ts": "2026-08-17T15:28:10.765Z"
-    },
-    {
-      "id": "38db3a9d-f156-4fc9-a006-dd843cd2007c",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Navegando para URL de login: https://ingressos.flamengo.com.br/login",
-      "ts": "2026-08-17T15:28:10.809Z"
-    },
-    {
-      "id": "531faf6c-5232-4bb6-a38b-59db15bc41d8",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "E-mail preenchido: veiga.yury@gmail.com",
-      "ts": "2026-08-17T15:28:11.642Z"
-    },
-    {
-      "id": "fba74968-5d90-4d41-84fa-cb23e8d109aa",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "Senha preenchida.",
-      "ts": "2026-08-17T15:28:11.850Z"
-    },
-    {
-      "id": "00ddd710-05b2-4dbc-8d2d-cd9bfd680ea9",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Aguardando resposta do login...",
-      "ts": "2026-08-17T15:28:12.056Z"
-    },
-    {
-      "id": "122dd37a-c8e4-423f-a984-618ccb9543c6",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "success",
-      "message": "Login efetuado com sucesso!",
-      "ts": "2026-08-17T15:28:14.223Z"
-    },
-    {
-      "id": "fcae14da-2b83-4659-bcb7-c794cf402738",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "✅ Re-login concluído. Navegando de volta para o evento...",
-      "ts": "2026-08-17T15:28:14.252Z"
-    },
-    {
-      "id": "0f481802-23c7-48b0-a4ee-288fd99a2973",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "🔄 Verificando disponibilidade (tentativa #120)...",
-      "ts": "2026-08-17T15:28:17.367Z"
-    },
-    {
-      "id": "48006418-a0fb-4ac2-8305-b3c4e9ec06b7",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 1 | E\"...",
-      "ts": "2026-08-17T15:28:17.401Z"
-    },
-    {
-      "id": "8d14eacb-6cdf-43fc-b4dd-33bf8fa43024",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 1 | E\" não disponível.",
-      "ts": "2026-08-17T15:28:17.430Z"
-    },
-    {
-      "id": "e9cbb0c3-2cdd-4002-ac0e-34e41df80a63",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 2 | E\"...",
-      "ts": "2026-08-17T15:28:17.460Z"
-    },
-    {
-      "id": "5d824183-c186-4750-be8c-3dc51d4f4bd7",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 2 | E\" não disponível.",
-      "ts": "2026-08-17T15:28:17.490Z"
-    },
-    {
-      "id": "d9cb48a3-c696-4a95-bb87-697eae2299ac",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 1 | F\"...",
-      "ts": "2026-08-17T15:28:17.525Z"
-    },
-    {
-      "id": "fb6a1ecb-055a-4dd6-aca8-37cf715574d8",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 1 | F\" não disponível.",
-      "ts": "2026-08-17T15:28:17.558Z"
-    },
-    {
-      "id": "bbe57d85-390a-4ac8-839f-8e7dc9f1aa0b",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 2 | F\"...",
-      "ts": "2026-08-17T15:28:17.589Z"
-    },
-    {
-      "id": "7e7d345a-3a4a-4db4-a9b7-bb9a72bc55cf",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 2 | F\" não disponível.",
-      "ts": "2026-08-17T15:28:17.620Z"
-    },
-    {
-      "id": "31807444-6c31-48c8-9ce5-53a3211d5101",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Sul Nível 1 | C\"...",
-      "ts": "2026-08-17T15:28:17.650Z"
-    },
-    {
-      "id": "aa2ed927-e7c0-4772-a86f-675b7feccf71",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Sul Nível 1 | C\" não disponível.",
-      "ts": "2026-08-17T15:28:17.681Z"
-    },
-    {
-      "id": "d60efd66-06c0-4f74-b018-5b42eb58d53a",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Sul Nível 2 | C\"...",
-      "ts": "2026-08-17T15:28:17.718Z"
-    },
-    {
-      "id": "f7a0bdc1-082a-46b5-999e-4290c9ddd2a5",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Sul Nível 2 | C\" não disponível.",
-      "ts": "2026-08-17T15:28:17.752Z"
-    },
-    {
-      "id": "de8bf43b-a2b2-4496-a22d-bc98221a8c22",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Leste Superior\"...",
-      "ts": "2026-08-17T15:28:17.778Z"
-    },
-    {
-      "id": "e6228929-bd8c-4209-8105-3baa88cafd32",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Leste Superior\" não disponível.",
-      "ts": "2026-08-17T15:28:17.809Z"
-    },
-    {
-      "id": "f725ee06-da23-4bb3-9eb0-30ccda50bcbb",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Leste Inferior\"...",
-      "ts": "2026-08-17T15:28:17.841Z"
-    },
-    {
-      "id": "c352c5a8-0a61-4508-84d3-1dd4a3bf4982",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Leste Inferior\" não disponível.",
-      "ts": "2026-08-17T15:28:17.870Z"
-    },
-    {
-      "id": "4c4ee8b7-4361-4300-a2a5-0f6fe843a97c",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Tentando qualquer setor disponível...",
-      "ts": "2026-08-17T15:28:17.900Z"
-    },
-    {
-      "id": "0a630f36-ec98-4061-953c-397ba599630a",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Nenhum setor disponível. Aguardando 10s ou atualização do site...",
-      "ts": "2026-08-17T15:28:17.932Z"
-    },
-    {
-      "id": "da61d4d4-5ef1-4dc6-9eba-93dba7059b86",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "🔄 Recarregando página do evento (tentativa #120)...",
-      "ts": "2026-08-17T15:28:28.152Z"
-    },
-    {
-      "id": "1897c722-d79e-4a75-b9b2-da90b378fe77",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "🔒 Após reload, caiu no /login. Fazendo re-login...",
-      "ts": "2026-08-17T15:28:31.622Z"
-    },
-    {
-      "id": "9051b282-6375-413e-bfbb-1ffe6064a5dc",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Navegando para URL de login: https://ingressos.flamengo.com.br/login",
-      "ts": "2026-08-17T15:28:31.672Z"
-    },
-    {
-      "id": "07beab54-e83a-417b-9ff5-76cc1ecd161f",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "E-mail preenchido: veiga.yury@gmail.com",
-      "ts": "2026-08-17T15:28:33.536Z"
-    },
-    {
-      "id": "a08dc998-70cd-437a-9453-67d9d47ad578",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "Senha preenchida.",
-      "ts": "2026-08-17T15:28:33.739Z"
-    },
-    {
-      "id": "c1cd669f-35b2-422a-831f-93b097251966",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Aguardando resposta do login...",
-      "ts": "2026-08-17T15:28:33.957Z"
-    },
-    {
-      "id": "356f6395-a2b7-4f52-a0a6-ffbdd109b1aa",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "success",
-      "message": "Login efetuado com sucesso!",
-      "ts": "2026-08-17T15:28:36.430Z"
-    },
-    {
-      "id": "7aafa6a5-6b71-4448-9318-a7b617e857bd",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "🔒 Sessão expirada detectada (URL: https://ingressos.flamengo.com.br/login). Fazendo re-login automático...",
-      "ts": "2026-08-17T15:28:40.259Z"
-    },
-    {
-      "id": "d7fb7dc5-f56d-40f5-93f1-a02567f24f6d",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Navegando para URL de login: https://ingressos.flamengo.com.br/login",
-      "ts": "2026-08-17T15:28:40.374Z"
-    },
-    {
-      "id": "c97b0b3d-4aac-4297-bff0-81fc8f0c2e95",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "E-mail preenchido: veiga.yury@gmail.com",
-      "ts": "2026-08-17T15:28:41.723Z"
-    },
-    {
-      "id": "45c4ad7a-bfb4-49f3-ad5c-45e3167ed02c",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "Senha preenchida.",
-      "ts": "2026-08-17T15:28:41.948Z"
-    },
-    {
-      "id": "7cbd1890-edaa-468f-bd78-e595ab0f766e",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Aguardando resposta do login...",
-      "ts": "2026-08-17T15:28:42.078Z"
-    },
-    {
-      "id": "0e05f249-8c87-4dd1-a40b-e3441c2409df",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "success",
-      "message": "Login efetuado com sucesso!",
-      "ts": "2026-08-17T15:28:44.422Z"
-    },
-    {
-      "id": "68719b5c-4d6e-4aa2-9f83-ffb1c0bac3df",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "✅ Re-login concluído. Navegando de volta para o evento...",
-      "ts": "2026-08-17T15:28:44.895Z"
-    },
-    {
-      "id": "9a7220b1-6207-464d-bf23-d85cd864bc68",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "🔄 Verificando disponibilidade (tentativa #121)...",
-      "ts": "2026-08-17T15:28:49.689Z"
-    },
-    {
-      "id": "0c25173b-a99d-40d8-a4b8-69f87f52c5ef",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 1 | E\"...",
-      "ts": "2026-08-17T15:28:49.745Z"
-    },
-    {
-      "id": "068571ba-270d-4b16-8f0b-97906881bc2c",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 1 | E\" não disponível.",
-      "ts": "2026-08-17T15:28:49.887Z"
-    },
-    {
-      "id": "7e90aacd-cfbd-41ab-973e-cfbef572ddfc",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 2 | E\"...",
-      "ts": "2026-08-17T15:28:49.969Z"
-    },
-    {
-      "id": "d8a2f92b-c438-4e6b-ab27-3a3e9eb3edae",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 2 | E\" não disponível.",
-      "ts": "2026-08-17T15:28:50.046Z"
-    },
-    {
-      "id": "b3ce596c-bbd0-465c-ab15-8658c60c541e",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 1 | F\"...",
-      "ts": "2026-08-17T15:28:50.137Z"
-    },
-    {
-      "id": "be910a8b-d34e-42e5-a280-141774f2987f",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 1 | F\" não disponível.",
-      "ts": "2026-08-17T15:28:50.194Z"
-    },
-    {
-      "id": "ee12daa5-e2f9-48d4-8ae4-e54ba5e79fd2",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 2 | F\"...",
-      "ts": "2026-08-17T15:28:50.251Z"
-    },
-    {
-      "id": "74d1fe69-f34d-410d-8cab-cbefafe657d6",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 2 | F\" não disponível.",
-      "ts": "2026-08-17T15:28:50.342Z"
-    },
-    {
-      "id": "0a671f0e-53ae-424b-a525-fb3d25ace7fc",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Sul Nível 1 | C\"...",
-      "ts": "2026-08-17T15:28:50.449Z"
-    },
-    {
-      "id": "f84fabc4-4685-488f-8fa1-9a4b3592705e",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Sul Nível 1 | C\" não disponível.",
-      "ts": "2026-08-17T15:28:50.582Z"
-    },
-    {
-      "id": "3de01adf-b6fb-4483-81f2-e7fb7dbe1254",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Sul Nível 2 | C\"...",
-      "ts": "2026-08-17T15:28:50.660Z"
-    },
-    {
-      "id": "a7e3a738-f61d-4936-b5c8-975e7b6e22b0",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Sul Nível 2 | C\" não disponível.",
-      "ts": "2026-08-17T15:28:50.751Z"
-    },
-    {
-      "id": "fc8f3a1a-9f7a-494f-9038-df685ddd12b1",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Leste Superior\"...",
-      "ts": "2026-08-17T15:28:50.816Z"
-    },
-    {
-      "id": "844ce3b4-6545-4e8d-a50f-ef8985426412",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Leste Superior\" não disponível.",
-      "ts": "2026-08-17T15:28:50.900Z"
-    },
-    {
-      "id": "9f97fe96-e8ac-4cb3-902e-55178677a501",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Leste Inferior\"...",
-      "ts": "2026-08-17T15:28:50.990Z"
-    },
-    {
-      "id": "e4104c39-fadf-4cc5-80be-dec7a770c50d",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Leste Inferior\" não disponível.",
-      "ts": "2026-08-17T15:28:51.131Z"
-    },
-    {
-      "id": "2ce9bc82-5b35-4e5d-a4dc-7379c9b8021e",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Tentando qualquer setor disponível...",
-      "ts": "2026-08-17T15:28:51.409Z"
-    },
-    {
-      "id": "4ced428c-aa37-4fb4-bfed-e03104523e2a",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Nenhum setor disponível. Aguardando 10s ou atualização do site...",
-      "ts": "2026-08-17T15:28:51.454Z"
-    },
-    {
-      "id": "984dfaed-ad27-422a-beee-720eecb18dbf",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "🔒 Sessão expirada detectada (URL: https://ingressos.flamengo.com.br/login). Fazendo re-login automático...",
-      "ts": "2026-08-17T15:29:01.507Z"
-    },
-    {
-      "id": "8692fafa-cfd8-43b4-9781-bcdc2c7397e2",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Navegando para URL de login: https://ingressos.flamengo.com.br/login",
-      "ts": "2026-08-17T15:29:01.567Z"
-    },
-    {
-      "id": "adc7d4a5-aa40-4d87-9c0d-6f5db2f78843",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "E-mail preenchido: veiga.yury@gmail.com",
-      "ts": "2026-08-17T15:29:02.987Z"
-    },
-    {
-      "id": "bc77e45f-5174-4a99-8a00-fe937639e150",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "Senha preenchida.",
-      "ts": "2026-08-17T15:29:03.140Z"
-    },
-    {
-      "id": "53561484-eb7c-4e0d-9b64-86e86a3ddb9f",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Aguardando resposta do login...",
-      "ts": "2026-08-17T15:29:03.301Z"
-    },
-    {
-      "id": "30371da6-4a40-4ade-9175-09c6895ae86f",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "success",
-      "message": "Login efetuado com sucesso!",
-      "ts": "2026-08-17T15:29:05.092Z"
-    },
-    {
-      "id": "37bec84b-8e11-41b4-859a-1dcb2e62793b",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "✅ Re-login concluído. Navegando de volta para o evento...",
-      "ts": "2026-08-17T15:29:05.127Z"
-    },
-    {
-      "id": "5d24622a-34fc-46f2-b8fd-e823176856d7",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "api",
-      "message": "🔄 Verificando disponibilidade (tentativa #122)...",
-      "ts": "2026-08-17T15:29:08.083Z"
-    },
-    {
-      "id": "fc9051ae-dfbb-44dc-9b62-a74316227274",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 1 | E\"...",
-      "ts": "2026-08-17T15:29:08.165Z"
-    },
-    {
-      "id": "26337d56-6892-40d7-80d9-64474a134f38",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 1 | E\" não disponível.",
-      "ts": "2026-08-17T15:29:08.248Z"
-    },
-    {
-      "id": "4ee95192-d038-4ece-9703-957e56d65097",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 2 | E\"...",
-      "ts": "2026-08-17T15:29:08.301Z"
-    },
-    {
-      "id": "84a8c8f2-5524-493a-880d-fbfa01ec428c",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 2 | E\" não disponível.",
-      "ts": "2026-08-17T15:29:08.360Z"
-    },
-    {
-      "id": "90590ec9-119f-450e-b0db-a927efd55b1a",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 1 | F\"...",
-      "ts": "2026-08-17T15:29:08.489Z"
-    },
-    {
-      "id": "7dc15008-4755-47f3-8ef9-cbfba48715fd",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 1 | F\" não disponível.",
-      "ts": "2026-08-17T15:29:08.578Z"
-    },
-    {
-      "id": "2fe8ebf6-ae43-4054-84f9-918a7a7e8d68",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Norte Nível 2 | F\"...",
-      "ts": "2026-08-17T15:29:08.697Z"
-    },
-    {
-      "id": "aaeb9514-505e-4a27-924b-b29ad6282270",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Norte Nível 2 | F\" não disponível.",
-      "ts": "2026-08-17T15:29:08.929Z"
-    },
-    {
-      "id": "a9ffebfd-7dc4-4d54-9784-da9060fa9f70",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Sul Nível 1 | C\"...",
-      "ts": "2026-08-17T15:29:09.052Z"
-    },
-    {
-      "id": "09dee480-df95-4943-b5d7-6387d259427c",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Sul Nível 1 | C\" não disponível.",
-      "ts": "2026-08-17T15:29:09.162Z"
-    },
-    {
-      "id": "f6060ef6-9c89-41de-abd1-0306ad622adb",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Sul Nível 2 | C\"...",
-      "ts": "2026-08-17T15:29:09.233Z"
-    },
-    {
-      "id": "1e5c1b25-2ef7-40d1-8b03-210e52f190de",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Sul Nível 2 | C\" não disponível.",
-      "ts": "2026-08-17T15:29:09.338Z"
-    },
-    {
-      "id": "0beec1ba-b4b4-487a-ae7c-daa06230cad3",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Leste Superior\"...",
-      "ts": "2026-08-17T15:29:09.401Z"
-    },
-    {
-      "id": "e2f029c3-0920-45fd-8c63-5ae616ff05ac",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Leste Superior\" não disponível.",
-      "ts": "2026-08-17T15:29:09.542Z"
-    },
-    {
-      "id": "c7e06b23-9665-4f96-9a04-2ce1e4994e1b",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Procurando setor: \"Leste Inferior\"...",
-      "ts": "2026-08-17T15:29:09.672Z"
-    },
-    {
-      "id": "ebc7203c-9396-4f8f-bbae-5ed906dfb198",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "warn",
-      "message": "\"Leste Inferior\" não disponível.",
-      "ts": "2026-08-17T15:29:09.743Z"
-    },
-    {
-      "id": "a8e3acec-8357-4a93-8c46-1f7d5481c595",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "info",
-      "message": "Tentando qualquer setor disponível...",
-      "ts": "2026-08-17T15:29:10.921Z"
-    },
-    {
-      "id": "a06cddae-6620-4870-b856-2015a3765ed9",
-      "event_id": "9aeedbcf-95c8-4255-a100-32934c1a2b4d",
-      "level": "wait",
-      "message": "Nenhum setor disponível. Aguardando 10s ou atualização do site...",
-      "ts": "2026-08-17T15:29:11.955Z"
+      "message": "🏁 Todas as contas foram processadas com sucesso!",
+      "ts": "2026-09-28T20:42:31.101Z"
     }
   ]
 }

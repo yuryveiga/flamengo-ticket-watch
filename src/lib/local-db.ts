@@ -111,13 +111,21 @@ async function writeDbRaw(data: LocalDbData): Promise<void> {
   try { await fs.copyFile(DATA_FILE, DATA_FILE + ".bak"); } catch {}
   const tmpFile = `${DATA_FILE}.${crypto.randomUUID()}.tmp`;
   await fs.writeFile(tmpFile, JSON.stringify(data, null, 2), "utf-8");
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 30; i++) {
     try {
       await fs.rename(tmpFile, DATA_FILE);
       break;
     } catch (e: any) {
-      if (i === 9) throw e;
-      await new Promise((r) => setTimeout(r, 50));
+      if (i === 29) {
+        try {
+          await fs.writeFile(DATA_FILE, JSON.stringify(data, null, 2), "utf-8");
+          await fs.unlink(tmpFile).catch(() => {});
+          break;
+        } catch (finalErr) {
+          throw finalErr;
+        }
+      }
+      await new Promise((r) => setTimeout(r, 100));
     }
   }
 }

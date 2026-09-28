@@ -250,20 +250,61 @@ export async function runBotPersistent(
       await submitBtn.click();
       
       await log("wait", "Aguardando login terminar (verificando mudança de URL)...");
-      try {
-        await page.waitForURL((url) => !url.href.includes("login"), { timeout: 15000 });
-      } catch {
-        // Verifica se deu erro de senha antes de assumir captcha
-        const errEl = page.locator("text=/incorretos|Tente novamente/i").first();
-        if (await errEl.isVisible({ timeout: 2000 })) {
-          await page.screenshot({ path: "erro-senha.png" });
-          throw new Error("Credenciais inválidas. Verifique e-mail e senha no painel.");
-        }
+      
+      // ── Trata modal de "Termos de Coleta de Dados" que pode aparecer durante o login ──
+      const acceptTermsIfVisible = async () => {
+        try {
+          const termsCheckbox = page.locator("input[type='checkbox']").filter({ hasText: "" }).first();
+          const termsLabel = page.locator("label:has-text('Li e aceito'), a:has-text('Li e aceito'), span:has-text('Li e aceito')").first();
+          
+          if (await termsLabel.isVisible({ timeout: 3000 })) {
+            await log("info", "📋 Modal de termos detectado! Aceitando termos de coleta de dados...");
+            // Tenta clicar no checkbox primeiro, depois na label como fallback
+            try {
+              await termsCheckbox.click({ timeout: 3000 });
+            } catch {
+              await termsLabel.click({ timeout: 3000 });
+            }
+            await page.waitForTimeout(1000);
+            // Clica em qualquer botão de confirmação que apareça após aceitar
+            const confirmBtn = page.locator("button:has-text('Confirmar'), button:has-text('Continuar'), button:has-text('Prosseguir'), button[type='submit']").first();
+            if (await confirmBtn.isVisible({ timeout: 2000 })) {
+              await confirmBtn.click();
+            }
+            await log("success", "✅ Termos aceitos com sucesso!");
+          }
+        } catch { /* modal não apareceu, tudo bem */ }
+      };
 
-        await log("warn", "URL não mudou após 15s. Verificando captcha de login...");
-        const captchaSolved = await solveCaptcha(page, log);
-        if (captchaSolved) {
-           await page.waitForURL((url) => !url.href.includes("login"), { timeout: 15000 }).catch(() => {});
+      try {
+        // Aguarda URL mudar, mas verifica modal a cada 2s enquanto espera
+        await Promise.race([
+          page.waitForURL((url) => !url.href.includes("login"), { timeout: 15000 }),
+          (async () => {
+            await page.waitForTimeout(2000);
+            await acceptTermsIfVisible();
+            await page.waitForURL((url) => !url.href.includes("login"), { timeout: 13000 });
+          })(),
+        ]);
+      } catch {
+        // Se ainda não saiu do login, tenta aceitar termos e depois captcha
+        await acceptTermsIfVisible();
+        await page.waitForTimeout(1000);
+        
+        if (page.url().includes("login")) {
+          // Verifica se deu erro de senha antes de assumir captcha
+          const errEl = page.locator("text=/incorretos|Tente novamente/i").first();
+          if (await errEl.isVisible({ timeout: 2000 })) {
+            await page.screenshot({ path: "erro-senha.png" });
+            throw new Error("Credenciais inválidas. Verifique e-mail e senha no painel.");
+          }
+
+          await log("warn", "URL não mudou após 15s. Verificando captcha de login...");
+          const captchaSolved = await solveCaptcha(page, log);
+          if (captchaSolved) {
+            await acceptTermsIfVisible();
+            await page.waitForURL((url) => !url.href.includes("login"), { timeout: 15000 }).catch(() => {});
+          }
         }
       }
       
@@ -376,12 +417,18 @@ export async function runBotPersistent(
           const captchaSolved = await solveCaptcha(page, log);
           if (captchaSolved) {
               await page.waitForURL("**/shopping-cart**", { timeout: 15000 }).catch(()=>{});
-              await log("success", `✅ SUCESSO! Ingressos no carrinho após resolver captcha! Setor: "${foundSectorStr}" · ${quantidade}x (Conta: ${email})`);
-              await sendTelegramAlert(`🚨 *INGRESSO GARANTIDO!* 🚨\n\n🎟 **Setor:** ${foundSectorStr}\n🔢 **Quantidade:** ${quantidade}\n👤 **Conta:** ${email}\n⚽ **Evento:** ${eventData.id}`, log);
-              break;
+              if (page.url().includes("shopping-cart")) {
+                  await log("success", `✅ SUCESSO! Ingressos no carrinho após resolver captcha! Setor: "${foundSectorStr}" — ${quantidade}x (Conta: ${email})`);
+                  await sendTelegramAlert(`✅ *INGRESSO GARANTIDO!* ✅\n\n📌 **Setor:** ${foundSectorStr}\n🎟️ **Quantidade:** ${quantidade}\n👤 **Conta:** ${email}\n🆔 **Evento:** ${eventData.id}`, log);
+                  break;
+              } else {
+                  await log("error", "Captcha resolvido, mas o site não redirecionou para o carrinho (ingressos podem ter esgotado).");
+                  await page.screenshot({ path: "erro-carrinho-pos-captcha.png" });
+              }
+          } else {
+              await log("error", "Erro ao ir pro carrinho (Timeout / Falha no Captcha).");
+              await page.screenshot({ path: "erro-carrinho.png" });
           }
-          await log("error", "Erro ao ir pro carrinho (Timeout / Captcha).");
-          await page.screenshot({ path: "erro-carrinho.png" });
           break;
         }
       } else {
