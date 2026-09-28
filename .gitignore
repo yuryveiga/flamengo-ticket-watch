@@ -38,3 +38,17 @@ error-login*
 debug-*.png
 tickets-stats.json
 local-data.json.bak
+
+# Arquivos temporários do banco de dados local
+local-data.json.*.tmp
+local-data.json.old
+local-data-git.json
+local-data-git.json.bak
+
+# Imagens de debug geradas pelo bot
+erro-*.png
+debug-*.png
+
+# Scripts e arquivos temporários de desenvolvimento
+refactor.cjs
+src/bot/playwright.ts.bak
