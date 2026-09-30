@@ -16,9 +16,13 @@ async function setupBrowser(email: string, headless: boolean) {
   const userDataDir = path.join(process.cwd(), `chrome-bot-profile-${safeEmail}`);
   if (!fs.existsSync(userDataDir)) fs.mkdirSync(userDataDir, { recursive: true });
 
+  const videoDir = path.join(process.cwd(), "videos-tmp");
+  if (!fs.existsSync(videoDir)) fs.mkdirSync(videoDir, { recursive: true });
+
   const context = await chromium.launchPersistentContext(userDataDir, {
     headless,
-    viewport: { width: 1280, height: 720 },
+    viewport: { width: 1920, height: 1080 },
+    recordVideo: { dir: videoDir, size: { width: 1920, height: 1080 } },
     args: [
       "--disable-blink-features=AutomationControlled",
       "--no-sandbox",
@@ -34,7 +38,7 @@ async function setupBrowser(email: string, headless: boolean) {
   
   await context.clearCookies({ domain: "ingressos.flamengo.com.br" });
   
-  return { context, page };
+  return { context, page, videoDir };
 }
 
 async function sendTelegramAlert(message: string, log: LogFn) {
@@ -221,7 +225,31 @@ export async function runBotPersistent(
 
   await log("info", `🚀 Iniciando bot SIMPLIFICADO para ${email}`);
 
-  const { context, page } = await setupBrowser(email, headless);
+  const { context, page, videoDir } = await setupBrowser(email, headless);
+
+  // Salva o vídeo quando ingresso for encontrado; descarta nos demais casos
+  const saveVideo = async (label: string) => {
+    try {
+      const videoPath = await page.video()?.path();
+      if (!videoPath) return;
+      await context.close(); // finaliza a gravação
+      const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+      const dest = path.join(process.cwd(), `ingresso-video-${label}-${timestamp}.webm`);
+      fs.renameSync(videoPath, dest);
+      await log("success", `🎥 Vídeo salvo: ${path.basename(dest)}`);
+    } catch (e: any) {
+      await log("warn", `🎥 Não foi possível salvar o vídeo: ${e.message}`);
+    }
+  };
+
+  const discardVideos = () => {
+    try {
+      const files = fs.readdirSync(videoDir);
+      for (const f of files) fs.unlinkSync(path.join(videoDir, f));
+    } catch {}
+  };
+
+  let ticketFoundSector = ""; // preenchido assim que encontrar setor disponível
 
   try {
     // 1. FAÇA LOGIN
@@ -367,9 +395,11 @@ export async function runBotPersistent(
 
           if (!isSold) {
             await log("success", `Setor "${setor}" DISPONÍVEL! Clicando...`);
+            await page.screenshot({ path: `ingresso-01-setor-encontrado-${setor.replace(/\s+/g,'-')}.png` });
             await sectorEl.click();
             foundSector = true;
             foundSectorStr = setor;
+            ticketFoundSector = setor; // marca que encontrou — vídeo será salvo
             await page.waitForTimeout(1000);
             break;
           } else {
@@ -401,6 +431,7 @@ export async function runBotPersistent(
              await page.waitForTimeout(1000);
            }
            
+           await page.screenshot({ path: `ingresso-02-antes-comprar.png` });
            await buyBtn.click({ force: true });
         }
 
@@ -408,9 +439,10 @@ export async function runBotPersistent(
         await log("wait", "6. Aguardando abrir o carrinho...");
         try {
           await page.waitForURL("**/shopping-cart**", { timeout: 15000 });
+          await page.screenshot({ path: `ingresso-03-carrinho-sucesso.png` });
           await log("success", `✅ SUCESSO ABSOLUTO! Ingressos no carrinho! Setor: "${foundSectorStr}" · ${quantidade}x (Conta: ${email})`);
           await sendTelegramAlert(`🚨 *INGRESSO GARANTIDO!* 🚨\n\n🎟 **Setor:** ${foundSectorStr}\n🔢 **Quantidade:** ${quantidade}\n👤 **Conta:** ${email}\n⚽ **Evento:** ${eventData.id}`, log);
-          await page.waitForTimeout(5000);
+          await page.waitForTimeout(3000);
           break;
         } catch {
           await log("error", "Demorou pra ir pro carrinho, checando se tem captcha...");
@@ -420,6 +452,7 @@ export async function runBotPersistent(
               if (page.url().includes("shopping-cart")) {
                   await log("success", `✅ SUCESSO! Ingressos no carrinho após resolver captcha! Setor: "${foundSectorStr}" — ${quantidade}x (Conta: ${email})`);
                   await sendTelegramAlert(`✅ *INGRESSO GARANTIDO!* ✅\n\n📌 **Setor:** ${foundSectorStr}\n🎟️ **Quantidade:** ${quantidade}\n👤 **Conta:** ${email}\n🆔 **Evento:** ${eventData.id}`, log);
+                  await page.waitForTimeout(3000);
                   break;
               } else {
                   await log("error", "Captcha resolvido, mas o site não redirecionou para o carrinho (ingressos podem ter esgotado).");
@@ -447,9 +480,10 @@ export async function runBotPersistent(
   } catch (error: any) {
     await log("error", `Erro: ${error.message}`);
   } finally {
-    if (!stopSignal.stop) {
-       await context.close().catch(()=>{});
-    }
+    const videoLabel = ticketFoundSector
+      ? ticketFoundSector.replace(/\s+/g, "-")
+      : `sessao-${new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19)}`;
+    await saveVideo(videoLabel);
   }
 }
 

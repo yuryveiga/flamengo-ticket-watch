@@ -48,7 +48,12 @@ local-data-git.json.bak
 # Imagens de debug geradas pelo bot
 erro-*.png
 debug-*.png
+ingresso-*.png
 
 # Scripts e arquivos temporários de desenvolvimento
 refactor.cjs
 src/bot/playwright.ts.bak
+
+# Vídeos gerados pelo bot
+videos-tmp/
+ingresso-video-*.webm

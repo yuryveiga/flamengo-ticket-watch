@@ -184,7 +184,7 @@ async function runEventLoop(eventId: string) {
 
       // ── Melhoria 8: Duração Máxima (Absoluta) ──────────────────────────────────
       if (conf.timer_duration_minutes) {
-        const freshDb = await localDb.readRaw();
+        const freshDb = await localDb.read();
         const evFresh = freshDb.events.find((e) => e.id === eventId);
         if (evFresh?.stats?.started_at) {
           const runningMs = Date.now() - evFresh.stats.started_at;
