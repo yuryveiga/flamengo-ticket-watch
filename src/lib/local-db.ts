@@ -17,6 +17,7 @@ export type EventConfig = {
   aceitar_qualquer: boolean;
   headless: boolean;
   loop_continuo: boolean;
+  login_type?: "normal" | "fla_id";
 
   // Timers e Agendamento
   timer_duration_minutes?: number;
@@ -45,6 +46,7 @@ export type AccountRecord = {
   label: string;
   email: string;
   senha_enc: string;
+  login_type?: "normal" | "fla_id";
   created_at: string;
 };
 

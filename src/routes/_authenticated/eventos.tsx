@@ -222,6 +222,7 @@ function EventWizard({ event, onCreated, onCancel }: { event?: any, onCreated: (
             account_id: data.account_id,
             email: data.account_id === "ALL" ? "TODAS" : (selectedAccount?.email ?? ""),
             senha: "",
+            login_type: selectedAccount?.login_type ?? "normal",
             setores: data.setores,
             quantidade: data.quantidade,
             intervalo: data.intervalo,
@@ -325,7 +326,9 @@ function EventWizard({ event, onCreated, onCancel }: { event?: any, onCreated: (
                 <option value="">— selecionar conta —</option>
                 <option value="ALL">🌟 TODAS (rodar em sequência)</option>
                 {accounts.map((a) => (
-                  <option key={a.id} value={a.id}>{a.label} · {a.email}</option>
+                  <option key={a.id} value={a.id}>
+                    {a.label} · {a.email} {a.login_type === "fla_id" ? "(🔴 FLA ID)" : ""}
+                  </option>
                 ))}
               </select>
             )}

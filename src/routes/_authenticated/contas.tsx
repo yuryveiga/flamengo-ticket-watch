@@ -19,7 +19,7 @@ export const Route = createFileRoute("/_authenticated/contas")({
   component: ContasPage,
 });
 
-type Account = { id: string; label: string; email: string; created_at: string };
+type Account = { id: string; label: string; email: string; login_type?: "normal" | "fla_id"; created_at: string };
 
 // ─── Modal de criação / edição ────────────────────────────────────────────────
 function AccountModal({ account, onClose }: { account?: Account; onClose: () => void }) {
@@ -27,13 +27,14 @@ function AccountModal({ account, onClose }: { account?: Account; onClose: () => 
   const [label, setLabel] = useState(account?.label ?? "");
   const [email, setEmail] = useState(account?.email ?? "");
   const [senha, setSenha] = useState("");
+  const [loginType, setLoginType] = useState<"normal" | "fla_id">(account?.login_type ?? "normal");
   const [show, setShow] = useState(false);
 
   const createAccountFn = useServerFn(createAccount);
   const updateAccountFn = useServerFn(updateAccount);
 
   const create = useMutation({
-    mutationFn: (d: { label: string; email: string; senha: string }) =>
+    mutationFn: (d: { label: string; email: string; senha: string; login_type: "normal" | "fla_id" }) =>
       createAccountFn({ data: d }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["accounts"] });
@@ -44,7 +45,7 @@ function AccountModal({ account, onClose }: { account?: Account; onClose: () => 
   });
 
   const update = useMutation({
-    mutationFn: (d: { id: string; label: string; email: string; senha: string }) =>
+    mutationFn: (d: { id: string; label: string; email: string; senha: string; login_type: "normal" | "fla_id" }) =>
       updateAccountFn({ data: d }),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["accounts"] });
@@ -65,9 +66,9 @@ function AccountModal({ account, onClose }: { account?: Account; onClose: () => 
       return;
     }
     if (isEditing) {
-      update.mutate({ id: account!.id, label, email, senha });
+      update.mutate({ id: account!.id, label, email, senha, login_type: loginType });
     } else {
-      create.mutate({ label, email, senha });
+      create.mutate({ label, email, senha, login_type: loginType });
     }
   };
 
@@ -83,6 +84,39 @@ function AccountModal({ account, onClose }: { account?: Account; onClose: () => 
 
         <form onSubmit={submit} className="space-y-3">
           <div>
+            <label className="text-xs text-muted-foreground font-medium">Tipo de Conta</label>
+            <div className="mt-1 grid grid-cols-2 gap-2 p-1 bg-background rounded-lg border border-border">
+              <button
+                type="button"
+                onClick={() => setLoginType("normal")}
+                className={`py-2 text-xs font-bold rounded-md transition-all ${
+                  loginType === "normal"
+                    ? "bg-primary text-primary-foreground shadow"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                1 - Conta Normal
+              </button>
+              <button
+                type="button"
+                onClick={() => setLoginType("fla_id")}
+                className={`py-2 text-xs font-bold rounded-md transition-all flex items-center justify-center gap-1.5 ${
+                  loginType === "fla_id"
+                    ? "bg-red-600 text-white shadow"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <span>🔴</span> 2 - FLA ID
+              </button>
+            </div>
+            <p className="text-[11px] text-muted-foreground mt-1">
+              {loginType === "fla_id" 
+                ? "Login através do botão 'Entrar com Fla-ID'."
+                : "Login direto com e-mail/CPF e senha."}
+            </p>
+          </div>
+
+          <div>
             <label className="text-xs text-muted-foreground font-medium">Apelido</label>
             <input
               required
@@ -93,13 +127,15 @@ function AccountModal({ account, onClose }: { account?: Account; onClose: () => 
             />
           </div>
           <div>
-            <label className="text-xs text-muted-foreground font-medium">E-mail FutebolCard</label>
+            <label className="text-xs text-muted-foreground font-medium">
+              {loginType === "fla_id" ? "E-mail ou CPF (Fla-ID)" : "E-mail FutebolCard"}
+            </label>
             <input
               required
-              type="email"
+              type={loginType === "fla_id" ? "text" : "email"}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="email@exemplo.com"
+              placeholder={loginType === "fla_id" ? "E-mail ou CPF do Fla-ID" : "email@exemplo.com"}
               className="mt-1 w-full px-3 py-2 rounded-md bg-background border border-border text-sm"
             />
           </div>
@@ -276,7 +312,16 @@ function ContasPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold truncate">{acc.label}</p>
-                <p className="text-xs text-muted-foreground truncate">{acc.email}</p>
+                <div className="flex items-center gap-2 mt-0.5">
+                  <p className="text-xs text-muted-foreground truncate">{acc.email}</p>
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                    acc.login_type === "fla_id"
+                      ? "bg-red-500/15 text-red-500 border border-red-500/30"
+                      : "bg-muted text-muted-foreground"
+                  }`}>
+                    {acc.login_type === "fla_id" ? "🔴 FLA ID" : "Conta Normal"}
+                  </span>
+                </div>
               </div>
               <div className="flex items-center gap-1 shrink-0">
                 <button

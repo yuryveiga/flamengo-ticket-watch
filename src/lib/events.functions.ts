@@ -16,6 +16,7 @@ const configSchema = z.object({
   aceitar_qualquer: z.boolean().default(false),
   headless: z.boolean().default(true),
   loop_continuo: z.boolean().default(false),
+  login_type: z.enum(["normal", "fla_id"]).optional(),
   timer_duration_minutes: z.number().int().min(0).optional(),
   timer_start_time: z.string().optional(),
   timer_end_time: z.string().optional(),
@@ -146,10 +147,17 @@ export const updateConfig = createServerFn({ method: "POST" })
       ? await encryptText(data.config.senha)
       : ((prev.senha_enc as string | undefined) ?? "");
 
+    let loginType = data.config.login_type;
+    if (!loginType && data.config.account_id && data.config.account_id !== "ALL") {
+      const acc = db.accounts.find(a => a.id === data.config.account_id);
+      if (acc?.login_type) loginType = acc.login_type;
+    }
+
     db.events[evIndex].config = {
       account_id: data.config.account_id,
       email: data.config.email,
       senha_enc: senhaEnc,
+      login_type: loginType ?? "normal",
       setores: data.config.setores,
       quantidade: data.config.quantidade as 1 | 2 | 3,
       intervalo: data.config.intervalo,
@@ -241,6 +249,7 @@ function sanitizeConfig(c: Record<string, unknown> | Partial<any>) {
     aceitar_qualquer: Boolean(c.aceitar_qualquer),
     headless: c.headless !== false,
     loop_continuo: Boolean(c.loop_continuo),
+    login_type: c.login_type as "normal" | "fla_id" | undefined,
     timer_duration_minutes: c.timer_duration_minutes as number | undefined,
     timer_start_time: c.timer_start_time as string | undefined,
     timer_end_time: c.timer_end_time as string | undefined,

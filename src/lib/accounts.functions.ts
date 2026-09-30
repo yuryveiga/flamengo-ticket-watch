@@ -24,6 +24,7 @@ export const createAccount = createServerFn({ method: "POST" })
         label: z.string().min(1).max(80),
         email: z.string().email().max(255),
         senha: z.string().min(6).max(255),
+        login_type: z.enum(["normal", "fla_id"]).default("normal"),
       })
       .parse(d),
   )
@@ -39,6 +40,7 @@ export const createAccount = createServerFn({ method: "POST" })
       label: data.label,
       email: data.email,
       senha_enc,
+      login_type: data.login_type,
       created_at: new Date().toISOString()
     };
     
@@ -49,6 +51,7 @@ export const createAccount = createServerFn({ method: "POST" })
       id: newAccount.id,
       label: newAccount.label,
       email: newAccount.email,
+      login_type: newAccount.login_type,
       created_at: newAccount.created_at
     };
   });
@@ -63,6 +66,7 @@ export const updateAccount = createServerFn({ method: "POST" })
         label: z.string().min(1).max(80),
         email: z.string().email().max(255),
         senha: z.string().max(255).optional().default(""),
+        login_type: z.enum(["normal", "fla_id"]).optional(),
       })
       .parse(d),
   )
@@ -73,6 +77,9 @@ export const updateAccount = createServerFn({ method: "POST" })
     
     db.accounts[accIndex].label = data.label;
     db.accounts[accIndex].email = data.email;
+    if (data.login_type) {
+      db.accounts[accIndex].login_type = data.login_type;
+    }
     if (data.senha) {
       db.accounts[accIndex].senha_enc = await encryptText(data.senha);
     }

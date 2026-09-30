@@ -47,12 +47,13 @@ async function pushLog(eventId: string, level: LogLevel, message: string) {
 
 // ─── Resolve account credentials for an event ────────────────────────────────
 
-async function resolveCredentials(ev: EventRecord): Promise<{ email: string; senha: string }> {
+async function resolveCredentials(ev: EventRecord): Promise<{ email: string; senha: string; login_type?: "normal" | "fla_id" }> {
   const conf = ev.config as any;
   const db = await localDb.read();
 
   let email: string = conf?.email ?? "";
   let senhaEnc: string = conf?.senha_enc ?? "";
+  let login_type: "normal" | "fla_id" | undefined = conf?.login_type;
 
   // If account_id is set, fetch the account's encrypted password from the DB
   if (conf?.account_id) {
@@ -60,11 +61,12 @@ async function resolveCredentials(ev: EventRecord): Promise<{ email: string; sen
     if (account) {
       email = account.email;
       senhaEnc = account.senha_enc;
+      if (account.login_type) login_type = account.login_type;
     }
   }
 
   const senha = await decryptText(senhaEnc).catch(() => "");
-  return { email, senha };
+  return { email, senha, login_type };
 }
 
 // ─── Bot loop for a single event ─────────────────────────────────────────────
@@ -123,7 +125,7 @@ async function runEventLoop(eventId: string) {
         const acc = dbFresh.accounts.find((a) => a.id === conf.account_id);
         if (acc) accountsToRun = [acc];
       } else {
-        accountsToRun = [{ email: conf.email, senha_enc: conf.senha_enc }];
+        accountsToRun = [{ email: conf.email, senha_enc: conf.senha_enc, login_type: conf.login_type }];
       }
 
       if (conf.loop_continuo) {
@@ -249,6 +251,7 @@ async function runEventLoop(eventId: string) {
                   ...conf,
                   email: acc.email,
                   senha_enc: acc.senha_enc,
+                  login_type: acc.login_type || conf?.login_type || "normal",
                   headless: conf?.headless !== false,
                 },
               },

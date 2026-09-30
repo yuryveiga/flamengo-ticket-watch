@@ -215,15 +215,16 @@ export async function runBotPersistent(
   log: LogFn,
   stopSignal: { stop: boolean }
 ) {
-  const config = eventData.config;
+  const config = eventData.config || {};
   const email = config.email;
+  const loginType = config.login_type || "normal";
   const login_url = eventData.login_url;
   const url = toSectorUrl(eventData.url);
   const setores = config.setores || [];
   const quantidade = config.quantidade || 1;
   const headless = config.headless !== false;
 
-  await log("info", `🚀 Iniciando bot SIMPLIFICADO para ${email}`);
+  await log("info", `🚀 Iniciando bot para ${email} (${loginType === "fla_id" ? "🔴 FLA ID" : "Conta Normal"})`);
 
   const { context, page, videoDir } = await setupBrowser(email, headless);
 
@@ -250,6 +251,7 @@ export async function runBotPersistent(
   };
 
   let ticketFoundSector = ""; // preenchido assim que encontrar setor disponível
+  let purchaseSuccess = false;
 
   try {
     // 1. FAÇA LOGIN
@@ -266,84 +268,140 @@ export async function runBotPersistent(
     if (await logoutLink.isVisible().catch(() => false)) {
       await log("success", "Sessão já estava ativa (botão 'Sair' visível).");
     } else {
-      await log("api", "Preenchendo credenciais...");
-      const emailField = page.locator("input[type='email'], input[name='email'], input#Email, input[placeholder*='e-mail' i], input[placeholder*='cpf' i]").first();
-      await emailField.waitFor({ state: "visible", timeout: 10000 });
+      if (loginType === "fla_id") {
+        await log("api", "🔴 Modo FLA ID: Clicando em 'Entrar com Fla-ID'...");
+        
+        await page.waitForTimeout(1000);
+
+        const flaSelectors = [
+          "a.fla-id-btn",
+          "a[href*='/login/fla-id']",
+          "a[href*='fla-id']",
+          ".fla-id-btn",
+          "a:has-text('Entrar com')",
+          "button:has-text('Entrar com')",
+          "[aria-label='Entrar']",
+        ];
+
+        let clickedFla = false;
+        for (const sel of flaSelectors) {
+          try {
+            const el = page.locator(sel).first();
+            await el.waitFor({ state: "visible", timeout: 3000 });
+            await el.scrollIntoViewIfNeeded().catch(() => {});
+            await el.click({ force: true });
+            await log("info", `✅ Botão Fla-ID (${sel}) clicado com sucesso!`);
+            clickedFla = true;
+            await page.waitForTimeout(2500);
+            break;
+          } catch {
+            // tenta o próximo seletor
+          }
+        }
+
+        if (!clickedFla) {
+          await log("warn", "⚠️ Botão não respondeu ao clique, navegando diretamente para a URL do Fla-ID...");
+          await page.goto("https://ingressos.flamengo.com.br/login/fla-id", { waitUntil: "domcontentloaded", timeout: 30000 });
+          await page.waitForTimeout(2000);
+        }
+      }
+
+      await log("api", `Preenchendo credenciais (${loginType === "fla_id" ? "FLA ID" : "Conta Normal"})...`);
+      const emailField = page.locator("input[type='email'], input[name='email'], input#Email, input[placeholder*='e-mail' i], input[placeholder*='cpf' i], input[name='username'], input[placeholder*='usuário' i], input[type='text']:visible").first();
+      await emailField.waitFor({ state: "visible", timeout: 15000 });
       await emailField.fill(email);
       
-      const pwField = page.locator("input[type='password'], input[name='password'], input[name='senha'], input#Password").first();
+      const pwField = page.locator("input[type='password'], input[name='password'], input[name='senha'], input#Password, input[type='password']:visible").first();
+      await pwField.waitFor({ state: "visible", timeout: 10000 });
       await pwField.fill(decryptedSenha);
       
-      const submitBtn = page.locator("button[type='submit'], button:has-text('Entrar'), button:has-text('Login')").first();
+      const submitBtn = page.locator("button[type='submit'], button:has-text('Entrar'), button:has-text('Login'), button:has-text('Acessar'), input[type='submit']").first();
       await submitBtn.click();
       
-      await log("wait", "Aguardando login terminar (verificando mudança de URL)...");
-      
-      // ── Trata modal de "Termos de Coleta de Dados" que pode aparecer durante o login ──
-      const acceptTermsIfVisible = async () => {
+      if (loginType === "fla_id") {
+        await log("wait", "Aguardando autenticação FLA ID concluir e redirecionar...");
         try {
-          const termsCheckbox = page.locator("input[type='checkbox']").filter({ hasText: "" }).first();
-          const termsLabel = page.locator("label:has-text('Li e aceito'), a:has-text('Li e aceito'), span:has-text('Li e aceito')").first();
-          
-          if (await termsLabel.isVisible({ timeout: 3000 })) {
-            await log("info", "📋 Modal de termos detectado! Aceitando termos de coleta de dados...");
-            // Tenta clicar no checkbox primeiro, depois na label como fallback
-            try {
-              await termsCheckbox.click({ timeout: 3000 });
-            } catch {
-              await termsLabel.click({ timeout: 3000 });
-            }
-            await page.waitForTimeout(1000);
-            // Clica em qualquer botão de confirmação que apareça após aceitar
-            const confirmBtn = page.locator("button:has-text('Confirmar'), button:has-text('Continuar'), button:has-text('Prosseguir'), button[type='submit']").first();
-            if (await confirmBtn.isVisible({ timeout: 2000 })) {
-              await confirmBtn.click();
-            }
-            await log("success", "✅ Termos aceitos com sucesso!");
+          await page.waitForURL((url) => !url.href.includes("flaid") && !url.pathname.endsWith("/login"), { timeout: 20000 });
+        } catch {
+          const errEl = page.locator("text=/incorretos|inválid|Tente novamente/i").first();
+          if (await errEl.isVisible({ timeout: 2000 }).catch(() => false)) {
+            await page.screenshot({ path: "erro-senha-flaid.png" });
+            throw new Error("Credenciais inválidas no FLA ID. Verifique usuário e senha no painel.");
           }
-        } catch { /* modal não apareceu, tudo bem */ }
-      };
-
-      try {
-        // Aguarda URL mudar, mas verifica modal a cada 2s enquanto espera
-        await Promise.race([
-          page.waitForURL((url) => !url.href.includes("login"), { timeout: 15000 }),
-          (async () => {
-            await page.waitForTimeout(2000);
-            await acceptTermsIfVisible();
-            await page.waitForURL((url) => !url.href.includes("login"), { timeout: 13000 });
-          })(),
-        ]);
-      } catch {
-        // Se ainda não saiu do login, tenta aceitar termos e depois captcha
-        await acceptTermsIfVisible();
-        await page.waitForTimeout(1000);
-        
-        if (page.url().includes("login")) {
-          // Verifica se deu erro de senha antes de assumir captcha
-          const errEl = page.locator("text=/incorretos|Tente novamente/i").first();
-          if (await errEl.isVisible({ timeout: 2000 })) {
-            await page.screenshot({ path: "erro-senha.png" });
-            throw new Error("Credenciais inválidas. Verifique e-mail e senha no painel.");
-          }
-
-          await log("warn", "URL não mudou após 15s. Verificando captcha de login...");
+          await log("warn", "URL não mudou após 20s no FLA ID. Verificando captcha...");
           const captchaSolved = await solveCaptcha(page, log);
           if (captchaSolved) {
-            await acceptTermsIfVisible();
-            await page.waitForURL((url) => !url.href.includes("login"), { timeout: 15000 }).catch(() => {});
+            await page.waitForURL((url) => !url.href.includes("flaid") && !url.pathname.endsWith("/login"), { timeout: 15000 }).catch(() => {});
+          }
+        }
+      } else {
+        await log("wait", "Aguardando login terminar (verificando mudança de URL)...");
+        
+        // ── Trata modal de "Termos de Coleta de Dados" que pode aparecer durante o login convencional ──
+        const acceptTermsIfVisible = async () => {
+          try {
+            const termsCheckbox = page.locator("input[type='checkbox']").filter({ hasText: "" }).first();
+            const termsLabel = page.locator("label:has-text('Li e aceito'), a:has-text('Li e aceito'), span:has-text('Li e aceito')").first();
+            
+            if (await termsLabel.isVisible({ timeout: 3000 })) {
+              await log("info", "📋 Modal de termos detectado! Aceitando termos de coleta de dados...");
+              try {
+                await termsCheckbox.click({ timeout: 3000 });
+              } catch {
+                await termsLabel.click({ timeout: 3000 });
+              }
+              await page.waitForTimeout(1000);
+              const confirmBtn = page.locator("button:has-text('Confirmar'), button:has-text('Continuar'), button:has-text('Prosseguir'), button[type='submit']").first();
+              if (await confirmBtn.isVisible({ timeout: 2000 })) {
+                await confirmBtn.click();
+              }
+              await log("success", "✅ Termos aceitos com sucesso!");
+            }
+          } catch { /* modal não apareceu, tudo bem */ }
+        };
+
+        try {
+          await Promise.race([
+            page.waitForURL((url) => !url.href.includes("login"), { timeout: 15000 }),
+            (async () => {
+              await page.waitForTimeout(2000);
+              await acceptTermsIfVisible();
+              await page.waitForURL((url) => !url.href.includes("login"), { timeout: 13000 });
+            })(),
+          ]);
+        } catch {
+          await acceptTermsIfVisible();
+          await page.waitForTimeout(1000);
+          
+          if (page.url().includes("login")) {
+            const errEl = page.locator("text=/incorretos|Tente novamente/i").first();
+            if (await errEl.isVisible({ timeout: 2000 })) {
+              await page.screenshot({ path: "erro-senha.png" });
+              throw new Error("Credenciais inválidas. Verifique e-mail e senha no painel.");
+            }
+
+            await log("warn", "URL não mudou após 15s. Verificando captcha de login...");
+            const captchaSolved = await solveCaptcha(page, log);
+            if (captchaSolved) {
+              await acceptTermsIfVisible();
+              await page.waitForURL((url) => !url.href.includes("login"), { timeout: 15000 }).catch(() => {});
+            }
           }
         }
       }
       
       // Checagem final de segurança para garantir que saiu do login
-      if (page.url().includes("login")) {
+      const stillInLogin = loginType === "fla_id"
+        ? page.url().includes("flaid") || (page.url().includes("login") && !page.url().includes("buy") && !page.url().includes("event"))
+        : page.url().includes("login");
+
+      if (stillInLogin) {
          throw new Error("Falha no login: O site não aceitou a entrada ou bloqueou a requisição silenciosamente.");
       }
       
-      await page.waitForTimeout(3000);
+      await page.waitForTimeout(2000);
       await page.screenshot({ path: "debug-apos-login.png" });
-      await log("success", "Login efetuado com sucesso (ou bypass)!");
+      await log("success", `Login efetuado com sucesso (${loginType === "fla_id" ? "FLA ID" : "Conta Normal"})!`);
     }
 
     // ── Loop de tentativa ──
@@ -358,10 +416,23 @@ export async function runBotPersistent(
       if (page.url().includes("/login")) {
          await log("warn", `Redirecionado para o login. (URL atual: ${page.url()}) Refazendo autenticação...`);
          await page.goto(login_url);
-         const btn = page.locator("button[type='submit']").first();
-         if (await btn.isVisible()) {
-             await page.locator("input[type='email'], input[name='email'], input#Email, input[placeholder*='e-mail' i], input[placeholder*='cpf' i]").first().fill(email);
-             await page.locator("input[type='password'], input[name='password'], input[name='senha'], input#Password").first().fill(decryptedSenha);
+         if (loginType === "fla_id") {
+           await page.waitForTimeout(1500);
+           const flaSelectors = ["a.fla-id-btn", "a[href*='/login/fla-id']", "a[href*='fla-id']", "a:has-text('Entrar com')"];
+           for (const sel of flaSelectors) {
+             try {
+               const el = page.locator(sel).first();
+               await el.waitFor({ state: "visible", timeout: 2000 });
+               await el.click({ force: true });
+               await page.waitForTimeout(2000);
+               break;
+             } catch {}
+           }
+         }
+         const btn = page.locator("button[type='submit'], button:has-text('Entrar'), button:has-text('Login'), button:has-text('Acessar')").first();
+         if (await btn.isVisible({ timeout: 5000 }).catch(() => false)) {
+             await page.locator("input[type='email'], input[name='email'], input#Email, input[placeholder*='e-mail' i], input[placeholder*='cpf' i], input[name='username'], input[placeholder*='usuário' i], input[type='text']:visible").first().fill(email);
+             await page.locator("input[type='password'], input[name='password'], input[name='senha'], input#Password, input[type='password']:visible").first().fill(decryptedSenha);
              await btn.click();
              try {
                 await page.waitForURL((url) => !url.href.includes("login"), { timeout: 15000 });
@@ -457,6 +528,7 @@ export async function runBotPersistent(
           await log("success", `✅ SUCESSO! Ingressos no carrinho! Setor: "${foundSectorStr}" · ${quantidade}x (Conta: ${email})`);
           await sendTelegramAlert(`🚨 *INGRESSO GARANTIDO!* 🚨\n\n🎟 **Setor:** ${foundSectorStr}\n🔢 **Quantidade:** ${quantidade}\n👤 **Conta:** ${email}\n⚽ **Evento:** ${eventData.id}`, log);
           await page.waitForTimeout(3000);
+          purchaseSuccess = true;
           break;
         }
 
@@ -484,6 +556,8 @@ export async function runBotPersistent(
       : `sessao-${new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19)}`;
     await saveVideo(videoLabel);
   }
+
+  return purchaseSuccess;
 }
 
 export async function runTestLogin() {}
