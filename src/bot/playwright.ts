@@ -435,35 +435,34 @@ export async function runBotPersistent(
            await buyBtn.click({ force: true });
         }
 
-        // 6. AGUARDAR ABRIR CARRINHO
-        await log("wait", "6. Aguardando abrir o carrinho...");
-        try {
-          await page.waitForURL("**/shopping-cart**", { timeout: 15000 });
+        // 6. RESOLVER CAPTCHA IMEDIATAMENTE E ENTÃO AGUARDAR CARRINHO
+        await log("wait", "6. Resolvendo captcha imediatamente após Comprar...");
+        
+        // Aguarda brevemente para o site processar o clique e exibir o captcha
+        await page.waitForTimeout(1000);
+        
+        // Resolve captcha direto — sem esperar pelo carrinho primeiro
+        const captchaResolvido = await solveCaptcha(page, log);
+        
+        if (captchaResolvido) {
+          // Captcha resolvido → agora aguarda o redirect para o carrinho
+          await page.waitForURL("**/shopping-cart**", { timeout: 20000 }).catch(() => {});
+        } else {
+          // Sem captcha visível → aguarda redirect normal
+          await page.waitForURL("**/shopping-cart**", { timeout: 15000 }).catch(() => {});
+        }
+
+        if (page.url().includes("shopping-cart")) {
           await page.screenshot({ path: `ingresso-03-carrinho-sucesso.png` });
-          await log("success", `✅ SUCESSO ABSOLUTO! Ingressos no carrinho! Setor: "${foundSectorStr}" · ${quantidade}x (Conta: ${email})`);
+          await log("success", `✅ SUCESSO! Ingressos no carrinho! Setor: "${foundSectorStr}" · ${quantidade}x (Conta: ${email})`);
           await sendTelegramAlert(`🚨 *INGRESSO GARANTIDO!* 🚨\n\n🎟 **Setor:** ${foundSectorStr}\n🔢 **Quantidade:** ${quantidade}\n👤 **Conta:** ${email}\n⚽ **Evento:** ${eventData.id}`, log);
           await page.waitForTimeout(3000);
           break;
-        } catch {
-          await log("error", "Demorou pra ir pro carrinho, checando se tem captcha...");
-          const captchaSolved = await solveCaptcha(page, log);
-          if (captchaSolved) {
-              await page.waitForURL("**/shopping-cart**", { timeout: 15000 }).catch(()=>{});
-              if (page.url().includes("shopping-cart")) {
-                  await log("success", `✅ SUCESSO! Ingressos no carrinho após resolver captcha! Setor: "${foundSectorStr}" — ${quantidade}x (Conta: ${email})`);
-                  await sendTelegramAlert(`✅ *INGRESSO GARANTIDO!* ✅\n\n📌 **Setor:** ${foundSectorStr}\n🎟️ **Quantidade:** ${quantidade}\n👤 **Conta:** ${email}\n🆔 **Evento:** ${eventData.id}`, log);
-                  await page.waitForTimeout(3000);
-                  break;
-              } else {
-                  await log("error", "Captcha resolvido, mas o site não redirecionou para o carrinho (ingressos podem ter esgotado).");
-                  await page.screenshot({ path: "erro-carrinho-pos-captcha.png" });
-              }
-          } else {
-              await log("error", "Erro ao ir pro carrinho (Timeout / Falha no Captcha).");
-              await page.screenshot({ path: "erro-carrinho.png" });
-          }
-          break;
         }
+
+        await log("error", "Não redirecionou para o carrinho após captcha (ingressos podem ter esgotado).");
+        await page.screenshot({ path: "erro-carrinho-pos-captcha.png" });
+        break;
       } else {
         const waitTime = config.intervalo || 10;
         
