@@ -9,7 +9,7 @@
       "status": "monitorando",
       "config": {
         "account_id": "5318fdf6-3ddf-45fc-8714-6ddb411c0018",
-        "email": "glenbotaxflu@outlook.com",
+        "email": "leonardofla261@outlook.com",
         "senha_enc": "",
         "login_type": "fla_id",
         "setores": [
@@ -23,13 +23,15 @@
         "aceitar_qualquer": false,
         "headless": true,
         "loop_continuo": true,
+        "timer_start_time": "07:00",
+        "timer_end_time": "03:30",
         "timer_loop_run_minutes": 30,
         "timer_loop_pause_minutes": 5
       },
       "created_at": "2026-09-28T20:28:58.353Z",
       "expires_at": null,
       "stats": {
-        "started_at": 1790810785813,
+        "started_at": 1790855739601,
         "attempts": 0,
         "anomalous_responses": 0
       }
@@ -49,8 +51,8 @@
       "id": "5318fdf6-3ddf-45fc-8714-6ddb411c0018",
       "user_id": "local-user-id",
       "label": "Fla id1",
-      "email": "glenbotaxflu@outlook.com",
-      "senha_enc": "v1:sCAcmcEO/6r+CsGT:qq5rGZUhXpsVGktnyUQKsroEmxFxykTL",
+      "email": "leonardofla261@outlook.com",
+      "senha_enc": "v1:6IrmJC4di4Hq3oJS:uUbcCBcIYhLgaxnuULB+REuVOJPuXzZg",
       "login_type": "fla_id",
       "created_at": "2026-09-30T23:12:50.665Z"
     }
@@ -943,316 +945,1440 @@
       "command": "start",
       "created_at": "2026-09-30T23:26:24.172Z",
       "processed_at": "2026-09-30T23:26:25.764Z"
+    },
+    {
+      "id": "47d97d10-ba77-47f2-80ca-a4790cc123f2",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-09-30T23:34:54.681Z",
+      "processed_at": "2026-09-30T23:34:56.772Z"
+    },
+    {
+      "id": "24f45202-9b58-4f13-9337-6986d6853a23",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-09-30T23:35:16.005Z",
+      "processed_at": "2026-09-30T23:35:17.805Z"
+    },
+    {
+      "id": "db06ebff-609a-42cd-a1af-8fd1bcdc7e08",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "user_id": "local-user-id",
+      "command": "stop",
+      "created_at": "2026-10-01T06:00:52.821Z",
+      "processed_at": "2026-10-01T06:00:55.653Z"
+    },
+    {
+      "id": "13eeb426-49e9-4389-8114-f65fb45560ba",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "user_id": "local-user-id",
+      "command": "start",
+      "created_at": "2026-10-01T06:01:14.480Z",
+      "processed_at": "2026-10-01T06:01:16.713Z"
     }
   ],
   "logs": [
     {
-      "id": "c713be23-8dfc-4254-8b5e-9b6a4d37c3ff",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "info",
-      "message": "🤖 Bot iniciado. Preparando sessão...",
-      "ts": "2026-09-30T23:26:25.795Z"
-    },
-    {
-      "id": "3cbdff13-9d6b-4895-a8c4-d5547bfbdcc4",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "info",
-      "message": "🚀 Iniciando rodada contínua #1 para fila de 1 conta(s)...",
-      "ts": "2026-09-30T23:26:25.830Z"
-    },
-    {
-      "id": "42be24b1-1623-4b53-8f0c-822840465f17",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "info",
-      "message": "==================================================",
-      "ts": "2026-09-30T23:26:25.846Z"
-    },
-    {
-      "id": "1363d17a-6378-4c53-8785-be20711db793",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "info",
-      "message": "[CONTA 1/1] Iniciando automação para glenbotaxflu@outlook.com...",
-      "ts": "2026-09-30T23:26:25.867Z"
-    },
-    {
-      "id": "fc366b8e-6d28-464e-923c-a1b8863a4679",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "info",
-      "message": "🚀 Iniciando bot para glenbotaxflu@outlook.com (🔴 FLA ID)",
-      "ts": "2026-09-30T23:26:25.884Z"
-    },
-    {
-      "id": "79a96722-3e7a-46ad-a493-ec4a338ef375",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "wait",
-      "message": "1. Navegando para a URL de login...",
-      "ts": "2026-09-30T23:26:26.252Z"
-    },
-    {
-      "id": "d67d88e0-d161-482c-b4e9-29b4a4522d39",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "api",
-      "message": "🔴 Modo FLA ID: Clicando em 'Entrar com Fla-ID'...",
-      "ts": "2026-09-30T23:26:27.985Z"
-    },
-    {
-      "id": "b982e054-d080-4b30-967b-e15a17923d60",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "info",
-      "message": "✅ Botão Fla-ID (a.fla-id-btn) clicado com sucesso!",
-      "ts": "2026-09-30T23:26:29.870Z"
-    },
-    {
-      "id": "ec5637b8-cef9-40ad-a2ce-ebb8e17e1be4",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "api",
-      "message": "Preenchendo credenciais (FLA ID)...",
-      "ts": "2026-09-30T23:26:32.385Z"
-    },
-    {
-      "id": "145d2d6e-8219-4848-9498-5816b86db49e",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "wait",
-      "message": "Aguardando autenticação FLA ID concluir e redirecionar...",
-      "ts": "2026-09-30T23:26:32.692Z"
-    },
-    {
-      "id": "e9c5712b-c0ec-431f-acde-2a459ed45d46",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "success",
-      "message": "Login efetuado com sucesso (FLA ID)!",
-      "ts": "2026-09-30T23:26:39.193Z"
-    },
-    {
-      "id": "c0f3daeb-4346-4ee5-a635-90711809dde5",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "wait",
-      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
-      "ts": "2026-09-30T23:26:39.215Z"
-    },
-    {
-      "id": "44467649-fb54-4509-904f-19fe3e4e649f",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "info",
-      "message": "3. Procurando setores...",
-      "ts": "2026-09-30T23:26:43.396Z"
-    },
-    {
-      "id": "45425035-ffe2-4bc5-824d-b4b18af56c82",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "info",
-      "message": "Verificando: \"Norte\"",
-      "ts": "2026-09-30T23:26:43.478Z"
-    },
-    {
-      "id": "8e4e30b7-ed9e-472a-9e3c-e87c0733eac0",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "warn",
-      "message": "\"Norte\" aparece esgotado (sold).",
-      "ts": "2026-09-30T23:26:43.585Z"
-    },
-    {
-      "id": "4cc5b976-3411-48da-805f-22794652d470",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "info",
-      "message": "Verificando: \"Leste Superior\"",
-      "ts": "2026-09-30T23:26:43.619Z"
-    },
-    {
-      "id": "279fd24f-29c6-43dd-8211-e44d4151cee6",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "warn",
-      "message": "\"Leste Superior\" aparece esgotado (sold).",
-      "ts": "2026-09-30T23:26:43.683Z"
-    },
-    {
-      "id": "e6b500e9-d879-41a1-a0d3-e45a10bd1637",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "info",
-      "message": "Verificando: \"Oeste Superior\"",
-      "ts": "2026-09-30T23:26:43.716Z"
-    },
-    {
-      "id": "a82e0f98-feaf-40e2-b163-3840fd131b93",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "warn",
-      "message": "\"Oeste Superior\" não existe na página.",
-      "ts": "2026-09-30T23:26:43.755Z"
-    },
-    {
-      "id": "6acfe388-b880-4262-9d64-95149ad66f5d",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "info",
-      "message": "Verificando: \"Leste Inferior\"",
-      "ts": "2026-09-30T23:26:43.800Z"
-    },
-    {
-      "id": "9f2d0f8a-5989-4157-88d7-1ad78f06cb07",
-      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
-      "level": "warn",
-      "message": "\"Leste Inferior\" aparece esgotado (sold).",
-      "ts": "2026-09-30T23:26:43.868Z"
-    },
-    {
-      "id": "a639a009-9c9f-48d6-8b56-265c57d8741d",
+      "id": "c181c5b4-cb77-4cc9-9c5e-ad0138f25df5",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "wait",
       "message": "Nenhum setor disponível. Tentando novamente em 10s...",
-      "ts": "2026-09-30T23:26:43.900Z"
+      "ts": "2026-10-01T13:33:57.054Z"
     },
     {
-      "id": "4eb423d3-86dd-4b28-9c97-e12fa726f57f",
+      "id": "f5439a5d-826b-44c0-8a6e-17a75e28c095",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "wait",
       "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
-      "ts": "2026-09-30T23:26:53.926Z"
+      "ts": "2026-10-01T13:34:07.076Z"
     },
     {
-      "id": "e9bf55b3-9362-4c72-bda6-a5ab76a2bdec",
+      "id": "b8782fdf-5750-4971-a66e-20ad546cad8c",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "info",
       "message": "3. Procurando setores...",
-      "ts": "2026-09-30T23:26:57.978Z"
+      "ts": "2026-10-01T13:34:10.603Z"
     },
     {
-      "id": "88e3c102-feef-4933-9c0e-a04c19d6b11c",
+      "id": "ec2f456f-6049-42af-8d79-387b1f849efb",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "info",
       "message": "Verificando: \"Norte\"",
-      "ts": "2026-09-30T23:26:58.068Z"
+      "ts": "2026-10-01T13:34:10.724Z"
     },
     {
-      "id": "b07b482d-d8e6-4079-94ba-7b1bb6272f87",
+      "id": "1fc9c057-9470-47e5-a6e8-5ad09456952f",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "warn",
       "message": "\"Norte\" aparece esgotado (sold).",
-      "ts": "2026-09-30T23:26:58.142Z"
+      "ts": "2026-10-01T13:34:10.794Z"
     },
     {
-      "id": "2a461018-e483-424e-817a-ae4c6e30f21b",
+      "id": "95702746-b105-45e7-bbf5-f0d007656259",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "info",
       "message": "Verificando: \"Leste Superior\"",
-      "ts": "2026-09-30T23:26:58.176Z"
+      "ts": "2026-10-01T13:34:10.840Z"
     },
     {
-      "id": "0a90e8f4-56c6-485a-b359-c9a7844d27f9",
+      "id": "def10b5a-16e6-475f-bb69-1490a8454cc7",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "warn",
       "message": "\"Leste Superior\" aparece esgotado (sold).",
-      "ts": "2026-09-30T23:26:58.230Z"
+      "ts": "2026-10-01T13:34:10.992Z"
     },
     {
-      "id": "e0735b1c-458d-48e5-a28e-522a4e00aab7",
+      "id": "7ae1e42e-edd8-4d7c-a609-59c843191b58",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "info",
       "message": "Verificando: \"Oeste Superior\"",
-      "ts": "2026-09-30T23:26:58.265Z"
+      "ts": "2026-10-01T13:34:11.036Z"
     },
     {
-      "id": "cce122ec-4213-4eff-a331-a54ce390c270",
+      "id": "ea374624-c1a1-4240-8de9-6bf9032d02e5",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "warn",
       "message": "\"Oeste Superior\" não existe na página.",
-      "ts": "2026-09-30T23:26:58.297Z"
+      "ts": "2026-10-01T13:34:11.075Z"
     },
     {
-      "id": "5266c8b4-5d4b-472a-a2cb-e10177141698",
+      "id": "1035daff-d831-41a8-a142-3b7521fea58b",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "info",
       "message": "Verificando: \"Leste Inferior\"",
-      "ts": "2026-09-30T23:26:58.323Z"
+      "ts": "2026-10-01T13:34:11.120Z"
     },
     {
-      "id": "86b9046a-7f24-447c-a698-6084c2bf3213",
+      "id": "000ea6b8-99da-44bc-a2cc-d5043edefd9d",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "warn",
       "message": "\"Leste Inferior\" aparece esgotado (sold).",
-      "ts": "2026-09-30T23:26:58.393Z"
+      "ts": "2026-10-01T13:34:11.188Z"
     },
     {
-      "id": "08847b4e-fdee-4a7d-a9db-229ca84c6ab5",
+      "id": "5711e912-c0e7-43f8-8c12-df305c97b2c4",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "wait",
       "message": "Nenhum setor disponível. Tentando novamente em 10s...",
-      "ts": "2026-09-30T23:26:58.430Z"
+      "ts": "2026-10-01T13:34:11.233Z"
     },
     {
-      "id": "debbeefd-c01b-4b71-b94c-db83824ed052",
+      "id": "c27ccea8-8245-4135-874d-240a471a7877",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "wait",
       "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
-      "ts": "2026-09-30T23:27:08.455Z"
+      "ts": "2026-10-01T13:34:21.249Z"
     },
     {
-      "id": "0280e7de-78b3-4f32-a42d-b327d87126e7",
+      "id": "c148b100-7ee5-4806-beb4-eef2ac9627c7",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "info",
       "message": "3. Procurando setores...",
-      "ts": "2026-09-30T23:27:12.831Z"
+      "ts": "2026-10-01T13:34:25.568Z"
     },
     {
-      "id": "789740a3-8573-4653-97ca-84df12c08c99",
+      "id": "a4b95243-362e-41f2-96f3-29e0d3f33ea1",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "info",
       "message": "Verificando: \"Norte\"",
-      "ts": "2026-09-30T23:27:12.924Z"
+      "ts": "2026-10-01T13:34:25.656Z"
     },
     {
-      "id": "1cf9adc0-d453-447f-ac9b-b680b8d17880",
+      "id": "88a9ba21-4707-404a-b512-db1af48b1699",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "warn",
       "message": "\"Norte\" aparece esgotado (sold).",
-      "ts": "2026-09-30T23:27:13.015Z"
+      "ts": "2026-10-01T13:34:25.741Z"
     },
     {
-      "id": "f9ecb0b8-1589-4241-b652-25255bebf557",
+      "id": "4cc34ccd-8e78-4957-ae2d-6ba84ac6dd2e",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "info",
       "message": "Verificando: \"Leste Superior\"",
-      "ts": "2026-09-30T23:27:13.061Z"
+      "ts": "2026-10-01T13:34:25.797Z"
     },
     {
-      "id": "858cf9b0-6cd8-4b71-a965-7a66e011485b",
+      "id": "b9f08de5-e8e9-4828-93c0-5b7793bc1484",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "warn",
       "message": "\"Leste Superior\" aparece esgotado (sold).",
-      "ts": "2026-09-30T23:27:13.149Z"
+      "ts": "2026-10-01T13:34:25.916Z"
     },
     {
-      "id": "4b4bb8c1-1349-4878-a7b2-2d9569b7db45",
+      "id": "3d1051b9-ce66-4ba9-849c-c8e66b92284e",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "info",
       "message": "Verificando: \"Oeste Superior\"",
-      "ts": "2026-09-30T23:27:13.277Z"
+      "ts": "2026-10-01T13:34:25.963Z"
     },
     {
-      "id": "39a902d2-ff88-422c-b922-8eb4787d12bd",
+      "id": "bc93bc58-bd7a-4d07-b9e2-6e29836cf19c",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "warn",
       "message": "\"Oeste Superior\" não existe na página.",
-      "ts": "2026-09-30T23:27:13.316Z"
+      "ts": "2026-10-01T13:34:26.101Z"
     },
     {
-      "id": "8597509f-ac9b-4ac3-ba21-cddb67bcb0da",
+      "id": "538616e8-5e5b-46d4-a1b1-5429a88fa7e4",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "info",
       "message": "Verificando: \"Leste Inferior\"",
-      "ts": "2026-09-30T23:27:13.362Z"
+      "ts": "2026-10-01T13:34:26.235Z"
     },
     {
-      "id": "6b90e4f9-792e-4e9f-8646-507cd99662f2",
+      "id": "509df9ae-c074-463d-98ed-583ed0f6c3f9",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "warn",
       "message": "\"Leste Inferior\" aparece esgotado (sold).",
-      "ts": "2026-09-30T23:27:13.433Z"
+      "ts": "2026-10-01T13:34:26.365Z"
     },
     {
-      "id": "6c64af3e-995a-4cf8-843c-4d61cff5be6b",
+      "id": "6b98e9c9-c146-41af-b050-618b4a969327",
       "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
       "level": "wait",
       "message": "Nenhum setor disponível. Tentando novamente em 10s...",
-      "ts": "2026-09-30T23:27:13.478Z"
+      "ts": "2026-10-01T13:34:26.405Z"
+    },
+    {
+      "id": "d2f6eae6-a03c-4e79-8d75-7b7f38a02c06",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:34:36.425Z"
+    },
+    {
+      "id": "f0c74c0b-a9a9-42d1-8e64-31e45457e5fa",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:34:40.680Z"
+    },
+    {
+      "id": "1589decb-5410-4855-a28f-08f3a1b4494f",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:34:40.770Z"
+    },
+    {
+      "id": "a46d35d5-f11e-4f63-baf3-aabf02a58e95",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:34:40.841Z"
+    },
+    {
+      "id": "96156d82-2612-412b-b522-16030ae53518",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:34:40.879Z"
+    },
+    {
+      "id": "c3ea92f7-a31b-47db-b244-aaee2896362e",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:34:40.966Z"
+    },
+    {
+      "id": "1fec8e6f-da6c-49a2-8d0b-0fa0abbc0a3e",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:34:41.007Z"
+    },
+    {
+      "id": "17aac226-e981-450c-8dd0-ca4fa3f8c378",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:34:41.056Z"
+    },
+    {
+      "id": "abdcd1b7-0cc4-4b1d-bf42-77fc55ff42f7",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:34:41.110Z"
+    },
+    {
+      "id": "eb104b9e-39f3-48cc-9610-e4ecbd321d0d",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:34:41.291Z"
+    },
+    {
+      "id": "82b7501f-cd5f-4657-bd9c-b980b0929f3a",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:34:41.334Z"
+    },
+    {
+      "id": "4e8d07e2-709e-47c1-9aef-fe89948d2a4d",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:34:51.375Z"
+    },
+    {
+      "id": "0a07608e-fe14-44ce-88cc-36d351602979",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:34:55.599Z"
+    },
+    {
+      "id": "ca650871-4c88-44b6-bfe1-043ad0e74a90",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:34:55.708Z"
+    },
+    {
+      "id": "49b085a7-a23b-46a0-b89f-e2d09e5be677",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:34:55.763Z"
+    },
+    {
+      "id": "5ed9ebf4-4ec3-42e1-b7bd-f9aaa1066d0d",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:34:55.810Z"
+    },
+    {
+      "id": "28dad36f-b8f9-4a9b-8560-e08dd3613fe0",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:34:55.896Z"
+    },
+    {
+      "id": "921bbdf4-d5be-4a68-9d80-18c8dedd75dc",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:34:55.936Z"
+    },
+    {
+      "id": "78e2022d-bf9b-45ba-acbc-680e9973e064",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:34:55.980Z"
+    },
+    {
+      "id": "dcb3816b-a4e3-4e1f-a185-9134e7608bc5",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:34:56.014Z"
+    },
+    {
+      "id": "a8ace89a-e33b-4b23-a280-8a40da6ef6ac",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:34:56.088Z"
+    },
+    {
+      "id": "351038b2-f693-4ab3-902b-1286218d0ce2",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:34:56.130Z"
+    },
+    {
+      "id": "4129dea8-c465-483f-8894-c8a377997577",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:35:06.159Z"
+    },
+    {
+      "id": "70a6a1c2-dc67-4648-ba6c-1f04efb4f74f",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:35:11.385Z"
+    },
+    {
+      "id": "888b48f5-8a39-4919-856a-dddbc8188f6c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:35:11.467Z"
+    },
+    {
+      "id": "56bde868-7bfe-4ffc-9a24-7b839beda41b",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:35:11.543Z"
+    },
+    {
+      "id": "a73c1524-4934-42af-85d8-d3ea87d46a8d",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:35:11.597Z"
+    },
+    {
+      "id": "db5ed519-8b62-4bbb-b9b1-0448945ff39a",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:35:11.658Z"
+    },
+    {
+      "id": "76985820-4be3-4ded-a6ab-0b7f5836a262",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:35:11.691Z"
+    },
+    {
+      "id": "7a6b8440-f72a-4418-a043-e4022c3b5011",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:35:11.729Z"
+    },
+    {
+      "id": "61090017-8223-4cb4-a7c7-fd69c20f99d7",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:35:11.769Z"
+    },
+    {
+      "id": "cb403dfe-120e-4a90-993b-c481d0a5a853",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:35:11.841Z"
+    },
+    {
+      "id": "f3bec524-4607-42aa-8de1-31128f356dca",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:35:11.889Z"
+    },
+    {
+      "id": "c4fdc0be-2c52-43e0-a7e2-1f78e5eb21d5",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:35:21.918Z"
+    },
+    {
+      "id": "0540dedc-d743-4d92-954f-f7b82b47068e",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:35:26.359Z"
+    },
+    {
+      "id": "674a01be-f459-417e-a7c6-2285b5f13d22",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:35:26.525Z"
+    },
+    {
+      "id": "3ee8a1c5-ee83-4fb5-9a2b-3777f777fde3",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:35:26.624Z"
+    },
+    {
+      "id": "3a77883a-2bf1-4b42-84dd-eb90a6a1f4a3",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:35:26.662Z"
+    },
+    {
+      "id": "884f23a5-f41b-42f6-9411-c57ee4bbae9b",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:35:26.744Z"
+    },
+    {
+      "id": "8c754d37-f401-4548-8035-aa8d4496324a",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:35:26.788Z"
+    },
+    {
+      "id": "fc8e63b1-06ab-43b4-9927-d37ed05f8003",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:35:26.840Z"
+    },
+    {
+      "id": "2b5c38c5-6777-4042-abaa-22f5635d6529",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:35:26.880Z"
+    },
+    {
+      "id": "e22a72c2-158e-40bd-b39f-fab4817656a5",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:35:26.939Z"
+    },
+    {
+      "id": "d39b431b-8c57-417c-b794-f0241f5a074f",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:35:26.978Z"
+    },
+    {
+      "id": "73f64b67-56b0-44fd-99cd-03962425be47",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:35:37.003Z"
+    },
+    {
+      "id": "2fd9c2fb-18fa-4e64-907b-91cb98d797fc",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:35:41.079Z"
+    },
+    {
+      "id": "9940466d-e985-40b3-b29d-3fdcfa5cb872",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:35:41.170Z"
+    },
+    {
+      "id": "5740d29d-176f-4e8c-b4d4-35f7977f5bfb",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:35:41.242Z"
+    },
+    {
+      "id": "4e5bf043-c6fc-4783-aadd-efbcec6e02e6",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:35:41.274Z"
+    },
+    {
+      "id": "19d6be20-4125-4ec6-a66b-8cfc0d760d13",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:35:41.337Z"
+    },
+    {
+      "id": "6939d4f6-3643-455d-8fe8-14e4c319a386",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:35:41.369Z"
+    },
+    {
+      "id": "66e807de-a60e-49fc-944b-8f49579dc689",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:35:41.409Z"
+    },
+    {
+      "id": "965b8988-469e-43eb-9e9a-1458f7da4150",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:35:41.438Z"
+    },
+    {
+      "id": "e180bfa7-dcb6-4293-a2ca-452657a534b1",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:35:41.496Z"
+    },
+    {
+      "id": "f1e4de46-a70d-4be9-b349-6e74bdebe7a3",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:35:41.529Z"
+    },
+    {
+      "id": "d6c0c910-ef8b-49a0-8fad-74572b56c0fd",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:35:51.555Z"
+    },
+    {
+      "id": "19139887-2756-4a62-90c8-7094d7ad1fad",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:35:55.866Z"
+    },
+    {
+      "id": "3d5a40a2-0aa8-4ced-9956-38d2390b2ae5",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:35:55.976Z"
+    },
+    {
+      "id": "af07d082-eb1d-4905-8e1c-bf6b0f0544e0",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:35:56.064Z"
+    },
+    {
+      "id": "016d303c-9614-423c-8d89-62560763656c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:35:56.110Z"
+    },
+    {
+      "id": "c060eca6-29ef-4eb4-bbc4-f69c741383f9",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:35:56.183Z"
+    },
+    {
+      "id": "f4000316-39c1-4c50-acf5-5d6b8c4566d4",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:35:56.227Z"
+    },
+    {
+      "id": "68b51a17-de7b-48a2-a97d-6eb3ea143f52",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:35:56.276Z"
+    },
+    {
+      "id": "71353c45-3c93-4d74-9f4a-1339e64c0666",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:35:56.317Z"
+    },
+    {
+      "id": "c7e497ba-cdd7-4424-b4e5-5a957a699656",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:35:56.507Z"
+    },
+    {
+      "id": "20b5dcc1-605c-4acc-86fd-eb92503659dd",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:35:56.548Z"
+    },
+    {
+      "id": "0afa96ff-ce9a-4221-aae5-6c1b24de1ed7",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:36:06.580Z"
+    },
+    {
+      "id": "4fc67aa1-111a-472e-9ac0-ae4c14d680aa",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:36:11.719Z"
+    },
+    {
+      "id": "1d154510-a5aa-4d23-80e8-fd71e69847da",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:36:11.807Z"
+    },
+    {
+      "id": "9c19bc0d-5294-4dc5-b1bc-e396774ba9bc",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:36:11.891Z"
+    },
+    {
+      "id": "74fbbfd8-a14a-45e4-9ce5-f9b4c0bbe02c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:36:11.933Z"
+    },
+    {
+      "id": "15b6d733-9147-43fe-ae6c-ae85aff935cf",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:36:12.129Z"
+    },
+    {
+      "id": "1aec2be6-da83-487c-96f3-1acbe1cf34ca",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:36:12.168Z"
+    },
+    {
+      "id": "7cc59a4d-866e-4c8e-9f95-5d7835b6d2c2",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:36:12.202Z"
+    },
+    {
+      "id": "aef8bcbd-2be8-4fdf-896d-2573c1d02e56",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:36:12.336Z"
+    },
+    {
+      "id": "cf916f1c-2cfa-4afc-bab7-48de221d0604",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:36:12.409Z"
+    },
+    {
+      "id": "403f89d5-d247-4f05-944e-efc12b4a37b9",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:36:12.441Z"
+    },
+    {
+      "id": "ecfb5e54-1a5c-4c2e-ac20-5bdad280695f",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:36:22.465Z"
+    },
+    {
+      "id": "2de3228a-66d2-48ee-aa99-65184023b523",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:36:26.592Z"
+    },
+    {
+      "id": "c640d3dd-7d40-4a8f-a09b-5910219be8ee",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:36:26.668Z"
+    },
+    {
+      "id": "6d3d6a75-4a83-4368-9526-21f68c5c2e4f",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:36:26.747Z"
+    },
+    {
+      "id": "6ca776d7-1c12-422c-a16a-7ce6b3f37ee7",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:36:26.777Z"
+    },
+    {
+      "id": "fd07a220-1ec2-4c75-98d0-c87ea5bbf5a2",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:36:26.838Z"
+    },
+    {
+      "id": "2808f0b8-b60b-4fca-8e99-b7b7b0c91c50",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:36:26.884Z"
+    },
+    {
+      "id": "a1117e7f-8085-4761-9435-a0d55a7924bf",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:36:26.917Z"
+    },
+    {
+      "id": "c272ae73-90d3-48e8-ba90-e21c03c974ef",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:36:26.953Z"
+    },
+    {
+      "id": "4ab3597c-e60d-4f91-9fa1-276f3a2c5c2c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:36:27.028Z"
+    },
+    {
+      "id": "19f1e435-f8de-45ed-b052-bcd9efe1db2f",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:36:27.096Z"
+    },
+    {
+      "id": "9627ee6d-429f-4a8f-90e0-42f4dab5f7d7",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:36:37.144Z"
+    },
+    {
+      "id": "dd15ee89-7a6e-44b4-a81e-edda99e21f3a",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:36:41.283Z"
+    },
+    {
+      "id": "d31e0121-cb31-473b-ba2d-864c52a38ad5",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:36:41.415Z"
+    },
+    {
+      "id": "7976dd08-0aa5-4e47-81e7-e29cef8c960e",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:36:41.504Z"
+    },
+    {
+      "id": "fda35ce9-171d-4d52-af90-77f25a61e438",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:36:41.548Z"
+    },
+    {
+      "id": "0e43dfc4-3c15-4817-b479-9a20998f62ee",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:36:41.693Z"
+    },
+    {
+      "id": "f0e52da5-5d73-449f-a07c-33f76b24e563",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:36:41.740Z"
+    },
+    {
+      "id": "bc6d5bdd-0224-4105-99cc-29efed7e995f",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:36:41.796Z"
+    },
+    {
+      "id": "95dbe99d-b6da-417c-902b-f66a7166d47d",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:36:41.869Z"
+    },
+    {
+      "id": "4c1ba3f0-b3dd-4556-982b-00f456235452",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:36:41.979Z"
+    },
+    {
+      "id": "ab4bd571-8174-4aa2-9ae9-122f093ffd9c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:36:42.016Z"
+    },
+    {
+      "id": "9af71051-65d0-4ec6-9348-bb053318d71a",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:36:52.040Z"
+    },
+    {
+      "id": "94447ce7-3cbd-485e-91cf-5b01b500beb3",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:36:56.300Z"
+    },
+    {
+      "id": "0dd55d1f-cafe-41bc-8e64-0d553edde01f",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:36:56.394Z"
+    },
+    {
+      "id": "4ffeacc4-14a2-4848-bcd0-85c6bb8cabaf",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:36:56.467Z"
+    },
+    {
+      "id": "8667142c-d8b0-42f4-bc64-a1436cc44631",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:36:56.496Z"
+    },
+    {
+      "id": "343d49e9-ddba-4a18-a5e5-f0088ab42f34",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:36:56.543Z"
+    },
+    {
+      "id": "60644a48-1789-43a5-a970-ce54c317b279",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:36:56.580Z"
+    },
+    {
+      "id": "bb809869-01ee-44c8-b360-2e7ef0c0ebc1",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:36:56.613Z"
+    },
+    {
+      "id": "2cd89396-d76a-435c-bef7-031d7f0d9e51",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:36:56.641Z"
+    },
+    {
+      "id": "18ec4d17-5911-4f15-9f3e-b8bc6ef05779",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:36:56.696Z"
+    },
+    {
+      "id": "5e4c1f9d-f471-46f9-b1e8-3b7c76b2c3df",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:36:56.735Z"
+    },
+    {
+      "id": "92cf139c-9a4b-43b8-8277-97d7c9260d6c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:37:06.760Z"
+    },
+    {
+      "id": "1b83907f-3aaa-45de-8a32-f59fdc15e552",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:37:11.597Z"
+    },
+    {
+      "id": "3c084de7-7c76-4fe2-803e-9d38510002b9",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:37:11.727Z"
+    },
+    {
+      "id": "f694c7db-367a-4dc3-aa80-7fb5382fc8a6",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:37:11.818Z"
+    },
+    {
+      "id": "25de841a-76a0-443c-9e93-bf32f37d2782",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:37:11.867Z"
+    },
+    {
+      "id": "fccbc8bd-15f9-44f0-ae8f-30ed9a991e11",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:37:11.961Z"
+    },
+    {
+      "id": "e69620e7-3b4d-4b7b-8441-b10965446bb8",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:37:12.010Z"
+    },
+    {
+      "id": "cae339e8-0c90-4e9b-87cf-9e21fa316a90",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:37:12.053Z"
+    },
+    {
+      "id": "dd86c8a4-36ad-4ace-98a5-e4ea162167cf",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:37:12.088Z"
+    },
+    {
+      "id": "ee11472a-6928-4ffa-a085-b18239b1a110",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:37:12.171Z"
+    },
+    {
+      "id": "ea9ec54a-22d1-4e3c-81e6-a0abc4b5bd93",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:37:12.212Z"
+    },
+    {
+      "id": "630181b1-f904-4f35-819b-f119d0e2d38c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:37:22.232Z"
+    },
+    {
+      "id": "d16bde8d-5b2e-4364-aa48-584013caaea4",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:37:26.500Z"
+    },
+    {
+      "id": "452c7b48-60b3-4f49-808b-b55398a24876",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:37:26.573Z"
+    },
+    {
+      "id": "42543550-f723-451f-bbce-1ce5441c8f08",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:37:26.635Z"
+    },
+    {
+      "id": "c214abc2-b152-4b86-9f72-2f8bfe31d44a",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:37:26.677Z"
+    },
+    {
+      "id": "d45e6929-ed33-4371-8b30-89161f8c5e68",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:37:26.866Z"
+    },
+    {
+      "id": "36273f3e-0956-4daf-9119-06b480e483fd",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:37:26.909Z"
+    },
+    {
+      "id": "da642ba4-d711-40b8-89fc-23b3f8532417",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:37:26.953Z"
+    },
+    {
+      "id": "fe7268ff-6f37-4022-9562-1824a8b5bb79",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:37:26.992Z"
+    },
+    {
+      "id": "66832ed0-b4f5-4276-8874-d0e343942713",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:37:27.051Z"
+    },
+    {
+      "id": "44b0e536-50fc-43e2-a7fc-f3edb541fc1c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:37:27.087Z"
+    },
+    {
+      "id": "6b848de3-f64e-4276-a3c0-a11e87031539",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:37:37.114Z"
+    },
+    {
+      "id": "be18aa3f-e618-4d4d-8173-e70b492bf94c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:37:41.237Z"
+    },
+    {
+      "id": "7eda67c0-f63a-412c-9ebd-45868268528c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:37:41.325Z"
+    },
+    {
+      "id": "3a1e7459-172b-4bfc-af90-7b615dcd4141",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:37:41.396Z"
+    },
+    {
+      "id": "7af37b57-479f-4f1d-9456-a533fa1b589c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:37:41.547Z"
+    },
+    {
+      "id": "26ec9719-48c5-4e11-bc7f-6d6b1d1e6d7b",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:37:41.617Z"
+    },
+    {
+      "id": "778e6ba9-eb9f-4f3a-b418-131210e06526",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:37:41.665Z"
+    },
+    {
+      "id": "15f4e321-3a29-47f9-8ff6-e8ce1ec77c46",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:37:41.707Z"
+    },
+    {
+      "id": "2747f121-1489-41a1-b409-d09c8c790c85",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:37:41.754Z"
+    },
+    {
+      "id": "1f13b143-2b25-437c-b0a3-3ad3c2a3ea0c",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:37:41.819Z"
+    },
+    {
+      "id": "d343862f-48b9-4701-87f9-b34b98dc5a9a",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:37:41.857Z"
+    },
+    {
+      "id": "490c7235-2013-4fb6-90e8-77228e7f1847",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:37:51.880Z"
+    },
+    {
+      "id": "7dd4f864-eca3-4464-b497-ac268f976d4b",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:37:56.163Z"
+    },
+    {
+      "id": "7aa1e1a1-d1e7-4288-85f9-559578b933ed",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:37:56.378Z"
+    },
+    {
+      "id": "8d9ed4ea-b478-4082-9d0f-2ee22e1551e1",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:37:56.504Z"
+    },
+    {
+      "id": "31eb8521-3d20-44a9-aa32-5bb4b0ecb4c0",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:37:56.546Z"
+    },
+    {
+      "id": "3e93ca99-8b8b-4cb0-a74b-f3510f6b5806",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:37:56.629Z"
+    },
+    {
+      "id": "a1516f7e-8623-432d-8a2c-19974d5fa8d7",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:37:56.693Z"
+    },
+    {
+      "id": "765bbfb7-d9c3-45cc-b238-36c77365fbc4",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:37:56.745Z"
+    },
+    {
+      "id": "1407a8f0-c4f2-4368-a7ec-12c8c451126f",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:37:56.819Z"
+    },
+    {
+      "id": "967ff94b-c67d-4bb5-a6be-f5f08af323ad",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:37:56.906Z"
+    },
+    {
+      "id": "a1725e69-3673-4f97-8ec2-595c508ceb27",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:37:56.949Z"
+    },
+    {
+      "id": "80f3e737-317f-42fe-ae2c-5e57959d2030",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:38:06.974Z"
+    },
+    {
+      "id": "b98e79a0-094b-429a-8234-8ed9ca5d9f9b",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:38:11.929Z"
+    },
+    {
+      "id": "d5cc1186-65bb-43e9-826b-6cc38b7cd234",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:38:12.008Z"
+    },
+    {
+      "id": "993d9ebe-9ff1-4e16-be06-274903666822",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:38:12.087Z"
+    },
+    {
+      "id": "faea2b58-afc2-4627-92b1-82eb30c0b845",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:38:12.130Z"
+    },
+    {
+      "id": "b7a5b4d9-436a-4019-aab5-6a9da9034927",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:38:12.211Z"
+    },
+    {
+      "id": "f96b9b07-dd70-4575-9bd6-94fc8bef9274",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:38:12.264Z"
+    },
+    {
+      "id": "8dfe5513-180d-4090-a8f0-2faf16453405",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:38:12.303Z"
+    },
+    {
+      "id": "c94747ba-f314-499d-a7c8-47d3bb932624",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:38:12.351Z"
+    },
+    {
+      "id": "185cf705-c26e-456d-bde0-1d7cf5d294f5",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:38:12.425Z"
+    },
+    {
+      "id": "856d289d-020e-400f-8252-3f8077ab57da",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:38:12.465Z"
+    },
+    {
+      "id": "c44e50ac-018b-471c-a03b-eac6086912b4",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:38:22.487Z"
+    },
+    {
+      "id": "c6c350e7-5786-405b-b831-1efec8309cf4",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "3. Procurando setores...",
+      "ts": "2026-10-01T13:38:26.625Z"
+    },
+    {
+      "id": "e9047f62-86f7-4461-b851-36f83a7cf2d6",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Norte\"",
+      "ts": "2026-10-01T13:38:26.706Z"
+    },
+    {
+      "id": "43326858-3a14-45b7-80f9-a747342a7497",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Norte\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:38:26.776Z"
+    },
+    {
+      "id": "cf9fa3e0-fb63-4cc3-a9df-7a373dd604fd",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Superior\"",
+      "ts": "2026-10-01T13:38:26.817Z"
+    },
+    {
+      "id": "19d8f9c7-b880-44cb-9e32-5ec453e37b4d",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Superior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:38:26.906Z"
+    },
+    {
+      "id": "7626fff0-e697-4adc-b71c-0e04d9469c04",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Oeste Superior\"",
+      "ts": "2026-10-01T13:38:26.955Z"
+    },
+    {
+      "id": "5898a9fe-6c39-4239-90e3-ded4326fa261",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Oeste Superior\" não existe na página.",
+      "ts": "2026-10-01T13:38:26.994Z"
+    },
+    {
+      "id": "ce92caa0-96e8-4d23-9d91-344beba7ccd8",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "info",
+      "message": "Verificando: \"Leste Inferior\"",
+      "ts": "2026-10-01T13:38:27.026Z"
+    },
+    {
+      "id": "5786a1b0-3f65-43bf-9655-8b71e5076b3f",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "warn",
+      "message": "\"Leste Inferior\" aparece esgotado (sold).",
+      "ts": "2026-10-01T13:38:27.088Z"
+    },
+    {
+      "id": "33e9b7d1-cf92-4cfe-a0fa-273721e657f8",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "Nenhum setor disponível. Tentando novamente em 10s...",
+      "ts": "2026-10-01T13:38:27.118Z"
+    },
+    {
+      "id": "eee0142b-ed71-4626-98c6-380e1a801ae2",
+      "event_id": "01d51b50-7edb-44c2-89ce-e453ae1266ab",
+      "level": "wait",
+      "message": "2. Navegando para o evento: https://ingressos.flamengo.com.br/buy/sector?event=41427",
+      "ts": "2026-10-01T13:38:37.144Z"
     }
   ]
 }

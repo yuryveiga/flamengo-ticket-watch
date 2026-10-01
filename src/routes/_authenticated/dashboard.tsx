@@ -33,14 +33,14 @@ function Dashboard() {
   const active = useMemo(() => events.find((e) => e.id === activeId), [events, activeId]);
 
   return (
-    <div className="p-4 md:p-6 space-y-4 max-w-7xl mx-auto">
-      <div className="flex items-center justify-between gap-2 flex-wrap">
-        <h1 className="text-2xl font-black">Dashboard</h1>
+    <div className="p-2 sm:p-4 md:p-6 space-y-2 sm:space-y-4 max-w-7xl mx-auto">
+      <div className="flex items-center justify-between gap-2">
+        <h1 className="text-lg sm:text-2xl font-black">Dashboard</h1>
         {events.length > 0 && (
           <select
             value={activeId ?? ""}
             onChange={(e) => setActiveId(e.target.value)}
-            className="px-3 py-1.5 rounded-md bg-card border border-border text-sm"
+            className="px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-md bg-card border border-border text-xs sm:text-sm max-w-[200px] sm:max-w-none truncate"
           >
             {events.map((e) => (
               <option key={e.id} value={e.id}>
@@ -62,7 +62,7 @@ function Dashboard() {
           </Link>
         </div>
       ) : active ? (
-        <div className="grid lg:grid-cols-2 gap-4">
+        <div className="grid lg:grid-cols-2 gap-2 sm:gap-4">
           <StatusPanel
             key={active.id}
             event={active}
@@ -155,32 +155,93 @@ function StatusPanel({
       : "—";
 
   return (
-    <section className="rounded-xl border border-border bg-card p-5 space-y-4">
-      <div className="flex items-center gap-2">
+    <section className="rounded-xl border border-border bg-card p-3 md:p-5 space-y-2 md:space-y-4">
+      {/* ── MOBILE: Linha superior compacta (Status + Botões inline) ── */}
+      <div className="flex items-center justify-between gap-2 md:hidden">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <span className={`h-2.5 w-2.5 rounded-full shrink-0 ${color} ${isRunning ? "animate-pulse" : ""}`} />
+          <span className="font-bold uppercase text-xs shrink-0">
+            {isRunning ? "Ativo" : event.status === "expirado" ? "Expirado" : "Parado"}
+          </span>
+          {isRunning && currentSector && (
+            <span className="text-[10px] bg-sky-900/50 text-sky-300 border border-sky-700 rounded px-1.5 py-0.5 animate-pulse truncate max-w-[120px]">
+              🔍 {currentSector}
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center gap-1.5 shrink-0">
+          {isRunning ? (
+            <button
+              onClick={onStop}
+              className="py-1 px-3 rounded-md bg-red-600 hover:bg-red-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow"
+            >
+              <Square className="h-3.5 w-3.5" />
+              <span>Parar</span>
+            </button>
+          ) : (
+            <button
+              onClick={onStart}
+              disabled={event.status === "expirado"}
+              className="py-1 px-3 rounded-md bg-green-600 hover:bg-green-700 text-white font-bold text-xs disabled:opacity-40 flex items-center justify-center gap-1.5 shadow"
+            >
+              <Play className="h-3.5 w-3.5" />
+              <span>Iniciar</span>
+            </button>
+          )}
+          <button
+            onClick={onTest}
+            className="py-1 px-2.5 rounded-md border border-border font-semibold text-xs hover:bg-accent"
+          >
+            Testar
+          </button>
+        </div>
+      </div>
+
+      {/* ── DESKTOP: Header original ── */}
+      <div className="hidden md:flex items-center gap-2">
         <span className={`h-3 w-3 rounded-full ${color} ${isRunning ? "animate-pulse" : ""}`} />
         <span className="font-bold uppercase text-sm">
           {isRunning ? "Ativo" : event.status === "expirado" ? "Expirado" : "Parado"}
         </span>
-        {/* Melhoria 5: badge do setor atual */}
         {isRunning && currentSector && (
           <span className="ml-auto text-xs bg-sky-900/50 text-sky-300 border border-sky-700 rounded px-2 py-0.5 animate-pulse">
             🔍 {currentSector}
           </span>
         )}
       </div>
-      <div>
+
+      {/* ── MOBILE: Evento compacto ── */}
+      <div className="md:hidden text-[11px] truncate flex items-center gap-1.5 bg-background/60 px-2 py-1 rounded border border-border/50">
+        <span className="text-[10px] uppercase text-muted-foreground font-semibold shrink-0">Evento:</span>
+        <span className="font-semibold text-foreground truncate">{event.name || event.url}</span>
+      </div>
+
+      {/* ── DESKTOP: Evento original ── */}
+      <div className="hidden md:block">
         <p className="text-xs text-muted-foreground">Evento</p>
         <p className="font-semibold break-all">{event.name || event.url}</p>
       </div>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+
+      {/* ── MOBILE: Stats compactos (4 colunas) ── */}
+      <div className="grid grid-cols-4 md:hidden gap-1">
+        <Stat label="Setor" value={event.config.setores[0] || "—"} />
+        <Stat label="Qtd" value={String(event.config.quantidade)} />
+        <Stat label="Tempo" value={isRunning ? elapsed : "—"} />
+        <Stat label="Tentativas" value={isRunning ? String(attemptCount) : "—"} />
+      </div>
+
+      {/* ── DESKTOP: Stats originais (3 colunas com padding normal) ── */}
+      <div className="hidden md:grid md:grid-cols-3 gap-3">
         <Stat label="Setor alvo" value={event.config.setores[0] || "—"} />
         <Stat label="Quantidade" value={String(event.config.quantidade)} />
         <Stat label="Respostas Anômalas" value={String(anomalousCount)} />
-        {/* Melhoria 6: tentativas + tempo ativo */}
         <Stat label="Tentativas" value={isRunning ? String(attemptCount) : "—"} />
         <Stat label="Tempo ativo" value={isRunning ? elapsed : "—"} />
       </div>
-      <div className="flex gap-2 flex-wrap">
+
+      {/* ── DESKTOP: Botões de ação originais embaixo ── */}
+      <div className="hidden md:flex gap-2 flex-wrap">
         {isRunning ? (
           <button
             onClick={onStop}
@@ -210,11 +271,11 @@ function StatusPanel({
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+function Stat({ label, value, className = "" }: { label: string; value: string; className?: string }) {
   return (
-    <div className="rounded-md bg-background border border-border p-2">
-      <p className="text-[10px] uppercase text-muted-foreground">{label}</p>
-      <p className="font-bold truncate">{value}</p>
+    <div className={`rounded-md bg-background border border-border p-1.5 md:p-2 text-center md:text-left ${className}`}>
+      <p className="text-[9px] md:text-[10px] uppercase text-muted-foreground truncate">{label}</p>
+      <p className="text-xs md:text-base font-bold truncate">{value}</p>
     </div>
   );
 }
@@ -271,33 +332,33 @@ export function LogTerminal({ eventId }: { eventId: string }) {
 
   return (
     <section
-      className="rounded-xl border border-border overflow-hidden flex flex-col"
+      className="rounded-xl border border-border overflow-hidden flex flex-col flex-1"
       style={{ background: "#0d1117" }}
     >
-      <div className="flex items-center justify-between px-3 py-2 border-b border-border">
-        <h3 className="text-xs font-bold uppercase tracking-wider text-white/70">
+      <div className="flex items-center justify-between px-2.5 py-1.5 sm:px-3 sm:py-2 border-b border-border">
+        <h3 className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-white/70">
           Terminal · realtime
         </h3>
         <div className="flex gap-1">
-          <button onClick={clear} className="text-xs px-2 py-1 text-white/70 hover:text-white">
+          <button onClick={clear} title="Limpar logs" className="text-xs p-1 text-white/70 hover:text-white rounded hover:bg-white/10">
             <Trash2 className="h-3 w-3" />
           </button>
-          <button onClick={exportTxt} className="text-xs px-2 py-1 text-white/70 hover:text-white">
+          <button onClick={exportTxt} title="Exportar logs" className="text-xs p-1 text-white/70 hover:text-white rounded hover:bg-white/10">
             <Download className="h-3 w-3" />
           </button>
         </div>
       </div>
       <div
         ref={ref}
-        className="font-mono text-xs p-3 overflow-auto h-[400px]"
+        className="font-mono text-[13px] md:text-xs p-2.5 md:p-3 overflow-auto h-[calc(100dvh-260px)] min-h-[220px] md:h-[400px]"
         style={{ fontFamily: "'JetBrains Mono','Fira Code',ui-monospace,monospace" }}
       >
         {logs.length === 0 ? (
-          <p className="text-white/40">— sem logs ainda —</p>
+          <p className="text-white/40 text-xs">— sem logs ainda —</p>
         ) : (
           logs.map((l) => (
-            <div key={l.id} className={LEVEL_COLOR[l.level] ?? "text-white/70"}>
-              [{new Date(l.ts).toLocaleTimeString()}] {LEVEL_EMOJI[l.level] ?? "⚪"} {l.message}
+            <div key={l.id} className={`${LEVEL_COLOR[l.level] ?? "text-white/70"} leading-normal py-0.5 break-words`}>
+              <span className="opacity-60 text-[11px] md:text-xs font-sans">[{new Date(l.ts).toLocaleTimeString()}]</span> {LEVEL_EMOJI[l.level] ?? "⚪"} {l.message}
             </div>
           ))
         )}
