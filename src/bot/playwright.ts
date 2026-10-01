@@ -318,7 +318,7 @@ export async function runBotPersistent(
     await page.goto(login_url, { waitUntil: "domcontentloaded", timeout: 60000 });
 
     try {
-      const cookieBtn = page.locator("button:has-text('Aceitar'), button:has-text('Concordar'), button:has-text('De acordo'), button:has-text('OK')").first();
+      const cookieBtn = page.locator("button:has-text('Aceitar'), button:has-text('Concordar'), button:has-text('Concordo'), button:has-text('De acordo'), button:has-text('OK')").first();
       if (await cookieBtn.isVisible({ timeout: 2000 })) {
         await cookieBtn.click({ force: true });
         await page.waitForTimeout(500);
@@ -443,7 +443,7 @@ export async function runBotPersistent(
           await page.waitForTimeout(1000);
           
           if (page.url().includes("login")) {
-            const errEl = page.locator("text=/incorretos|Tente novamente/i").first();
+            const errEl = page.locator("text=/incorretos|inválid|Tente novamente/i").first();
             if (await errEl.isVisible({ timeout: 2000 })) {
               await page.screenshot({ path: "erro-senha.png" });
               throw new Error("Credenciais inválidas. Verifique e-mail e senha no painel.");
