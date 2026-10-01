@@ -594,7 +594,7 @@ export async function runBotPersistent(
         await page.waitForTimeout(1000);
         // NÃO dá break: o browser continua logado e tenta os próximos setores na próxima volta do loop!
       } else {
-        const waitTime = config.intervalo || 10;
+        const waitTime = config.intervalo || 3;
         
         if (!config.loop_continuo) {
            await log("warn", "Loop contínuo desativado. Encerrando busca nesta conta.");

@@ -12,7 +12,7 @@ const configSchema = z.object({
   senha: z.string().max(255).optional().default(""),
   setores: z.array(z.string().min(1).max(120)).max(20).default([]),
   quantidade: z.number().int().min(1).max(3).default(1),
-  intervalo: z.number().int().min(5).max(60).default(30),
+  intervalo: z.number().int().min(2).max(60).default(3),
   aceitar_qualquer: z.boolean().default(false),
   headless: z.boolean().default(true),
   loop_continuo: z.boolean().default(false),
