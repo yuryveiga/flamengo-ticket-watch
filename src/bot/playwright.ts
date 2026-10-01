@@ -264,12 +264,12 @@ export async function runBotPersistent(
 
   const { context, page, videoDir } = await setupBrowser(email, headless);
 
-  // Salva o vídeo quando ingresso for encontrado; descarta nos demais casos
+  // Salva o vídeo SOMENTE quando ingresso for garantido no carrinho; descarta e deleta nos demais casos
   const saveVideo = async (label: string) => {
     try {
       const videoPath = await page.video()?.path();
-      if (!videoPath) return;
-      await context.close(); // finaliza a gravação
+      await context.close().catch(() => {}); // finaliza a gravação
+      if (!videoPath || !fs.existsSync(videoPath)) return;
       const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
       const dest = path.join(process.cwd(), `ingresso-video-${label}-${timestamp}.webm`);
       fs.renameSync(videoPath, dest);
@@ -281,10 +281,19 @@ export async function runBotPersistent(
 
   const discardVideos = () => {
     try {
-      const files = fs.readdirSync(videoDir);
-      for (const f of files) fs.unlinkSync(path.join(videoDir, f));
+      if (fs.existsSync(videoDir)) {
+        const files = fs.readdirSync(videoDir);
+        for (const f of files) {
+          try {
+            fs.unlinkSync(path.join(videoDir, f));
+          } catch {}
+        }
+      }
     } catch {}
   };
+
+  // Limpa vídeos temporários anteriores para não consumir espaço em disco
+  discardVideos();
 
   let ticketFoundSector = ""; // preenchido assim que encontrar setor disponível
   let purchaseSuccess = false;
@@ -579,10 +588,20 @@ export async function runBotPersistent(
   } catch (error: any) {
     await log("error", `Erro: ${error.message}`);
   } finally {
-    const videoLabel = ticketFoundSector
-      ? ticketFoundSector.replace(/\s+/g, "-")
-      : `sessao-${new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19)}`;
-    await saveVideo(videoLabel);
+    if (purchaseSuccess && ticketFoundSector) {
+      const videoLabel = ticketFoundSector.replace(/\s+/g, "-");
+      await saveVideo(videoLabel);
+    } else {
+      // Se não comprou / não foi para o carrinho, descarta e deleta a gravação
+      try {
+        const videoPath = await page.video()?.path();
+        await context.close().catch(() => {});
+        if (videoPath && fs.existsSync(videoPath)) {
+          try { fs.unlinkSync(videoPath); } catch {}
+        }
+      } catch {}
+      discardVideos();
+    }
   }
 
   return purchaseSuccess;
