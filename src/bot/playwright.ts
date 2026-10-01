@@ -67,20 +67,19 @@ async function solveCaptcha(page: Page, log: LogFn): Promise<boolean> {
   }
 
   try {
-    // Procura por bframe (desafio ativo) ou anchor (recaptcha presente)
-    const bframe = page.locator("iframe[src*='recaptcha/api2/bframe']").first();
-    const anchor = page.locator("iframe[src*='recaptcha/api2/anchor']").first();
-    
-    const isBframe = await bframe.isVisible({ timeout: 500 }).catch(() => false);
-    const isAnchor = await anchor.count().then(c => c > 0).catch(() => false);
+    // Procura por qualquer indício de reCAPTCHA na página (iframe, classe, sitekey ou textarea)
+    const recaptchaLocator = page.locator("iframe[src*='recaptcha'], .g-recaptcha, [data-sitekey], #g-recaptcha-response").first();
+    const hasRecaptcha = await recaptchaLocator.waitFor({ state: "attached", timeout: 2500 }).then(() => true).catch(() => false);
 
-    if (!isBframe && !isAnchor) {
+    if (!hasRecaptcha) {
       return false; // Não há recaptcha detectado na tela
     }
 
-    await log("warn", "🚨 [CAPTCHA] Desafio detectado! Solicitando resolução ultra-rápida via CapSolver...");
-    
-    // Extrai siteKey do bframe ou anchor ou DOM
+    // Checa se o bframe está visível
+    const bframe = page.locator("iframe[src*='recaptcha/api2/bframe']").first();
+    const isBframe = await bframe.isVisible({ timeout: 1000 }).catch(() => false);
+
+    // Extrai siteKey do bframe ou de qualquer iframe recaptcha ou do DOM
     let siteKey: string | null = null;
     let isInvisible = true;
 
@@ -92,26 +91,41 @@ async function solveCaptcha(page: Page, log: LogFn): Promise<boolean> {
       }
     }
 
-    if (!siteKey && isAnchor) {
-      const src = await anchor.getAttribute("src").catch(() => null);
-      if (src) {
-        const urlParams = new URLSearchParams(src.split('?')[1]);
-        siteKey = urlParams.get("k");
-        isInvisible = src.includes("size=invisible") || !src.includes("size=");
+    if (!siteKey) {
+      const iframes = await page.locator("iframe[src*='recaptcha']").all();
+      for (const ifr of iframes) {
+        const src = await ifr.getAttribute("src").catch(() => null);
+        if (src && src.includes("k=")) {
+          const urlParams = new URLSearchParams(src.split('?')[1]);
+          const k = urlParams.get("k");
+          if (k) {
+            siteKey = k;
+            isInvisible = src.includes("size=invisible") || !src.includes("size=");
+            break;
+          }
+        }
       }
     }
 
     if (!siteKey) {
       siteKey = await page.evaluate(() => {
         const el = document.querySelector('[data-sitekey]');
-        return el ? el.getAttribute('data-sitekey') : null;
+        if (el) return el.getAttribute('data-sitekey');
+        if (typeof (window as any).___grecaptcha_cfg !== 'undefined' && (window as any).___grecaptcha_cfg.clients) {
+          for (const key in (window as any).___grecaptcha_cfg.clients) {
+            const client = (window as any).___grecaptcha_cfg.clients[key];
+            if (client?.sitekey) return client.sitekey;
+          }
+        }
+        return null;
       }).catch(() => null);
     }
 
     if (!siteKey) {
-      await log("error", "[CAPTCHA] Não foi possível extrair a SiteKey do Google.");
       return false;
     }
+
+    await log("warn", `🚨 [CAPTCHA] Desafio Google detectado! SiteKey: ${siteKey.substring(0, 10)}... Solicitando CapSolver...`);
 
     const pageUrl = page.url();
     await log("api", `[CAPTCHA] SiteKey: ${siteKey.substring(0, 10)}... Criando tarefa no CapSolver...`);
@@ -537,24 +551,20 @@ export async function runBotPersistent(
         // 5. CLIQUE EM COMPRAR
         await log("info", "5. Clicando em Comprar...");
         const buyBtn = page.locator("button:has-text('Adicionar ao carrinho'), button:has-text('Comprar')").first();
-        if (await buyBtn.isVisible({ timeout: 2500 }).catch(() => false)) {
+        if (await buyBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
           await page.screenshot({ path: "ingresso-02-antes-comprar.png" });
           await buyBtn.click({ force: true });
         }
 
-        // 6. VERIFICAÇÃO INSTANTÂNEA DE CAPTCHA E CARRINHO
-        await log("wait", "6. Verificando captcha e redirecionamento para o carrinho...");
+        // 6. AGUARDAR E RESOLVER CAPTCHA PÓS-CLIQUE
+        await log("wait", "6. Aguardando e resolvendo captcha após Comprar...");
+        await page.waitForTimeout(1000);
 
-        // Checagem imediata de desafio ativo (bframe)
-        const bframe = page.locator("iframe[src*='recaptcha/api2/bframe']").first();
-        const hasChallenge = await bframe.isVisible({ timeout: 1200 }).catch(() => false);
+        // Sempre executa solveCaptcha para capturar o desafio ativo ou token
+        const captchaResolvido = await solveCaptcha(page, log);
 
-        if (hasChallenge) {
-          await solveCaptcha(page, log);
-        }
-
-        // Aguarda redirect para o carrinho (rápido: 6s sem desafio, ou 15s com desafio)
-        const cartTimeout = hasChallenge ? 15000 : 6000;
+        // Aguarda redirect para o carrinho
+        const cartTimeout = captchaResolvido ? 20000 : 15000;
         await page.waitForURL("**/shopping-cart**", { timeout: cartTimeout }).catch(() => {});
 
         if (page.url().includes("shopping-cart")) {
