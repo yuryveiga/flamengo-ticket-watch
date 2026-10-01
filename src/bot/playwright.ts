@@ -318,8 +318,11 @@ export async function runBotPersistent(
     await page.goto(login_url, { waitUntil: "domcontentloaded", timeout: 60000 });
 
     try {
-      const cookieBtn = page.locator("button:has-text('Aceitar'), button:has-text('Concordar'), button:has-text('OK')").first();
-      if (await cookieBtn.isVisible({ timeout: 2000 })) await cookieBtn.click();
+      const cookieBtn = page.locator("button:has-text('Aceitar'), button:has-text('Concordar'), button:has-text('De acordo'), button:has-text('OK')").first();
+      if (await cookieBtn.isVisible({ timeout: 2000 })) {
+        await cookieBtn.click({ force: true });
+        await page.waitForTimeout(500);
+      }
     } catch {}
 
     const logoutLink = page.locator("a:has-text('Sair'), a:has-text('Logout')").first();
