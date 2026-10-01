@@ -67,118 +67,154 @@ async function solveCaptcha(page: Page, log: LogFn): Promise<boolean> {
   }
 
   try {
-    const iframe = page.locator("iframe[src*='recaptcha/api2/bframe'], iframe[src*='recaptcha/api2/anchor']").first();
-    if (!(await iframe.isVisible({ timeout: 2000 }).catch(() => false))) {
-      return false; // Não há captcha na tela
+    // Procura por bframe (desafio ativo) ou anchor (recaptcha presente)
+    const bframe = page.locator("iframe[src*='recaptcha/api2/bframe']").first();
+    const anchor = page.locator("iframe[src*='recaptcha/api2/anchor']").first();
+    
+    const isBframe = await bframe.isVisible({ timeout: 500 }).catch(() => false);
+    const isAnchor = await anchor.count().then(c => c > 0).catch(() => false);
+
+    if (!isBframe && !isAnchor) {
+      return false; // Não há recaptcha detectado na tela
     }
 
-    await log("warn", "🚨 [CAPTCHA] Desafio Google detectado! Iniciando solver invisível...");
+    await log("warn", "🚨 [CAPTCHA] Desafio detectado! Solicitando resolução ultra-rápida via CapSolver...");
     
-    const src = await iframe.getAttribute("src");
-    if (!src) return false;
-    
-    const urlParams = new URLSearchParams(src.split('?')[1]);
-    const siteKey = urlParams.get("k");
-    const pageUrl = page.url();
+    // Extrai siteKey do bframe ou anchor ou DOM
+    let siteKey: string | null = null;
+    let isInvisible = true;
+
+    if (isBframe) {
+      const src = await bframe.getAttribute("src").catch(() => null);
+      if (src) {
+        const urlParams = new URLSearchParams(src.split('?')[1]);
+        siteKey = urlParams.get("k");
+      }
+    }
+
+    if (!siteKey && isAnchor) {
+      const src = await anchor.getAttribute("src").catch(() => null);
+      if (src) {
+        const urlParams = new URLSearchParams(src.split('?')[1]);
+        siteKey = urlParams.get("k");
+        isInvisible = src.includes("size=invisible") || !src.includes("size=");
+      }
+    }
 
     if (!siteKey) {
-      await log("error", "[CAPTCHA] Não extraiu SiteKey.");
+      siteKey = await page.evaluate(() => {
+        const el = document.querySelector('[data-sitekey]');
+        return el ? el.getAttribute('data-sitekey') : null;
+      }).catch(() => null);
+    }
+
+    if (!siteKey) {
+      await log("error", "[CAPTCHA] Não foi possível extrair a SiteKey do Google.");
       return false;
     }
 
-    await log("api", `[CAPTCHA] SiteKey: ${siteKey.substring(0, 8)}... Enviando tarefa.`);
+    const pageUrl = page.url();
+    await log("api", `[CAPTCHA] SiteKey: ${siteKey.substring(0, 10)}... Criando tarefa no CapSolver...`);
 
+    const startSolve = Date.now();
     const createRes = await axios.post("https://api.capsolver.com/createTask", {
       clientKey: capsolverApiKey,
       task: {
         type: "ReCaptchaV2TaskProxyless",
         websiteURL: pageUrl,
         websiteKey: siteKey,
-        isInvisible: true
+        isInvisible
       }
-    });
+    }, { timeout: 7000 });
 
     if (createRes.data.errorId !== 0) {
-      await log("error", `[CAPTCHA] Erro API: ${createRes.data.errorDescription}`);
+      await log("error", `[CAPTCHA] Erro ao criar tarefa CapSolver: ${createRes.data.errorDescription}`);
       return false;
     }
 
     const taskId = createRes.data.taskId;
-    await log("wait", `[CAPTCHA] Tarefa ${taskId} criada! Resolvendo...`);
+    await log("wait", `[CAPTCHA] Tarefa ${taskId} em processamento no CapSolver...`);
 
-    for (let i = 0; i < 20; i++) {
-      await page.waitForTimeout(3000);
+    // Primeira consulta após 1s (tempo mínimo do CapSolver)
+    await page.waitForTimeout(1000);
+
+    // Polling acelerado a cada 800ms (máxima agilidade)
+    for (let i = 0; i < 35; i++) {
       const resultRes = await axios.post("https://api.capsolver.com/getTaskResult", {
         clientKey: capsolverApiKey,
         taskId: taskId
-      });
+      }, { timeout: 4000 }).catch(() => null);
 
-      const status = resultRes.data.status;
-      if (status === "ready") {
-        const token = resultRes.data.solution.gRecaptchaResponse;
-        await log("success", "[CAPTCHA] 🔥 Resolvido! Injetando token...");
-        
-        await page.evaluate((tokenStr) => {
-          const textArea = document.getElementById("g-recaptcha-response") as HTMLTextAreaElement;
-          if (textArea) {
-            textArea.value = tokenStr;
-            textArea.innerHTML = tokenStr;
-          }
-          
-          const captchaDiv = document.querySelector('.g-recaptcha, [data-sitekey]');
-          let callbackName = null;
-          if (captchaDiv) {
-             callbackName = captchaDiv.getAttribute('data-callback');
-             if (callbackName && typeof (window as any)[callbackName] === 'function') {
-                (window as any)[callbackName](tokenStr);
-             }
-          }
-          
-          if (typeof (window as any).___grecaptcha_cfg !== 'undefined' && (window as any).___grecaptcha_cfg.clients) {
-            for (let key in (window as any).___grecaptcha_cfg.clients) {
-               const client = (window as any).___grecaptcha_cfg.clients[key];
-               for (let path in client) {
-                 if (client[path] && typeof client[path].callback === 'function') {
-                   if (client[path].callback.name !== callbackName) {
-                      client[path].callback(tokenStr);
-                   }
-                 }
-               }
+      if (resultRes && resultRes.data) {
+        const status = resultRes.data.status;
+        if (status === "ready") {
+          const token = resultRes.data.solution?.gRecaptchaResponse;
+          const totalSec = ((Date.now() - startSolve) / 1000).toFixed(1);
+          await log("success", `[CAPTCHA] 🔥 Resolvido em ${totalSec}s! Injetando token e submetendo instantaneamente...`);
+
+          // Injeta token, aciona callbacks e submete em uma única execução atômica (0ms de delay)
+          await page.evaluate((tokenStr) => {
+            const textArea = document.getElementById("g-recaptcha-response") as HTMLTextAreaElement;
+            if (textArea) {
+              textArea.value = tokenStr;
+              textArea.innerHTML = tokenStr;
             }
-          }
-        }, token);
-        
-        await page.waitForTimeout(2000);
-        
-        await page.evaluate(() => {
-           const iframe = document.querySelector('iframe[src*="bframe"]');
-           if (iframe) {
+
+            const captchaDiv = document.querySelector('.g-recaptcha, [data-sitekey]');
+            let callbackName = null;
+            if (captchaDiv) {
+              callbackName = captchaDiv.getAttribute('data-callback');
+              if (callbackName && typeof (window as any)[callbackName] === 'function') {
+                try { (window as any)[callbackName](tokenStr); } catch {}
+              }
+            }
+
+            if (typeof (window as any).___grecaptcha_cfg !== 'undefined' && (window as any).___grecaptcha_cfg.clients) {
+              for (const key in (window as any).___grecaptcha_cfg.clients) {
+                const client = (window as any).___grecaptcha_cfg.clients[key];
+                for (const path in client) {
+                  if (client[path] && typeof client[path].callback === 'function') {
+                    if (client[path].callback.name !== callbackName) {
+                      try { client[path].callback(tokenStr); } catch {}
+                    }
+                  }
+                }
+              }
+            }
+
+            // Remove o bframe para desbloquear a tela
+            const iframe = document.querySelector('iframe[src*="bframe"]');
+            if (iframe) {
               const parent = iframe.closest('div[style*="position: absolute"]');
               if (parent) parent.remove();
-           }
+            }
 
-           const form = document.querySelector('form[action*="buy"], form[action*="cart"], form#form-comprar, form.form-comprar, form');
-           if (form) {
+            // Submete o formulário ou botão de comprar imediatamente
+            const form = document.querySelector('form[action*="buy"], form[action*="cart"], form#form-comprar, form.form-comprar, form');
+            if (form) {
               const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
               if (submitBtn) {
-                 (submitBtn as HTMLElement).click();
+                (submitBtn as HTMLElement).click();
               } else {
-                 (form as HTMLFormElement).submit();
+                try { (form as HTMLFormElement).submit(); } catch {}
               }
-           }
-        });
-        
-        return true;
-      } else if (status === "failed") {
-         await log("error", "[CAPTCHA] Falha no CapSolver.");
-         return false;
+            }
+          }, token);
+
+          return true;
+        } else if (status === "failed") {
+          await log("error", `[CAPTCHA] Falha no CapSolver: ${resultRes.data.errorDescription || "Erro desconhecido"}`);
+          return false;
+        }
       }
+
+      await page.waitForTimeout(800);
     }
-    
-    await log("error", "[CAPTCHA] Timeout no CapSolver.");
+
+    await log("error", "[CAPTCHA] Timeout ao aguardar resposta do CapSolver.");
     return false;
   } catch (error: any) {
-    await log("error", `[CAPTCHA] Erro: ${error.message}`);
+    await log("error", `[CAPTCHA] Erro na resolução: ${error.message}`);
     return false;
   }
 }
@@ -492,49 +528,41 @@ export async function runBotPersistent(
         // 5. CLIQUE EM COMPRAR
         await log("info", "5. Clicando em Comprar...");
         const buyBtn = page.locator("button:has-text('Adicionar ao carrinho'), button:has-text('Comprar')").first();
-        if (await buyBtn.isVisible({ timeout: 3000 }).catch(()=>false)) {
-           
-           // ANTES DE CLICAR, CHECAR CAPTCHA COMO NO ORIGINAL
-           const captchaVisibleBefore = await page.locator(".g-recaptcha, #g-recaptcha, div[data-sitekey], iframe[src*='recaptcha']").isVisible({ timeout: 500 }).catch(() => false);
-           if (captchaVisibleBefore) {
-             await log("warn", "⚠️ CAPTCHA detectado ANTES do clique. Resolvendo previamente...");
-             await solveCaptcha(page, log);
-             await page.waitForTimeout(1000);
-           }
-           
-           await page.screenshot({ path: `ingresso-02-antes-comprar.png` });
-           await buyBtn.click({ force: true });
+        if (await buyBtn.isVisible({ timeout: 2500 }).catch(() => false)) {
+          await page.screenshot({ path: "ingresso-02-antes-comprar.png" });
+          await buyBtn.click({ force: true });
         }
 
-        // 6. RESOLVER CAPTCHA IMEDIATAMENTE E ENTÃO AGUARDAR CARRINHO
-        await log("wait", "6. Resolvendo captcha imediatamente após Comprar...");
-        
-        // Aguarda brevemente para o site processar o clique e exibir o captcha
-        await page.waitForTimeout(1000);
-        
-        // Resolve captcha direto — sem esperar pelo carrinho primeiro
-        const captchaResolvido = await solveCaptcha(page, log);
-        
-        if (captchaResolvido) {
-          // Captcha resolvido → agora aguarda o redirect para o carrinho
-          await page.waitForURL("**/shopping-cart**", { timeout: 20000 }).catch(() => {});
-        } else {
-          // Sem captcha visível → aguarda redirect normal
-          await page.waitForURL("**/shopping-cart**", { timeout: 15000 }).catch(() => {});
+        // 6. VERIFICAÇÃO INSTANTÂNEA DE CAPTCHA E CARRINHO
+        await log("wait", "6. Verificando captcha e redirecionamento para o carrinho...");
+
+        // Checagem imediata de desafio ativo (bframe)
+        const bframe = page.locator("iframe[src*='recaptcha/api2/bframe']").first();
+        const hasChallenge = await bframe.isVisible({ timeout: 1200 }).catch(() => false);
+
+        if (hasChallenge) {
+          await solveCaptcha(page, log);
         }
+
+        // Aguarda redirect para o carrinho (rápido: 6s sem desafio, ou 15s com desafio)
+        const cartTimeout = hasChallenge ? 15000 : 6000;
+        await page.waitForURL("**/shopping-cart**", { timeout: cartTimeout }).catch(() => {});
 
         if (page.url().includes("shopping-cart")) {
-          await page.screenshot({ path: `ingresso-03-carrinho-sucesso.png` });
+          await page.screenshot({ path: "ingresso-03-carrinho-sucesso.png" });
           await log("success", `✅ SUCESSO! Ingressos no carrinho! Setor: "${foundSectorStr}" · ${quantidade}x (Conta: ${email})`);
           await sendTelegramAlert(`🚨 *INGRESSO GARANTIDO!* 🚨\n\n🎟 **Setor:** ${foundSectorStr}\n🔢 **Quantidade:** ${quantidade}\n👤 **Conta:** ${email}\n⚽ **Evento:** ${eventData.id}`, log);
           await page.waitForTimeout(3000);
           purchaseSuccess = true;
-          break;
+          break; // Sucesso garantido: finaliza com vitória
         }
 
-        await log("error", "Não redirecionou para o carrinho após captcha (ingressos podem ter esgotado).");
+        // Se não foi para o carrinho, os ingressos desse setor foram reservados por outro torcedor
+        ticketFoundSector = ""; // Reseta flag para não salvar vídeo falso
+        await log("warn", `⚠️ Setor "${foundSectorStr}" não foi para o carrinho (reservado por outro torcedor ou esgotado). Continuando busca imediatamente...`);
         await page.screenshot({ path: "erro-carrinho-pos-captcha.png" });
-        break;
+        await page.waitForTimeout(1000);
+        // NÃO dá break: o browser continua logado e tenta os próximos setores na próxima volta do loop!
       } else {
         const waitTime = config.intervalo || 10;
         
