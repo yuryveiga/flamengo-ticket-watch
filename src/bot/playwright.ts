@@ -366,16 +366,23 @@ export async function runBotPersistent(
       }
 
       await log("api", `Preenchendo credenciais (${loginType === "fla_id" ? "FLA ID" : "Conta Normal"})...`);
-      const emailField = page.locator("input[type='email'], input[name='email'], input#Email, input[placeholder*='e-mail' i], input[placeholder*='cpf' i], input[name='username'], input[placeholder*='usuário' i], input[type='text']:visible").first();
+      const emailField = page.locator("input[type='email'], input[name='login'], input[name='email'], input#Email, input[placeholder*='e-mail' i], input[placeholder*='cpf' i], input[name='username'], input[placeholder*='usuário' i], input[type='text']:visible").first();
       await emailField.waitFor({ state: "visible", timeout: 15000 });
-      await emailField.fill(email);
+      await emailField.click();
+      await page.waitForTimeout(500);
+      await emailField.fill(""); // limpa o campo
+      await emailField.pressSequentially(email, { delay: 80 }); // digita como humano
       
-      const pwField = page.locator("input[type='password'], input[name='password'], input[name='senha'], input#Password, input[type='password']:visible").first();
+      const pwField = page.locator("input[type='password'], input[name='pass'], input[name='password'], input[name='senha'], input#Password, input[type='password']:visible").first();
       await pwField.waitFor({ state: "visible", timeout: 10000 });
-      await pwField.fill(decryptedSenha);
+      await pwField.click();
+      await page.waitForTimeout(500);
+      await pwField.fill("");
+      await pwField.pressSequentially(decryptedSenha, { delay: 80 });
       
+      await page.waitForTimeout(1000); // aguarda JS processar
       const submitBtn = page.locator("button[type='submit'], button:has-text('Entrar'), button:has-text('Login'), button:has-text('Acessar'), input[type='submit']").first();
-      await submitBtn.click();
+      await submitBtn.click({ force: true, delay: 150 });
       
       if (loginType === "fla_id") {
         await log("wait", "Aguardando autenticação FLA ID concluir e redirecionar...");
@@ -455,6 +462,7 @@ export async function runBotPersistent(
         : page.url().includes("login");
 
       if (stillInLogin) {
+         await page.screenshot({ path: "falha-silenciosa-login.png" });
          throw new Error("Falha no login: O site não aceitou a entrada ou bloqueou a requisição silenciosamente.");
       }
       
