@@ -467,7 +467,18 @@ export async function runBotPersistent(
     }
 
     // ── Loop de tentativa ──
+    const loopStartTimeMs = Date.now();
+    const runMinutes = config.timer_loop_run_minutes;
+    
     while (!stopSignal.stop) {
+      if (runMinutes && runMinutes > 0) {
+        if (Date.now() - loopStartTimeMs >= runMinutes * 60000) {
+           await log("warn", `⏱️ Tempo de execução atingido (${runMinutes} min). Fechando navegador para descanso...`);
+           try { await context.close(); } catch {}
+           return "pause_requested";
+        }
+      }
+
       // 2. VÁ ATÉ A URL DO EVENTO
       await log("wait", `2. Navegando para o evento: ${url}`);
       await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
