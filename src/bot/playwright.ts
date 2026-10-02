@@ -31,6 +31,11 @@ async function setupBrowser(email: string, headless: boolean) {
       "--window-position=0,0",
       "--ignore-certificate-errors",
     ],
+    proxy: {
+      server: "http://res.proxy-seller.com:10000",
+      username: "b8e6a45014935c0b",
+      password: "43uQ7qPEHatb8eDz"
+    }
   });
 
   let page = context.pages()[0];
@@ -362,7 +367,14 @@ export async function runBotPersistent(
 
       await log("api", `Preenchendo credenciais (${loginType === "fla_id" ? "FLA ID" : "Conta Normal"})...`);
       const emailField = page.locator("input[type='email'], input[name='login'], input[name='email'], input#Email, input[placeholder*='e-mail' i], input[placeholder*='cpf' i], input[name='username'], input[placeholder*='usuário' i], input[type='text']:visible").first();
-      await emailField.waitFor({ state: "visible", timeout: 15000 });
+      
+      try {
+        await emailField.waitFor({ state: "visible", timeout: 30000 });
+      } catch (e) {
+        await page.screenshot({ path: "erro-timeout-login.png" });
+        throw new Error("Timeout ao aguardar formulário de login (proxy pode estar lento ou bloqueado no Cloudflare). Veja erro-timeout-login.png.");
+      }
+      
       await emailField.click();
       await page.waitForTimeout(500);
       await emailField.fill(""); // limpa o campo
