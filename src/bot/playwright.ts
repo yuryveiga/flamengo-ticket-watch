@@ -137,7 +137,9 @@ async function solveCaptcha(page: Page, log: LogFn): Promise<boolean> {
         type: "ReCaptchaV2TaskProxyless",
         websiteURL: pageUrl,
         websiteKey: siteKey,
-        isInvisible
+        isInvisible,
+        pageAction: "buy",
+        userAgent: await page.evaluate(() => navigator.userAgent)
       }
     }, { timeout: 7000 });
 
@@ -203,16 +205,6 @@ async function solveCaptcha(page: Page, log: LogFn): Promise<boolean> {
               if (parent) parent.remove();
             }
 
-            // Submete o formulário ou botão de comprar imediatamente
-            const form = document.querySelector('form[action*="buy"], form[action*="cart"], form#form-comprar, form.form-comprar, form');
-            if (form) {
-              const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
-              if (submitBtn) {
-                (submitBtn as HTMLElement).click();
-              } else {
-                try { (form as HTMLFormElement).submit(); } catch {}
-              }
-            }
           }, token);
 
           return true;
@@ -573,6 +565,17 @@ export async function runBotPersistent(
 
         // Sempre executa solveCaptcha para capturar o desafio ativo ou token
         const captchaResolvido = await solveCaptcha(page, log);
+
+        // Detectar modal de erro
+        const alertModal = page.locator("#alert-modal, .modal").filter({ hasText: /validar sua ação/i });
+        if (await alertModal.isVisible({ timeout: 3000 }).catch(() => false)) {
+          const cancelBtn = alertModal.locator("button:has-text('Cancelar')").first();
+          if (await cancelBtn.isVisible()) await cancelBtn.click();
+          await log("warn", "⚠️ Modal de erro de segurança detectado. Recarregando e tentando novamente...");
+          ticketFoundSector = "";
+          await page.waitForTimeout(1000);
+          continue; // continua o loop
+        }
 
         // Aguarda redirect para o carrinho
         const cartTimeout = captchaResolvido ? 20000 : 15000;
