@@ -19,6 +19,9 @@ async function setupBrowser(email: string, headless: boolean) {
   const videoDir = path.join(process.cwd(), "videos-tmp");
   if (!fs.existsSync(videoDir)) fs.mkdirSync(videoDir, { recursive: true });
 
+  const proxyPorts = ["10000", "10001", "10002"];
+  const selectedPort = proxyPorts[Math.floor(Math.random() * proxyPorts.length)];
+
   const context = await chromium.launchPersistentContext(userDataDir, {
     headless,
     viewport: { width: 1920, height: 1080 },
@@ -32,9 +35,9 @@ async function setupBrowser(email: string, headless: boolean) {
       "--ignore-certificate-errors",
     ],
     proxy: {
-      server: "http://res.proxy-seller.com:10000",
-      username: "b8e6a45014935c0b",
-      password: "43uQ7qPEHatb8eDz"
+      server: `http://res.proxy-seller.com:${selectedPort}`,
+      username: "0fbefbccf822a48b",
+      password: "wMjzJEVFCPYyI9iL"
     }
   });
 
