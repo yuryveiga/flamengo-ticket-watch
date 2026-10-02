@@ -80,7 +80,7 @@ const defaultWizard: WizardData = {
   setores: [],
   aceitar_qualquer: false,
   headless: true,
-  intervalo: 10,
+  intervalo: 3,
   loop_continuo: false,
   timer_duration_minutes: 0,
   timer_start_time: "",
@@ -153,7 +153,7 @@ function EventWizard({ event, onCreated, onCancel }: { event?: any, onCreated: (
     setores: event.config?.setores || [],
     aceitar_qualquer: event.config?.aceitar_qualquer || false,
     headless: event.config?.headless ?? true,
-    intervalo: event.config?.intervalo || 30,
+    intervalo: event.config?.intervalo || 3,
     loop_continuo: event.config?.loop_continuo || false,
     timer_duration_minutes: event.config?.timer_duration_minutes || 0,
     timer_start_time: event.config?.timer_start_time || "",
@@ -354,7 +354,7 @@ function EventWizard({ event, onCreated, onCancel }: { event?: any, onCreated: (
             <div className="mt-3 space-y-3">
               <label className="block text-xs">
                 Intervalo entre tentativas: <span className="font-bold">{data.intervalo}s</span>
-                <input type="range" min={5} max={60} step={5} value={data.intervalo} onChange={(e) => set("intervalo", Number(e.target.value))} className="w-full mt-1" />
+                <input type="range" min={2} max={60} step={1} value={data.intervalo} onChange={(e) => set("intervalo", Number(e.target.value))} className="w-full mt-1" />
               </label>
               <label className="flex items-center gap-2 text-xs">
                 <input type="checkbox" checked={data.headless} onChange={(e) => set("headless", e.target.checked)} />
