@@ -19,8 +19,21 @@ async function setupBrowser(email: string, headless: boolean) {
   const videoDir = path.join(process.cwd(), "videos-tmp");
   if (!fs.existsSync(videoDir)) fs.mkdirSync(videoDir, { recursive: true });
 
-  const proxyPorts = ["10000", "10001", "10002"];
-  const selectedPort = proxyPorts[Math.floor(Math.random() * proxyPorts.length)];
+  let proxyConfig: { server: string } | undefined = undefined;
+  try {
+    const geoNodeUrl = "https://proxylist.geonode.com/api/proxy-list?country=BR&speed=medium&page=1&limit=500&sort_by=speed&sort_type=asc";
+    const res = await axios.get(geoNodeUrl, { timeout: 10000 });
+    if (res.data && res.data.data && res.data.data.length > 0) {
+      const validProxies = res.data.data.filter((p: any) => p.protocols.includes("http") || p.protocols.includes("https") || p.protocols.includes("socks5"));
+      if (validProxies.length > 0) {
+        const picked = validProxies[Math.floor(Math.random() * validProxies.length)];
+        const protocol = picked.protocols.includes("socks5") ? "socks5" : "http";
+        proxyConfig = {
+          server: `${protocol}://${picked.ip}:${picked.port}`
+        };
+      }
+    }
+  } catch (err) {}
 
   const context = await chromium.launchPersistentContext(userDataDir, {
     headless,
@@ -34,11 +47,7 @@ async function setupBrowser(email: string, headless: boolean) {
       "--window-position=0,0",
       "--ignore-certificate-errors",
     ],
-    proxy: {
-      server: `http://res.proxy-seller.com:${selectedPort}`,
-      username: "0fbefbccf822a48b",
-      password: "wMjzJEVFCPYyI9iL"
-    }
+    proxy: proxyConfig
   });
 
   let page = context.pages()[0];
